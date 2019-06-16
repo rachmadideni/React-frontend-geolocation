@@ -1,0 +1,709 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.59022000,-4.85900194],
+            	[119.58540944,-4.86026750],
+            	[119.58148222,-4.86365306]
+            ]},
+            "properties": {
+                "idkecm": 1,
+                "nmkecm": "minasa",
+                "idsung": 1,
+                "nmsung": "Salo Maleleng"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.62808944,-4.88337417],
+            	[119.59914056,-4.89224889],
+            	[119.56926139,-4.89785083]
+            ]},
+            "properties": {
+                "idkecm": 1,
+                "nmkecm": "minasa",
+                "idsung": 2,
+                "nmsung": "Salo Kalibone"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.62989167,-4.77559333],
+            	[119.58552000,-4.80003833],
+            	[119.54654528,-4.83449028]
+            ]},
+            "properties": {
+                "idkecm": 1,
+                "nmkecm": "minasa",
+                "idsung": 3,
+                "nmsung": "Salo Pangkajene"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.62846806,-4.77359556],
+            	[119.61814111,-4.76938639],
+            	[119.60935444,-4.76112806]
+            ]},
+            "properties": {
+                "idkecm": 1,
+                "nmkecm": "minasa",
+                "idsung": 4,
+                "nmsung": "Salo Bontorannu 1"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.60414944,-4.76097194],
+            	[119.60361278,-4.77197444],
+            	[119.59077750,-4.77962556]
+            ]},
+            "properties": {
+                "idkecm": 1,
+                "nmkecm": "minasa",
+                "idsung": 6,
+                "nmsung": "Salo Bontorannu 2"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.55986111,-4.80780194],
+            	[119.53138111,-4.81956806],
+            	[119.50151028,-4.82407028]
+            ]},
+            "properties": {
+                "idkecm": 2,
+                "nmkecm": "pangkajene",
+                "idsung": 7,
+                "nmsung": "Salo Tangnga"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.54654528,-4.83449028],
+            	[119.51819500,-4.84535806],
+            	[119.49964944,-4.83494500]
+            ]},
+            "properties": {
+                "idkecm": 2,
+                "nmkecm": "pangkajene",
+                "idsung": 8,
+                "nmsung": "Salo Pangkajene"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.54920361,-4.84273806],
+            	[119.52814889,-4.85624639],
+            	[119.51285111,-4.87180611]
+            ]},
+            "properties": {
+                "idkecm": 2,
+                "nmkecm": "pangkajene",
+                "idsung": 9,
+                "nmsung": "Salo Pacellang"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.51264250,-4.84940806],
+            	[119.50971917,-4.85763333],
+            	[119.50547028,-4.86633000]
+            ]},
+            "properties": {
+                "idkecm": 2,
+                "nmkecm": "pangkajene",
+                "idsung": 10,
+                "nmsung": "Salo Boddie"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.58148222,-4.86365306],
+            	[119.57251667,-4.87593333],
+            	[119.55220222,-4.88600306]
+            ]},
+            "properties": {
+                "idkecm": 2,
+                "nmkecm": "pangkajene",
+                "idsung": 11,
+                "nmsung": "Salo Maleleng"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.56513611,-4.89685222],
+            	[119.54232194,-4.89265417],
+            	[119.51976028,-4.88325000]
+            ]},
+            "properties": {
+                "idkecm": 2,
+                "nmkecm": "pangkajene",
+                "idsung": 12,
+                "nmsung": "Salo Sangkarak"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.59077750,-4.77962556],
+            	[119.56393639,-4.78746778],
+            	[119.53948722,-4.78596306]
+            ]},
+            "properties": {
+                "idkecm": 2,
+                "nmkecm": "pangkajene",
+                "idsung": 13,
+                "nmsung": "Salo Bontorannu"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.51337306,-4.79446306],
+            	[119.50505111,-4.79142111],
+            	[119.49437500,-4.79331333]
+            ]},
+            "properties": {
+                "idkecm": 3,
+                "nmkecm": "bungoro",
+                "idsung": 14,
+                "nmsung": "Solo Padangpadangeng"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.53948722,-4.78596306],
+            	[119.51888333,-4.76883278],
+            	[119.49110417,-4.76548333]
+            ]},
+            "properties": {
+                "idkecm": 3,
+                "nmkecm": "bungoro",
+                "idsung": 15,
+                "nmsung": "Salo Bontorannu 3"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.51143806,-4.80227889],
+            	[119.50428611,-4.80136611],
+            	[119.49696250,-4.80585000]
+            ]},
+            "properties": {
+                "idkecm": 3,
+                "nmkecm": "bungoro",
+                "idsung": 16,
+                "nmsung": "Salo Jallo"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.65011028,-4.72627333],
+            	[119.64603806,-4.72901750],
+            	[119.64193639,-4.72736667]
+            ]},
+            "properties": {
+                "idkecm": 3,
+                "nmkecm": "bungoro",
+                "idsung": 17,
+                "nmsung": "Salo Padaelo"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.65503167,-4.76775333],
+            	[119.62989167,-4.77559333],
+            	[119.64281111,-4.77265389]
+            ]},
+            "properties": {
+                "idkecm": 3,
+                "nmkecm": "bungoro",
+                "idsung": 18,
+                "nmsung": "Salo Pangkajene"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.64358722,-4.77249611],
+            	[119.63660417,-4.77133722],
+            	[119.62846806,-4.77359556]
+            ]},
+            "properties": {
+                "idkecm": 3,
+                "nmkecm": "bungoro",
+                "idsung": 19,
+                "nmsung": "Salo Bontorannu 1"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.60935444,-4.76112806],
+            	[119.60625306,-4.75923722],
+            	[119.60414944,-4.76097194]
+            ]},
+            "properties": {
+                "idkecm": 3,
+                "nmkecm": "bungoro",
+                "idsung": 20,
+                "nmsung": "Salo Bontorannu 2"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.57393111,-4.75682194],
+            	[119.52999861,-4.74751500],
+            	[119.51037028,-4.72268000]
+            ]},
+            "properties": {
+                "idkecm": 4,
+                "nmkecm": "labakkang",
+                "idsung": 21,
+                "nmsung": "Salo Labakkang"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.55072778,-4.69879083],
+            	[119.53413194,-4.70458667],
+            	[119.51724028,-4.70809000]
+            ]},
+            "properties": {
+                "idkecm": 4,
+                "nmkecm": "labakkang",
+                "idsung": 22,
+                "nmsung": "Salo Leppangeng"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.57056194,-4.70392861],
+            	[119.54750944,-4.72737000],
+            	[119.51619028,-4.71619000]
+            ]},
+            "properties": {
+                "idkecm": 4,
+                "nmkecm": "labakkang",
+                "idsung": 23,
+                "nmsung": "Salo Limbangan"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.59174000,-4.73084500],
+            	[119.57346333,-4.72853500],
+            	[119.54879194,-4.72424000]
+            ]},
+            "properties": {
+                "idkecm": 4,
+                "nmkecm": "labakkang",
+                "idsung": 24,
+                "nmsung": "Salo Ulubatu"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.59636389,-4.74529611],
+            	[119.56973917,-4.73860806],
+            	[119.54905694,-4.72909444]
+            ]},
+            "properties": {
+                "idkecm": 4,
+                "nmkecm": "labakkang",
+                "idsung": 25,
+                "nmsung": "Salo Bujubatu"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.59483389,-4.63124333],
+            	[119.61034694,-4.63350194],
+            	[119.62483083,-4.63130806]
+            ]},
+            "properties": {
+                "idkecm": 5,
+                "nmkecm": "mandalle",
+                "idsung": 26,
+                "nmsung": "Salo Manjeling"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.59099417,-4.57789972],
+            	[119.61339417,-4.58661056],
+            	[119.62839528,-4.60510833]
+            ]},
+            "properties": {
+                "idkecm": 5,
+                "nmkecm": "mandalle",
+                "idsung": 27,
+                "nmsung": "Salo Tamarupa"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.58779056,-4.58643889],
+            	[119.60156722,-4.59063306],
+            	[119.61701889,-4.59152056]
+            ]},
+            "properties": {
+                "idkecm": 5,
+                "nmkecm": "mandalle",
+                "idsung": 28,
+                "nmsung": "Salo Kekeang"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.58581111,-4.58900250],
+            	[119.59993722,-4.59743778],
+            	[119.61621861,-4.59306278]
+            ]},
+            "properties": {
+                "idkecm": 5,
+                "nmkecm": "mandalle",
+                "idsung": 29,
+                "nmsung": "Salo Marcompo"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.59705333,-4.59708000],
+            	[119.59878250,-4.61223472],
+            	[119.62908778,-4.61196611]
+            ]},
+            "properties": {
+                "idkecm": 5,
+                "nmkecm": "mandalle",
+                "idsung": 30,
+                "nmsung": "Salo Lamasa"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.54783250,-4.65104861],
+            	[119.57115611,-4.67057194],
+            	[119.58131889,-4.68197694]
+            ]},
+            "properties": {
+                "idkecm": 6,
+                "nmkecm": "ma rang",
+                "idsung": 31,
+                "nmsung": "Salo Kalukue"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.59614250,-4.74497028],
+            	[119.61027833,-4.74854111],
+            	[119.62003944,-4.74672222]
+            ]},
+            "properties": {
+                "idkecm": 6,
+                "nmkecm": "ma rang",
+                "idsung": 32,
+                "nmsung": "Salo Bujubatu"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.62937972,-4.73119417],
+            	[119.58447444,-4.71805722],
+            	[119.54777833,-4.72376278]
+            ]},
+            "properties": {
+                "idkecm": 6,
+                "nmkecm": "ma rang",
+                "idsung": 33,
+                "nmsung": "Salo Ulubatu"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.51726917,-4.70800972],
+            	[119.53406000,-4.70460111],
+            	[119.55072250,-4.69873944]
+            ]},
+            "properties": {
+                "idkecm": 6,
+                "nmkecm": "ma rang",
+                "idsung": 35,
+                "nmsung": "Salo Lepangeng"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.53686528,-4.66410472],
+            	[119.55461056,-4.69026083],
+            	[119.58675722,-4.68847861]
+            ]},
+            "properties": {
+                "idkecm": 6,
+                "nmkecm": "ma rang",
+                "idsung": 36,
+                "nmsung": "Salo Bawapitu"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.62071611,-4.70749778],
+            	[119.62087167,-4.70765250],
+            	[119.62103639,-4.70779250]
+            ]},
+            "properties": {
+                "idkecm": 6,
+                "nmkecm": "ma rang",
+                "idsung": 39,
+                "nmsung": "Salo Kading"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.51622556,-4.71626000],
+            	[119.53198222,-4.72465194],
+            	[119.54934361,-4.72436111]
+            ]},
+            "properties": {
+                "idkecm": 6,
+                "nmkecm": "ma rang",
+                "idsung": 40,
+                "nmsung": "Salo Limbangan"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.54371917,-4.65662333],
+            	[119.55821167,-4.67090417],
+            	[119.56868806,-4.68309778]
+            ]},
+            "properties": {
+                "idkecm": 6,
+                "nmkecm": "ma rang",
+                "idsung": 41,
+                "nmsung": "Salo Langoting"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.55504722,-4.71705722],
+            	[119.56433056,-4.70743083],
+            	[119.58385917,-4.70563083]
+            ]},
+            "properties": {
+                "idkecm": 6,
+                "nmkecm": "ma rang",
+                "idsung": 42,
+                "nmsung": "Salo Lettecenranae"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.62084639,-4.70843472],
+            	[119.63696806,-4.70185806],
+            	[119.64595000,-4.69145111]
+            ]},
+            "properties": {
+                "idkecm": 7,
+                "nmkecm": "segeri",
+                "idsung": 43,
+                "nmsung": "Salo Kading"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.56568472,-4.61745750],
+            	[119.57824500,-4.63042389],
+            	[119.59474861,-4.63125306]
+            ]},
+            "properties": {
+                "idkecm": 7,
+                "nmkecm": "segeri",
+                "idsung": 44,
+                "nmsung": "Salo Manjeling"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.55300500,-4.63566083],
+            	[119.60123250,-4.65319306],
+            	[119.62150500,-4.70048139]
+            ]},
+            "properties": {
+                "idkecm": 7,
+                "nmkecm": "segeri",
+                "idsung": 45,
+                "nmsung": "Salo Segeri"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.56485306,-4.64222028],
+            	[119.57760056,-4.65609722],
+            	[119.59053028,-4.67187861]
+            ]},
+            "properties": {
+                "idkecm": 7,
+                "nmkecm": "segeri",
+                "idsung": 46,
+                "nmsung": "Salo Batue"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.60140639,-4.65284944],
+            	[119.62307972,-4.64907333],
+            	[119.65429278,-4.65667056]
+            ]},
+            "properties": {
+                "idkecm": 7,
+                "nmkecm": "segeri",
+                "idsung": 47,
+                "nmsung": "Salo Barang"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "LineString",
+        		"coordinates": [
+            	[119.62650694,-4.71455944],
+            	[119.63735833,-4.72000639],
+            	[119.65002972,-4.72583889]
+            ]},
+            "properties": {
+                "idkecm": 7,
+                "nmkecm": "segeri",
+                "idsung": 48,
+                "nmsung": "Salo Padaelo"
+            }
+        }
+    ]
+}
