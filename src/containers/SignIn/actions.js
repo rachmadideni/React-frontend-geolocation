@@ -4,6 +4,7 @@ import {
   LOGIN_ACTION,
   LOGIN_SUCCESS_ACTION,
   LOGIN_ERROR_ACTION,
+  PUT_ROLE_ACTION
 } from './constants';
 
 export function loginAction(){
@@ -38,6 +39,13 @@ export function changeUsernameAction(payload){
 export function changePasswordAction(payload){
 	return {
 		type:CHANGE_PASSWORD_ACTION,
+		payload
+	}
+}
+
+export function putRoleAction(payload){
+	return {
+		type:PUT_ROLE_ACTION,
 		payload
 	}
 }

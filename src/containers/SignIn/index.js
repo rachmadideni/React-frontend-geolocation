@@ -1,21 +1,16 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Grid';
 import BaseTypography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core//Button';
 import Snackbar from '@material-ui/core/Snackbar';
-// import IconButton from '@material-ui/core/IconButton';
-// import CloseIcon from '@material-ui/icons/Close';
 import LoadingDialog from '../../components/LoadingDialog';
-
-import { Redirect } from 'react-router-dom';
 import { color } from '../../styles/constants';
-
-// REDUX
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import {
 	loginAction,	
 	loginErrorAction,
@@ -71,9 +66,9 @@ class SignIn extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	componentDidMount(){
+	/*componentDidMount(){
 		console.log(this.props);
-	}
+	}*/
 
 	componentDidUpdate(prevProps) {
 	    if (!!this.props.error.message && prevProps.error.message === null) {
@@ -167,10 +162,6 @@ class SignIn extends React.Component {
 			setLoginError,
 			auth
 		} = this.props
-
-		/*if(isSubmitted){
-			return <Redirect to="/dashboard" />; 
-		}*/
 
 		if(auth.token){
 			return <Redirect to="/dashboard" />; 
