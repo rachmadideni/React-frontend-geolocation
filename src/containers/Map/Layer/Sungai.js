@@ -140,7 +140,7 @@ class Sungai extends React.Component {
         console.log('mode state:', this.state.mode);
         // console.log(this.props);
         
-        // console.log('prevProps:',prevProps.geodata.river);// props
+        // console.log('prevProps:',prevProps);// props
         // console.log('prevState:',prevState.geojsonRiver);// state
         // console.log('nextState:',this.state.geojsonRiver)
         
@@ -150,14 +150,14 @@ class Sungai extends React.Component {
         
       	// console.log(_.isEqual(prevProps.geodata.river,this.props.riverData))
       	// console.log(turf.booleanEqual(prevProps.geodata.river, this.state.geojsonRiver));
-        if(_.isEqual(prevProps.geodata.river,this.props.riverData)){
+        if(_.isEqual(prevProps.geodata,this.props.riverData)){
         	console.log(true);
-        	console.log(JSON.stringify(this.state.geojsonRiver))
+        	console.log(this.state.geojsonRiver)
         	// if(_.isEqual(prevProps.riverData,prevState.geojsonRiver)){
         	// console.log('statefromProps is equal with state');
         }else{
         	console.log(false);
-        	// console.log('statefromProps is Not equal with state');
+        	console.log('statefromProps is Not equal with state');
         	this.setState({
         		geojsonRiver:this.props.riverData
         	});

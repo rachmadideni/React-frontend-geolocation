@@ -5,7 +5,7 @@ import {
 	CHANGE_TABVALUE_ACTION,
 	CHANGE_VIEWPORT_ACTION,
 	// GET_GEOJSON_ACTION,
-	GET_GEOJSON_SUCCESS_ACTION,
+	// GET_GEOJSON_SUCCESS_ACTION,
 	// PUT_MARKER_ACTION,
 	PUT_MARKER_SUCCESS_ACTION,
 	CLEAR_MARKER_SUCCESS_ACTION,
@@ -83,9 +83,9 @@ function mapContainerReducer(state = initialState, action){
 			.setIn(['viewport','longitude'],action.payload.longitude)
 			.setIn(['viewport','zoom'],action.payload.zoom)
 
-		case GET_GEOJSON_SUCCESS_ACTION:			
+		/*case GET_GEOJSON_SUCCESS_ACTION:			
 			return state
-			.setIn(['geojson_map',action.payload.key],action.payload.geojson);
+			.setIn(['geojson_map',action.payload.key],action.payload.geojson);*/
 		
 		case PUT_MARKER_SUCCESS_ACTION:			
 			// return state.updateIn(['marker','coordinates'], new List(action.payload));

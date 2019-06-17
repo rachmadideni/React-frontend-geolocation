@@ -29,12 +29,13 @@ import {
 	makeSelectTabValue, 
 	makeSelectMapConfig,
 	makeSelectMapViewport,
-	makeSelectGeojson,
+	//makeSelectGeojson,
 	makeSelectMarker,
 	makeSelectMapStyle,
 	makeSelectLayerVisibility,
 	makeSelectDASMode,
-	makeSelectRiverFeatures
+	makeSelectRiverFeatures,
+	makeSelectRiverData
 } from './selectors';
 
 import { SUNGAI } from './constants';
@@ -104,7 +105,7 @@ class MapContainer extends React.Component {
 			mapStyle,
 			layerVisibility,
 			DASMode,
-			geoData
+			geodata
 		} = this.props;	
 
 		return (
@@ -120,15 +121,12 @@ class MapContainer extends React.Component {
 						viewport => this.handleViewportChange(viewport)
 					}>						
 					
-					{layerVisibility.kecamatan && <BatasKecamatan />}
+					{/*layerVisibility.kecamatan && <BatasKecamatan />*/}
 					{/*<ProjectMark />*/}
 					{
 						layerVisibility.sungai && 
-						<Sungai 
-							data={SUNGAI} 
-							dt={this.props.selectRiverFeatures}
-							geodata={geoData}
-							DASMode={DASMode} />}					
+						<Sungai data = { SUNGAI } geodata={geodata} dt={this.props.selectRiverFeatures} DASMode = { DASMode } />
+					}					
 					{ this.renderNavigationControl() }				  					    			  
 				</MapGL>								
 			</Fragment>
@@ -140,7 +138,8 @@ const mapStateToProps = createStructuredSelector({
 	tabValue: makeSelectTabValue(),
 	mapConfig: makeSelectMapConfig(),
 	viewport: makeSelectMapViewport(),
-	geoData: makeSelectGeojson(),
+	//geoData: makeSelectGeojson(),
+	geodata:makeSelectRiverData(),
 	marker: makeSelectMarker(),	
 	mapStyle: makeSelectMapStyle(),
 	layerVisibility: makeSelectLayerVisibility(),
@@ -153,7 +152,7 @@ function mapDispatchToProps(dispatch){
 		// changeMapMode:()=>dispatch(changeMapModeAction()),
 		changeTabValue: (value)=>dispatch(changeTabValueAction(value)),
 		changeViewport: ({ latitude, longitude, zoom })=> dispatch(changeViewportAction({ latitude,longitude,zoom })),
-		getGeojon: key => dispatch(getGeojonAction(key)),
+		// getGeojon: key => dispatch(getGeojonAction(key)),
 		putMarker: payload => dispatch(putMarkerSuccessAction(payload)),
 		clearMarker: () => dispatch(clearMarkerSuccessAction()),
 		changeDasMode: payload=>dispatch(changeDasModeAction(payload))

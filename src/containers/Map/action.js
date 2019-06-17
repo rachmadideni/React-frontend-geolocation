@@ -2,8 +2,8 @@ import {
 	// CHANGE_MAP_MODE_ACTION,	
 	CHANGE_TABVALUE_ACTION,
 	CHANGE_VIEWPORT_ACTION,
-	GET_GEOJSON_ACTION,
-	GET_GEOJSON_SUCCESS_ACTION,
+	// GET_GEOJSON_ACTION,
+	// GET_GEOJSON_SUCCESS_ACTION,
 	// PUT_MARKER_ACTION,
 	// CLEAR_MARKER_ACTION,
 	PUT_MARKER_SUCCESS_ACTION,
@@ -111,7 +111,7 @@ export function changeViewportAction({ latitude,longitude,zoom }){
 	}
 }
 
-export function getGeojonAction(key){
+/*export function getGeojonAction(key){
 	return {
 		type:GET_GEOJSON_ACTION,
 		payload:key
@@ -126,7 +126,7 @@ export function getGeojsonSuccessAction(key,geojson){
 			geojson
 		}
 	}
-}
+}*/
 
 export function putMarkerSuccessAction(marker){
 	return {
