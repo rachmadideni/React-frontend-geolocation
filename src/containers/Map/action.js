@@ -160,14 +160,14 @@ export function changeLayerVisibilityAction({ kecamatan,sungai,project }){
 }
 
 export function getRiverAction(){
-	// console.log('getRiverAction')
+	console.log('getRiverAction');
 	return {
 		type:GET_RIVER_ACTION
 	}
 }
 
 export function getRiverSuccessAction(payload){
-	// console.log('getRiverSuccessAction payload:',payload);
+	console.log('getRiverSuccessAction payload:',payload);
 	return {
 		type:GET_RIVER_SUCCESS_ACTION,
 		payload

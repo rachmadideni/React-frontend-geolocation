@@ -11,9 +11,9 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import reducer from './reducer';
-// import saga from './saga';
+import saga from './saga';
 // import { changeMapModeAction } from './action';
-// import injectSaga from '../../utils/injectSaga';
+import injectSaga from '../../utils/injectSaga';
 import injectReducer from '../../utils/injectReducer';
 
 import { 
@@ -22,7 +22,8 @@ import {
 	getGeojonAction,
 	putMarkerSuccessAction,
 	clearMarkerSuccessAction,
-	changeDasModeAction
+	changeDasModeAction,
+	getRiverAction
 } from './action';
 
 import { 
@@ -43,6 +44,7 @@ import { SUNGAI } from './constants';
 import BatasKecamatan from './Layer/BatasKecamatan';
 // import ProjectMark from './Layer/ProjectMark';
 import Sungai from './Layer/Sungai';
+import RiverMap from './Layer/RiverMap';
 
 // Components
 // import DashboardTab from './DashboardTab';
@@ -57,7 +59,8 @@ class MapContainer extends React.Component {
 		};		
 	}
 
-	componentDidMount(){		
+	componentDidMount(){
+		this.props.getRiver();		
 		// const { getGeojon } = this.props;
 		// getGeojon('sungai');
 
@@ -106,10 +109,11 @@ class MapContainer extends React.Component {
 			layerVisibility,
 			DASMode,
 			geodata
-		} = this.props;	
+		} = this.props;
 
 		return (
-			<Fragment>				
+			<Fragment>
+							
 				<MapGL 					
 					accessToken = { mapConfig.token } 
 					latitude = { viewport.latitude } 
@@ -119,13 +123,17 @@ class MapContainer extends React.Component {
 					style={{ width: '100vw', height: '90vh' }}
 					onViewportChange = { 
 						viewport => this.handleViewportChange(viewport)
-					}>						
+					}>
 					
 					{/*layerVisibility.kecamatan && <BatasKecamatan />*/}
 					{/*<ProjectMark />*/}
 					{
-						layerVisibility.sungai && 
-						<Sungai data = { SUNGAI } geodata={geodata} dt={this.props.selectRiverFeatures} DASMode = { DASMode } />
+						// render river hanya jika features punya isi
+						(layerVisibility.sungai && geodata.features.length > 0 ) && 
+						<RiverMap 
+							data={this.props.geodata} 
+							fetchRiver={this.props.getRiver} /> 
+						/*<Sungai data = { SUNGAI } geodata={geodata} dt={this.props.selectRiverFeatures} DASMode = { DASMode } />*/
 					}					
 					{ this.renderNavigationControl() }				  					    			  
 				</MapGL>								
@@ -155,7 +163,8 @@ function mapDispatchToProps(dispatch){
 		// getGeojon: key => dispatch(getGeojonAction(key)),
 		putMarker: payload => dispatch(putMarkerSuccessAction(payload)),
 		clearMarker: () => dispatch(clearMarkerSuccessAction()),
-		changeDasMode: payload=>dispatch(changeDasModeAction(payload))
+		changeDasMode: payload=>dispatch(changeDasModeAction(payload)),
+		getRiver: ()=>dispatch(getRiverAction())
 	}
 }
 
@@ -165,10 +174,10 @@ const withConnect = connect(
 )
 
 const withReducer = injectReducer({ key: 'mapContainer', reducer });
-// const withSaga = injectSaga({ key: 'mapSaga', saga });
+const withSaga = injectSaga({ key: 'mapSaga', saga });
 
 export default compose(
 	withReducer,
-	// withSaga,
+	withSaga,
 	withConnect
 )(MapContainer);
