@@ -12,6 +12,7 @@ const makeSelectMapViewport = () => createSelector(MapContainer,substate=>substa
 const makeSelectGeojson = () => createSelector(MapContainer, substate => substate.get('geodata').toJS());
 
 const makeSelectRiverData = () => createSelector(MapContainer, ss=>ss.getIn(['geodata','river']).toJS(),);
+const makeSelectProjectData = () => createSelector(MapContainer, ss=>ss.getIn(['geodata','project']).toJS(),);
 
 // select map style
 const makeSelectMapStyle = () => createSelector(MapContainer, substate=>substate.get('mapStyle'))
@@ -33,6 +34,11 @@ const makeSelectLoading = () => createSelector(MapContainer, substate => substat
 const makeSelectErrorMessage = () => createSelector(MapContainer, substate => substate.getIn(['error','message']));
 const makeSelectSnackBarState = () => createSelector(MapContainer, substate => substate.get('snackBarOpen'))
 
+const makeSelectJenisSungai = () => createSelector(MapContainer, substate=>substate.get('jenis_sungai'))
+
+const makeSelectFormRiverData = () => createSelector(MapContainer, state=>state.getIn(['form','river']).toJS())
+const makeSelectFormProjectData = () => createSelector(MapContainer, state=>state.getIn(['form','project']).toJS())
+
 export {
 	makeSelectTabValue,
 	makeSelectMapConfig,
@@ -46,7 +52,11 @@ export {
 	makeSelectOptions,
 	makeSelectRiverFeatures,
 	makeSelectRiverData,
+	makeSelectProjectData,
 	makeSelectLoading,
 	makeSelectErrorMessage,
-	makeSelectSnackBarState
+	makeSelectSnackBarState,
+	makeSelectJenisSungai,
+	makeSelectFormRiverData,
+	makeSelectFormProjectData
 }

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
+import Draw from '@urbica/react-map-gl-draw';
 import { 
 	Source, 
 	Layer,
@@ -7,10 +8,23 @@ import {
 
 import { parseProjectData } from '../helpers';
 
-class ProjectMark extends React.Component{
+// Pin Component
+import MarkerPin from '../../../icons/marker';
+// Form Component
+import FormProject from '../FormLayer/FormProject';
+
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { makeSelectLayerVisibility } from '../selectors';
+
+class ProjectMark extends Component {
 	constructor(props){
 		super(props);
-		this.state = {						
+		this.state = {
+			project:this.props.data,
+			featureId:null,
+			features:[],
 			data:{
 			  type: 'Feature',
 			  geometry: {
@@ -24,12 +38,71 @@ class ProjectMark extends React.Component{
 			}
 		};
 	}
+
+	_onProjectUpdated = collection => {
+		this.setState((state,props)=>{
+			return{
+				project:collection
+			}
+		})
+	}
+
+	_getProjectAttributes = data => {
+		console.log(data);
+		if(data.features.length > 0){
+			const currentProperties = data.features[0].properties;
+			const featureId = data.features[0].id;
+			const features = data.features;
+			if(currentProperties.hasOwnProperty('nampro')){
+				this.setState(state=>{
+					return {
+						featureId,
+						features
+					}
+				})
+			}else{
+				this.setState(state=>{
+					return {
+						featureId,
+						features
+					}
+				})
+			}
+		}else{
+			this.setState(state=>{
+					return {
+						featureId:null
+					}
+				})
+		}
+	}
+
 	render(){
-		const { data } = this.state;
+		const { 
+			data,
+			project,
+			featureId,
+			features } = this.state;
+
+		const {
+			layerVisibility
+		} = this.props
+
 		return (
-			<React.Fragment>
+			<Fragment>
 				
-				<Source 
+				<Draw 
+					data = { project }
+					onChange={ collection => this._onProjectUpdated(collection) }
+					onDrawSelectionChange={ data => this._getProjectAttributes(data) } />
+					{
+						!layerVisibility.sungai && 
+						<FormProject 
+							featureId = { featureId }
+							features = { features } />
+					}	
+				
+				{/*<Source 
 					id="project" 
 					type="geojson"
 					data={data} />
@@ -40,13 +113,29 @@ class ProjectMark extends React.Component{
 					source="project"
 					paint={{
 						'circle-radius': 6,
-    				'circle-color': '#1978c8'
+    				'circle-color': '#6bd675'
 					}}
-					onClick={event=>console.log(event)} />
+					onClick={event=>console.log(event)}>
+				</Layer>*/}
 					
-			</React.Fragment>
+			</Fragment>
 		);
 	}
 }
 
-export default ProjectMark;
+const mapStateToProps = createStructuredSelector({
+	layerVisibility:makeSelectLayerVisibility()	
+})
+
+/*function mapDispatchToProps(dispatch){
+	return {
+		hapusSungai:value=>dispatch(hapusSungaiAction(value))
+	}
+}*/
+
+const withConnect = connect(
+	mapStateToProps,
+	null
+);
+
+export default compose(withConnect)(ProjectMark);

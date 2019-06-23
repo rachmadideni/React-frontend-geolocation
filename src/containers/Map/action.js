@@ -18,12 +18,106 @@ import {
 	SET_RIVER_PROP_ACTION,
 	PUSH_RIVER_PROP_KEYVAL_ACTION,
 	GET_RIVER_ATTRIBUTE_ACTION,
-	// GET_RIVER_ATTRIBUTE_SUCCESS_ACTION,
+	GET_RIVER_ATTRIBUTE_SUCCESS_ACTION,
+	GET_RIVER_ATTRIBUTE_FAIL_ACTION,
 	GET_RIVER_ACTION,
 	GET_RIVER_SUCCESS_ACTION,
 	GET_RIVER_FAILED_ACTION,
-	SET_SNACKBAR_ACTION
+	SET_SNACKBAR_ACTION,
+	PILIH_JENIS_SUNGAI,
+	UBAH_NAMA_SUNGAI_ACTION,
+	UBAH_JENIS_SUNGAI_ACTION,
+	UBAH_KECAMATAN_ACTION,
+	UBAH_KETERANGAN_ACTION,
+	HAPUS_SUNGAI_ACTION,
+	HAPUS_SUNGAI_SUCCESS_ACTION,
+	UBAH_NAMA_PROJECT_ACTION,
+	UBAH_TANGGAL_PROJECT_ACTION,
+	UBAH_KETERANGAN_PROJECT_ACTION,
+	GET_PROJECT_ATTRIBUTE_ACTION,
+	GET_PROJECT_ATTRIBUTE_SUCCESS_ACTION,
+	GET_PROJECT_ATTRIBUTE_FAIL_ACTION,
+	ADD_PROJECT_ACTION
 } from './constants';
+
+// UBAH FORM PROJECT DATA
+export function ubahNamaProjectAction(value){
+	return {
+		type:UBAH_NAMA_PROJECT_ACTION,
+		value
+	}
+}
+
+export function ubahTanggalProjectAction(value){
+	return {
+		type:UBAH_TANGGAL_PROJECT_ACTION,
+		value
+	}
+}
+
+export function ubahKeteranganProjectAction(value){
+	return {
+		type:UBAH_KETERANGAN_PROJECT_ACTION,
+		value
+	}
+}
+
+export function getProjectAttributeAction(payload){
+	return {
+		type:GET_PROJECT_ATTRIBUTE_ACTION,
+		payload
+	}
+}
+
+export function getProjectAttributeSuccessAction(payload){
+	return {
+		type:GET_PROJECT_ATTRIBUTE_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function getProjectAttributeFailAction(payload){
+	return {
+		type:GET_PROJECT_ATTRIBUTE_FAIL_ACTION,
+		payload
+	}
+}
+
+export function addProjectAction(payload){
+	return {
+		type:ADD_PROJECT_ACTION,
+		payload
+	}
+}
+
+// UBAH FORM RIVER DATA
+export function ubahNamaSungaiAction(value){
+	return {
+		type:UBAH_NAMA_SUNGAI_ACTION,
+		value
+	}
+}
+
+export function ubahJenisSungaiAction(value){
+	return {
+		type:UBAH_JENIS_SUNGAI_ACTION,
+		value
+	}
+}
+
+export function ubahKecamatanAction(value){
+	return {
+		type:UBAH_KECAMATAN_ACTION,
+		value
+	}
+}
+
+export function ubahKeteranganAction(value){
+	return {
+		type:UBAH_KETERANGAN_ACTION,
+		value
+	}
+}
 
 export function getRiverAttributeAction(payload){
 	// console.log(payload);
@@ -34,8 +128,33 @@ export function getRiverAttributeAction(payload){
 }
 
 export function getRiverAttributeSuccessAction(payload){
-	console.log(payload);	
+	console.log('getRiverAttributeSuccessAction payload:',payload);
+	return {
+		type:GET_RIVER_ATTRIBUTE_SUCCESS_ACTION,
+		payload
+	}	
 }
+
+export function getRiverAttributeFailAction(payload){
+	return {
+		type:GET_RIVER_ATTRIBUTE_FAIL_ACTION,
+		payload
+	}
+}
+
+export function hapusSungaiAction(payload){
+	return {
+		type:HAPUS_SUNGAI_ACTION,
+		payload
+	}
+}
+
+export function hapusSungaiSuccessAction(){
+	return {
+		type:HAPUS_SUNGAI_SUCCESS_ACTION
+	}
+}
+
 
 export function pushRiverPropKeyValAction(payload){
 	return {
@@ -50,9 +169,10 @@ export function setRiverPropAction(features){
 	}
 }
 
-export function addRiverAction(){
+export function addRiverAction(payload){
 	return {
-		type:ADD_RIVER_ACTION
+		type:ADD_RIVER_ACTION,
+		payload
 	}
 }
 
@@ -187,3 +307,11 @@ export function setSnackbarAction(payload){
 		payload
 	}	
 }
+
+// pilih jenis sungai (1=sungai utama,2=anak sungai)
+export function pilihJenisSungaiAction(payload){
+	return {
+		type:PILIH_JENIS_SUNGAI,
+		payload
+	}
+} 

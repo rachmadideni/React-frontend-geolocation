@@ -19,7 +19,21 @@ import {
 	GET_RIVER_ACTION,
 	GET_RIVER_SUCCESS_ACTION,
 	GET_RIVER_FAILED_ACTION,
-	SET_SNACKBAR_ACTION
+	SET_SNACKBAR_ACTION,
+	PILIH_JENIS_SUNGAI,
+	UBAH_NAMA_SUNGAI_ACTION,
+	UBAH_KECAMATAN_ACTION,
+	UBAH_JENIS_SUNGAI_ACTION,
+	UBAH_KETERANGAN_ACTION,
+	GET_RIVER_ATTRIBUTE_SUCCESS_ACTION,
+	GET_RIVER_ATTRIBUTE_FAIL_ACTION,
+	HAPUS_SUNGAI_ACTION,
+	HAPUS_SUNGAI_SUCCESS_ACTION,
+	UBAH_NAMA_PROJECT_ACTION,
+	UBAH_TANGGAL_PROJECT_ACTION,
+	UBAH_KETERANGAN_PROJECT_ACTION,
+	GET_PROJECT_ATTRIBUTE_SUCCESS_ACTION,
+	GET_PROJECT_ATTRIBUTE_FAIL_ACTION
 } from './constants';
 
 export const initialState = fromJS({
@@ -35,8 +49,8 @@ export const initialState = fromJS({
 	mapStyle:'mapbox://styles/mapbox/streets-v11',// light-v9
 	layerVisibility:{
 		kecamatan:false,
-		sungai:true,
-		project:false
+		sungai:false,
+		project:true
 	},
 	isDrawerOpen:false,
 	DASMODE:'EDIT',// enum : VIEW atau EDIT
@@ -65,6 +79,20 @@ export const initialState = fromJS({
 	snackBarOpen:false,
 	error:{
 		message:null
+	},
+	jenis_sungai:"1",
+	form:{
+		river:{
+			kecamatan:null,
+			sungai:'',
+			jenis_sungai:"1",
+			keterangan:'',
+		},
+		project:{
+			nampro:'',
+			tglpro:'',
+			ketera:''
+		}
 	}
 });
 
@@ -132,6 +160,64 @@ function mapContainerReducer(state = initialState, action){
 
 		case SET_SNACKBAR_ACTION:
 			return state.set('snackBarOpen', action.payload);
+
+		case PILIH_JENIS_SUNGAI:
+			return state.set('jenis_sungai', action.payload);
+
+		case UBAH_NAMA_SUNGAI_ACTION:{			
+			return state.setIn(['form','river','sungai'], action.value);
+		}
+
+		case UBAH_KECAMATAN_ACTION:{
+			return state.setIn(['form','river','kecamatan'], action.value);	
+		}
+
+		case UBAH_JENIS_SUNGAI_ACTION:{
+			return state.setIn(['form','river','jenis_sungai'], action.value);	
+		}
+
+		case UBAH_KETERANGAN_ACTION:{
+			return state.setIn(['form','river','keterangan'], action.value);	
+		}
+
+		case UBAH_NAMA_PROJECT_ACTION:{
+			return state.setIn(['form','project','nampro'], action.value);
+		}
+
+		case UBAH_TANGGAL_PROJECT_ACTION:{
+			return state.setIn(['form','project','tglpro'], action.value);
+		}
+
+		case UBAH_KETERANGAN_PROJECT_ACTION:{
+			return state.setIn(['form','project','ketera'], action.value);
+		}
+
+		case GET_RIVER_ATTRIBUTE_SUCCESS_ACTION:{
+			// console.log(action.payload);
+			// return state;
+			return state.setIn(['form','river'], new Map(action.payload));
+		}
+
+		case GET_RIVER_ATTRIBUTE_FAIL_ACTION:{
+			return state.setIn(['form','river'], new Map(action.payload))
+		}
+
+		case GET_PROJECT_ATTRIBUTE_SUCCESS_ACTION:{
+			return state.setIn(['form','project'], new Map(action.payload))
+		} 
+		
+		case GET_PROJECT_ATTRIBUTE_FAIL_ACTION:{
+			return state.setIn(['form','project'], new Map(action.payload))
+		}
+
+		case HAPUS_SUNGAI_ACTION:{
+			return state.set('loading',true);
+		}
+
+		case HAPUS_SUNGAI_SUCCESS_ACTION:{
+			return state.set('loading',false);
+		}
+
 		default:
 			return state;
 	}

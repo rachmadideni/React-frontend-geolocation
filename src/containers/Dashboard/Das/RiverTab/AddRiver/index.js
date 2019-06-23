@@ -92,7 +92,7 @@ class AddRiver extends Component{
 							</Typography>
 						
 						<Typography 
-							variant="caption" 
+							variant="body1" 
 							gutterBottom>
 							fitur untuk menambahkan informasi sungai
 						</Typography>			

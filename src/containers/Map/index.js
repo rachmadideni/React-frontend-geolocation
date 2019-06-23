@@ -36,15 +36,19 @@ import {
 	makeSelectLayerVisibility,
 	makeSelectDASMode,
 	makeSelectRiverFeatures,
-	makeSelectRiverData
+	makeSelectRiverData,
+	makeSelectProjectData,
+	makeSelectLoading
 } from './selectors';
 
 import { SUNGAI } from './constants';
 
 import BatasKecamatan from './Layer/BatasKecamatan';
-// import ProjectMark from './Layer/ProjectMark';
+import ProjectMark from './Layer/ProjectMark';
 import Sungai from './Layer/Sungai';
 import RiverMap from './Layer/RiverMap';
+
+import LoadingDialog from '../../components/LoadingDialog';
 
 // Components
 // import DashboardTab from './DashboardTab';
@@ -108,12 +112,14 @@ class MapContainer extends React.Component {
 			mapStyle,
 			layerVisibility,
 			DASMode,
-			geodata
+			geodata,
+			geodataProject,
+			isLoading
 		} = this.props;
 
 		return (
 			<Fragment>
-							
+				<LoadingDialog isLoading={isLoading} />			
 				<MapGL 					
 					accessToken = { mapConfig.token } 
 					latitude = { viewport.latitude } 
@@ -125,8 +131,11 @@ class MapContainer extends React.Component {
 						viewport => this.handleViewportChange(viewport)
 					}>
 					
-					{/*layerVisibility.kecamatan && <BatasKecamatan />*/}
-					{/*<ProjectMark />*/}
+					{/*layerVisibility.kecamatan && <BatasKecamatan />*/}					
+					{
+						// render project
+						layerVisibility.project && <ProjectMark data={geodataProject} />
+					}
 					{
 						// render river hanya jika features punya isi
 						(layerVisibility.sungai && geodata.features.length > 0 ) && 
@@ -148,11 +157,13 @@ const mapStateToProps = createStructuredSelector({
 	viewport: makeSelectMapViewport(),
 	//geoData: makeSelectGeojson(),
 	geodata:makeSelectRiverData(),
+	geodataProject:makeSelectProjectData(),
 	marker: makeSelectMarker(),	
 	mapStyle: makeSelectMapStyle(),
 	layerVisibility: makeSelectLayerVisibility(),
 	DASMode: makeSelectDASMode(),
-	selectRiverFeatures: makeSelectRiverFeatures()
+	selectRiverFeatures: makeSelectRiverFeatures(),
+	isLoading: makeSelectLoading(),
 });
 
 function mapDispatchToProps(dispatch){
