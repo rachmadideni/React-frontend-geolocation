@@ -38,6 +38,8 @@ import {
 import isEmpty from 'validator/lib/isEmpty';
 import moment from 'moment';
 
+import { api } from '../../../environtments';
+
 /* UPLOAD Component */
 class UploadComp extends React.Component {
 	constructor(props){
@@ -110,8 +112,8 @@ class FormProject extends React.Component {
 	}
 
 	componentDidUpdate(props,state){
-		if(props.featureId !== this.props.featureId){
-			if(this.props.featureId){
+		if (props.featureId !== this.props.featureId) {
+			if (this.props.featureId) {
 				this.props.getProjectAttribute(this.props.featureId);// call saga utk ambil atribut				
 			}
 			// console.log('features geometry:',this.props.features[0].geometry.coordinates)
@@ -210,6 +212,31 @@ class FormProject extends React.Component {
 		this.props.uploadProject({ files, id });
 	}
 
+	_renderFiles = () => {
+		const { upload } = this.props.dt
+		// console.log('upload',upload);
+		if(upload.length > 0){
+			return upload.map((item,index)=>{
+				return (
+					<a key={index} href={`${api.host}/api/static/${item.filename}`}>
+						<img 
+							style={{
+								width:'55px',
+								height:'55px',
+								border:'solid 1px #354577',							
+								margin:'5px',
+								padding:'2px'
+							}} src={`${api.host}/api/static/${item.filename}`}></img></a>				
+				);
+			})			
+		}
+		
+		return (
+			<h4>tidak ada file upload</h4>
+		);
+
+	}
+
 	render(){
 
 		const { 
@@ -228,7 +255,7 @@ class FormProject extends React.Component {
 			<Wrapper 
 				container 
 				direction="column" 
-				style={{ display:'flex' }}>
+				style={{ display:'flex',height:'450px' }}>
 
 				<FormWrapper>
 					<FormInnerWrapper
@@ -362,7 +389,16 @@ class FormProject extends React.Component {
 							  onClick={this._handleUpload}
 							  disabled={ (featureId && dt.id) ? false : true }>
 							  upload
-							</Button>					
+							</Button>
+
+							<div style={{
+								flex:1,
+								width:'100%',
+								height:'150px'
+							}}>
+							{this._renderFiles()}							
+							</div>
+
 						</div>
 
 			      

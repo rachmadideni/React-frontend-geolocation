@@ -6,14 +6,13 @@ import MapGL, {
 
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
-// redux
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import reducer from './reducer';
 import saga from './saga';
-// import { changeMapModeAction } from './action';
 import injectSaga from '../../utils/injectSaga';
+// import { changeMapModeAction } from './action';
 import injectReducer from '../../utils/injectReducer';
 
 import { 
@@ -74,25 +73,13 @@ class MapContainer extends React.Component {
 	}
 
 	componentDidMount(){
-		
-		
-
-		/*const fetchInitialData = new Promise((resolve, reject)=>{
-			resolve(
-				this.props.getRiver(),
-				this.props.getProject());			
-		}).then(result=>console.log(result))
-		.catch(err=>console.log(err));
-		return fetchInitialData;
-		console.log('fetchInitialData:', fetchInitialData);*/ 
 		// const { getGeojon } = this.props;
 		// getGeojon('sungai');
 
 		/*const map = this._map.current.getMap();
     	map.once('load', () => {
       		map.setPaintProperty('water', 'fill-color', '#db7093');
-    	});*/
-    					
+    	});*/    					
 	}
 
 	// REDUX CHANGE TAB HANDLER
@@ -151,7 +138,8 @@ class MapContainer extends React.Component {
 					style={{ width: '100vw', height: '90vh' }}
 					onViewportChange = { 
 						viewport => this.handleViewportChange(viewport)
-					}>
+					}
+					onLoad = { e=>console.log(e) }>
 					
 					{/*layerVisibility.kecamatan && <BatasKecamatan />*/}					
 					{						

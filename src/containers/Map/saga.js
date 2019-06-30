@@ -68,34 +68,47 @@ export function* uploadFile(file){
 export function* uploadProjectFile(action){
 	const file = action.payload.files;
 	const projectId = action.payload.id;
-	console.log('action paylod id:',action.payload.id)
+	// console.log('action paylod id:',action.payload.id)
 	// TODO : kompress file
 	try{
 		const responseData = yield uploadFile({ file, projectId });
-		console.log('saga response upload:',responseData);
+		// console.log('saga response upload:',responseData);
 		yield put(uploadProjectSuccessAction());
 	}catch(err){
 		console.log('uploadProjectFile:',err);
 	}
 }
 
+export function* getUploadFiles(featureId){	
+	const endpoint = `${api.host}/api/geojson/project/getUploadFiles/${featureId}`;
+	const requestOpt = { method:'GET' }
+	try{
+		const response = yield call(request, endpoint, requestOpt);
+		return response.data;
+	}catch(err){
+		throw err;	
+	}
+}
+
 // AMBIL SEMUA DATA AWAL PROJECT
 export function* fetchProjectAttribute(action){
-	// console.log(action.payload);
+	console.log(action.payload);
 	const featureId = action.payload;
 	const endpoint = `${api.host}/api/geojson/project/attribut/${featureId}`;
 	const requestOpt = { method:'GET' }
 	try{
-		const response = yield call(request, endpoint, requestOpt);
-		console.log('saga fetchAttribute Project:',response);
-		const { id, nampro, tglpro, ketera } = response.data[0]
-		yield put(getProjectAttributeSuccessAction({ id, nampro, tglpro, ketera }))
+		const response = yield call(request, endpoint, requestOpt);		
+		const { id, nampro, tglpro, ketera } = response.data[0];
+		const uploadedFiles = yield getUploadFiles(featureId);
+		yield put(getProjectAttributeSuccessAction({ id, nampro, tglpro, ketera, upload:uploadedFiles }))
 	}catch(err){
+		const uploadedFiles = yield getUploadFiles(featureId);
 		yield put(getProjectAttributeFailAction({
 			id:"",
 			nampro:"",
 			tglpro:"",
-			ketera:""
+			ketera:"",
+			upload:uploadedFiles
 		}));
 		yield put(setSnackbarAction(true))
 	}
