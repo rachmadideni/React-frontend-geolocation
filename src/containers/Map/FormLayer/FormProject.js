@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Grid from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
@@ -13,15 +14,18 @@ import { color } from '../../../styles/constants'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+
 import {
 	makeSelectFormProjectData
 } from '../../Map/selectors';
+
 import {
 	ubahNamaProjectAction,
 	ubahTanggalProjectAction,
 	ubahKeteranganProjectAction,
 	getProjectAttributeAction,
-	addProjectAction
+	addProjectAction,
+	uploadProjectAction
 } from '../../Map/action';
 
 import { 
@@ -32,6 +36,58 @@ import {
 	ActionButton } from '../../../components/Form';
 
 import isEmpty from 'validator/lib/isEmpty';
+import moment from 'moment';
+
+/* UPLOAD Component */
+class UploadComp extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			upload:[0,1,2]
+		}
+	}
+
+	_addUploadItem = (index,event) => {
+		/*console.log(index);
+		console.log(event);
+		const upload = this.state.upload.slice();//copy
+		upload[index] = event.target.value;
+		this.setState({
+			upload:upload
+		})*/
+	}
+
+	_renderUpload = () => {
+		const { upload } = this.state;
+		return upload.map((item,index)=>{
+			return (		
+				<div key={index}>				
+					<input 
+						type="file" 
+						value="" />
+					<Button 
+					  variant="contained" 
+					  size="small"
+					  onClick={this._addUploadItem(index)}>
+					  +
+					</Button>					
+				</div>			
+			);
+		});		
+	}
+
+	render(){
+		const {
+			upload
+		} = this.state;
+
+		return (
+			<React.Fragment>
+			{this._renderUpload()}
+			</React.Fragment>
+		)
+	}
+}
 
 class FormProject extends React.Component {
 	constructor(props){
@@ -43,9 +99,14 @@ class FormProject extends React.Component {
 				nampro:null,
 				tglpro:null
 			},
-			isSubmitted:false
+			isSubmitted:false,
+			files:null,
 		}
 		this.handleSubmit = this.handleSubmit.bind(this); 
+	}
+
+	componentDidMount(){
+		console.log(moment().format('YYYY-MM-DD'));
 	}
 
 	componentDidUpdate(props,state){
@@ -132,6 +193,23 @@ class FormProject extends React.Component {
 		return !isError;
 	}
 
+	_handleFileUploadChanges = (event) => {
+		console.log('event.target.files :', event.target.files[0]);
+		if(!!event.target.files && !!event.target.files[0]){			
+			this.setState({
+				files:event.target.files[0]
+			})
+		}
+		return false;
+	}
+
+	_handleUpload = () => {
+		// console.log(file);
+		const { files } = this.state;
+		const { id } = this.props.dt;
+		this.props.uploadProject({ files, id });
+	}
+
 	render(){
 
 		const { 
@@ -146,7 +224,12 @@ class FormProject extends React.Component {
 		} = this.props;
 
 		return (
-			<Wrapper container direction="column" style={{ display:'flex' }}>
+			
+			<Wrapper 
+				container 
+				direction="column" 
+				style={{ display:'flex' }}>
+
 				<FormWrapper>
 					<FormInnerWrapper
 						container
@@ -228,8 +311,7 @@ class FormProject extends React.Component {
 							id="tglpro"
 							label="tanggal project"
 							type="date"
-							defaultValue="2017-05-24"
-							value={dt.tglpro}
+							defaultValue={new Date().toString()}							
 							disabled={featureId ? false: true}
 							InputLabelProps={{
 			          shrink: true,
@@ -260,11 +342,50 @@ class FormProject extends React.Component {
 			      	disabled={featureId ? false: true}
 			      	 />
 
+			      <div 
+			      	style={{ 
+			      		backgroundColor:'none',
+			      		height:'35px'
+			      	}}>
+
+							<input 
+								type="file" 
+								name="project"
+								accept="image/*"
+								disabled={ (featureId && dt.id) ? false : true } 
+								onChange={this._handleFileUploadChanges} />
+							
+							<Button 
+							  variant="contained" 
+							  size="small"
+							  success={true}
+							  onClick={this._handleUpload}
+							  disabled={ (featureId && dt.id) ? false : true }>
+							  upload
+							</Button>					
+						</div>
+
+			      
+
 					</form>
 				</FormWrapper>
 			</Wrapper>
 		);
 	}
+}
+
+FormProject.propTypes = {
+	featureId: PropTypes.string,
+  features: PropTypes.array,
+  dt: PropTypes.object,// form data
+  validasiNamaProject: PropTypes.func,
+  validasiTanggalProject: PropTypes.func,
+  ubahNamaProject: PropTypes.func,
+  ubahTanggalProject: PropTypes.func,
+  ubahKeteranganProject: PropTypes.func,
+  getProjectAttribute: PropTypes.func,
+  addProject: PropTypes.func,
+  handleSubmit: PropTypes.func
 }
 
 const mapStateToProps = createStructuredSelector({
@@ -277,7 +398,8 @@ function mapDispatchToProps(dispatch){
 		ubahTanggalProject: value=>dispatch(ubahTanggalProjectAction(value)),
 		ubahKeteranganProject: value=>dispatch(ubahKeteranganProjectAction(value)),
 		getProjectAttribute: featureId=>dispatch(getProjectAttributeAction(featureId)),
-		addProject: features=>dispatch(addProjectAction(features))		
+		addProject: features=>dispatch(addProjectAction(features)),
+		uploadProject: file=>dispatch(uploadProjectAction(file))		
 	}
 }
 

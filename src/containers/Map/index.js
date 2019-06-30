@@ -23,7 +23,8 @@ import {
 	putMarkerSuccessAction,
 	clearMarkerSuccessAction,
 	changeDasModeAction,
-	getRiverAction
+	getRiverAction,
+	getProjectAction
 } from './action';
 
 import { 
@@ -63,8 +64,27 @@ class MapContainer extends React.Component {
 		};		
 	}
 
+	componentWillMount(){
+		this.props.getRiver();
+		this.props.getProject();
+	}
+
+	componentDidUpdate(){
+		// this.props.getProject();	
+	}
+
 	componentDidMount(){
-		this.props.getRiver();		
+		
+		
+
+		/*const fetchInitialData = new Promise((resolve, reject)=>{
+			resolve(
+				this.props.getRiver(),
+				this.props.getProject());			
+		}).then(result=>console.log(result))
+		.catch(err=>console.log(err));
+		return fetchInitialData;
+		console.log('fetchInitialData:', fetchInitialData);*/ 
 		// const { getGeojon } = this.props;
 		// getGeojon('sungai');
 
@@ -119,7 +139,9 @@ class MapContainer extends React.Component {
 
 		return (
 			<Fragment>
-				<LoadingDialog isLoading={isLoading} />			
+				<LoadingDialog 
+					isLoading={isLoading} />			
+				
 				<MapGL 					
 					accessToken = { mapConfig.token } 
 					latitude = { viewport.latitude } 
@@ -132,17 +154,25 @@ class MapContainer extends React.Component {
 					}>
 					
 					{/*layerVisibility.kecamatan && <BatasKecamatan />*/}					
-					{
-						// render project
-						layerVisibility.project && <ProjectMark data={geodataProject} />
+					{						
+						layerVisibility.project && 
+						<ProjectMark 
+							data = { geodataProject } riverData = { this.props.geodata } />
 					}
+					
 					{
 						// render river hanya jika features punya isi
-						(layerVisibility.sungai && geodata.features.length > 0 ) && 
+						// jike river visible = true dan data river ada   
+						(layerVisibility.sungai && geodata.features.length < 0) &&
 						<RiverMap 
 							data={this.props.geodata} 
-							fetchRiver={this.props.getRiver} /> 
-						/*<Sungai data = { SUNGAI } geodata={geodata} dt={this.props.selectRiverFeatures} DASMode = { DASMode } />*/
+							fetchRiver={this.props.getRiver} />
+							/*
+						<Sungai 
+							data = { SUNGAI } 
+							geodata={geodata} dt={this.props.selectRiverFeatures} 
+							DASMode = { DASMode }>
+						</Sungai>*/
 					}					
 					{ this.renderNavigationControl() }				  					    			  
 				</MapGL>								
@@ -155,7 +185,6 @@ const mapStateToProps = createStructuredSelector({
 	tabValue: makeSelectTabValue(),
 	mapConfig: makeSelectMapConfig(),
 	viewport: makeSelectMapViewport(),
-	//geoData: makeSelectGeojson(),
 	geodata:makeSelectRiverData(),
 	geodataProject:makeSelectProjectData(),
 	marker: makeSelectMarker(),	
@@ -164,18 +193,20 @@ const mapStateToProps = createStructuredSelector({
 	DASMode: makeSelectDASMode(),
 	selectRiverFeatures: makeSelectRiverFeatures(),
 	isLoading: makeSelectLoading(),
+	//geoData: makeSelectGeojson(),
 });
 
 function mapDispatchToProps(dispatch){
 	return {
+		getRiver: () => dispatch(getRiverAction()),
+		getProject: () => dispatch(getProjectAction()),
+		changeTabValue: (value) => dispatch(changeTabValueAction(value)),
+    changeViewport: ({ latitude, longitude, zoom }) => dispatch(changeViewportAction({ latitude, longitude, zoom })),
+    putMarker: payload => dispatch(putMarkerSuccessAction(payload)),
+    clearMarker: () => dispatch(clearMarkerSuccessAction()),
+    changeDasMode: payload => dispatch(changeDasModeAction(payload)),
 		// changeMapMode:()=>dispatch(changeMapModeAction()),
-		changeTabValue: (value)=>dispatch(changeTabValueAction(value)),
-		changeViewport: ({ latitude, longitude, zoom })=> dispatch(changeViewportAction({ latitude,longitude,zoom })),
 		// getGeojon: key => dispatch(getGeojonAction(key)),
-		putMarker: payload => dispatch(putMarkerSuccessAction(payload)),
-		clearMarker: () => dispatch(clearMarkerSuccessAction()),
-		changeDasMode: payload=>dispatch(changeDasModeAction(payload)),
-		getRiver: ()=>dispatch(getRiverAction())
 	}
 }
 

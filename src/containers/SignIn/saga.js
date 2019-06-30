@@ -26,8 +26,8 @@ export function* login(){
 
 	try{
 		const response = yield call(request, endpoint, requestOpt);
-		const token = response.response.token;		
-		yield put(setAuthTokenAction(response.response.token));		
+		const token = response.data.token;	
+		yield put(setAuthTokenAction(token));		
 		yield put(loginSuccessAction());
 	}catch(err){
     	let errorMsg = null;

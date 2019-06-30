@@ -11,5 +11,6 @@ export const color = {
 	success:'#50d329',
 	primaryTextColor:'#ffffff',
 	secondaryTextColor:'#ffffff',
-	light:'#f2f2f2'
+	light:'#f2f2f2',
+	danger:'#d12525'
 }

@@ -23,7 +23,9 @@ import {
 	ubahKecamatanAction,
 	ubahKeteranganAction,
 	getRiverAttributeAction,
-	addRiverAction } from '../../Map/action';
+	addRiverAction,
+	hapusSungaiAction,
+	getRiverAction } from '../../Map/action';
 
 import { 
 	makeSelectOptions,
@@ -61,7 +63,7 @@ const ActionButton = styled(Button).attrs({
 	}
 	&&{
 		color:white;
-		background-color:${props=>props.success ? color.success : color.secondary};
+		background-color:${props=>props.success ? color.success : color.danger};
 		box-shadow:none;
 		margin-bottom:5px;
 		margin-right:5px;
@@ -170,7 +172,7 @@ class FormRiverAttributes extends React.Component{
 			if(this.props.featureId){
 				this.props.getRiverAttribute(this.props.featureId);// call saga utk ambil atribut				
 			}
-			console.log('features geometry:',this.props.features[0].geometry.coordinates)
+			// console.log('features geometry:',this.props.features[0].geometry.coordinates)
 			this.setState((state)=>{
 				return {
 					featureId:this.props.featureId,
@@ -243,6 +245,16 @@ class FormRiverAttributes extends React.Component{
 		return false;
 	}
 
+	handleDelete = () => {		
+		const { featureId } = this.state;
+		const d = window.confirm('anda akan menghapus sungai')
+		if(d == true){
+			this.props.hapusSungai(featureId);
+			// this.props.getRiver();			
+			// this.forceUpdate()
+		}
+	}
+
 	render(){
 
 		const { 
@@ -309,15 +321,7 @@ class FormRiverAttributes extends React.Component{
 									borderRadius:'0',
 									boxShadow:'none',
 								}}>
-									<ActionButton 									
-										size="small" 
-										variant="contained" 
-										success="true"
-										onClick = { this.handleSubmit }										
-										fullWidth
-										disabled = { featureId ? false : true || !!this.state.error.sungai }>
-										Simpan Atribut
-									</ActionButton>									
+																		
 								</Grid>
 							</Grid>
 
@@ -419,6 +423,26 @@ class FormRiverAttributes extends React.Component{
 
 					{/* simpan ke state : keterangan */}
 
+						<ActionButton 									
+							size="small" 
+							variant="contained" 
+							success={true}
+							fullWidth
+							onClick = { this.handleSubmit }										
+							color="primary"
+							disabled = { featureId ? false : true || !!this.state.error.sungai }>
+							Simpan Atribut
+						</ActionButton>
+						<ActionButton 									
+							size="small" 
+							variant="contained" 
+							success={false}										
+							fullWidth
+							onClick = { this.handleDelete }																				
+							disabled = { featureId ? false : true || !!this.state.error.sungai }>
+							Hapus
+						</ActionButton>
+
 					</form>
 				</FormWrapper>
 			</Wrapper>
@@ -442,7 +466,9 @@ function mapDispatchToProps(dispatch){
 		ubahKecamatan:value=>dispatch(ubahKecamatanAction(value)),
 		ubahKeterangan:value=>dispatch(ubahKeteranganAction(value)),
 		getRiverAttribute: featureId=>dispatch(getRiverAttributeAction(featureId)),
-		addRiver: features=>dispatch(addRiverAction(features))
+		addRiver: features=>dispatch(addRiverAction(features)),
+		hapusSungai: value=>dispatch(hapusSungaiAction(value)),
+		getRiver: ()=>dispatch(getRiverAction()),
 	}
 }
 

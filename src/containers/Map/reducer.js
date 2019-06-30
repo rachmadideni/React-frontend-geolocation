@@ -33,7 +33,12 @@ import {
 	UBAH_TANGGAL_PROJECT_ACTION,
 	UBAH_KETERANGAN_PROJECT_ACTION,
 	GET_PROJECT_ATTRIBUTE_SUCCESS_ACTION,
-	GET_PROJECT_ATTRIBUTE_FAIL_ACTION
+	GET_PROJECT_ATTRIBUTE_FAIL_ACTION,
+	GET_PROJECT_ACTION,
+	GET_PROJECT_SUCCESS_ACTION,
+	GET_PROJECT_FAILED_ACTION,
+	UPLOAD_PROJECT_ACTION,
+	UPLOAD_PROJECT_SUCCESS_ACTION
 } from './constants';
 
 export const initialState = fromJS({
@@ -49,7 +54,7 @@ export const initialState = fromJS({
 	mapStyle:'mapbox://styles/mapbox/streets-v11',// light-v9
 	layerVisibility:{
 		kecamatan:false,
-		sungai:false,
+		sungai:true,
 		project:true
 	},
 	isDrawerOpen:false,
@@ -89,9 +94,11 @@ export const initialState = fromJS({
 			keterangan:'',
 		},
 		project:{
+			id:'',
 			nampro:'',
 			tglpro:'',
-			ketera:''
+			ketera:'',
+			upload:[]
 		}
 	}
 });
@@ -193,8 +200,6 @@ function mapContainerReducer(state = initialState, action){
 		}
 
 		case GET_RIVER_ATTRIBUTE_SUCCESS_ACTION:{
-			// console.log(action.payload);
-			// return state;
 			return state.setIn(['form','river'], new Map(action.payload));
 		}
 
@@ -218,6 +223,23 @@ function mapContainerReducer(state = initialState, action){
 			return state.set('loading',false);
 		}
 
+		case GET_PROJECT_ACTION:
+			return state.set('loading',true);
+
+		case GET_PROJECT_SUCCESS_ACTION:{
+			return state.set('loading',false).setIn(['geodata','project','features'], new List(action.payload));
+		}
+
+		case GET_PROJECT_FAILED_ACTION:
+			return state
+				.set('loading',false)
+				.setIn(['error', 'message'], action.payload);
+
+		case UPLOAD_PROJECT_ACTION:
+			return state.set('loading',true);
+
+		case UPLOAD_PROJECT_SUCCESS_ACTION:
+			return state.set('loading',false);
 		default:
 			return state;
 	}

@@ -190,7 +190,7 @@ class Sungai extends React.Component {
 
     RiverOnLeave = () => {
         if (this.state.hoveredSungaiId) {
-            this.setState({ hoveredSungaiId: null });
+            // this.setState({ hoveredSungaiId: null });
         }
     };
 

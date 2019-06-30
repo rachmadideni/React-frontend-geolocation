@@ -49,7 +49,7 @@ class RiverMap extends Component {
 	getRiverAttributes = data => {
 
 		if(data.features.length > 0){
-			console.log('onChange:',data.features);
+			// console.log('onChange:',data.features);
 			const availableProperty = data.features[0].properties;
 			const featureId = data.features[0].id;
 			const features = data.features;

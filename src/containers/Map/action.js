@@ -34,10 +34,15 @@ import {
 	UBAH_NAMA_PROJECT_ACTION,
 	UBAH_TANGGAL_PROJECT_ACTION,
 	UBAH_KETERANGAN_PROJECT_ACTION,
+	GET_PROJECT_ACTION,
+	GET_PROJECT_SUCCESS_ACTION,
+	GET_PROJECT_FAILED_ACTION,
 	GET_PROJECT_ATTRIBUTE_ACTION,
 	GET_PROJECT_ATTRIBUTE_SUCCESS_ACTION,
 	GET_PROJECT_ATTRIBUTE_FAIL_ACTION,
-	ADD_PROJECT_ACTION
+	ADD_PROJECT_ACTION,
+	UPLOAD_PROJECT_ACTION,
+	UPLOAD_PROJECT_SUCCESS_ACTION
 } from './constants';
 
 // UBAH FORM PROJECT DATA
@@ -78,7 +83,7 @@ export function getProjectAttributeSuccessAction(payload){
 
 export function getProjectAttributeFailAction(payload){
 	return {
-		type:GET_PROJECT_ATTRIBUTE_FAIL_ACTION,
+		type: GET_PROJECT_ATTRIBUTE_FAIL_ACTION,
 		payload
 	}
 }
@@ -89,6 +94,20 @@ export function addProjectAction(payload){
 		payload
 	}
 }
+
+export function uploadProjectAction(file){
+	return {
+		type:UPLOAD_PROJECT_ACTION,
+		payload:file		
+	}
+}
+
+export function uploadProjectSuccessAction(){
+	return {
+		type: UPLOAD_PROJECT_SUCCESS_ACTION
+	}
+}
+	
 
 // UBAH FORM RIVER DATA
 export function ubahNamaSungaiAction(value){
@@ -128,7 +147,7 @@ export function getRiverAttributeAction(payload){
 }
 
 export function getRiverAttributeSuccessAction(payload){
-	console.log('getRiverAttributeSuccessAction payload:',payload);
+	//console.log('getRiverAttributeSuccessAction payload:',payload);
 	return {
 		type:GET_RIVER_ATTRIBUTE_SUCCESS_ACTION,
 		payload
@@ -280,14 +299,14 @@ export function changeLayerVisibilityAction({ kecamatan,sungai,project }){
 }
 
 export function getRiverAction(){
-	console.log('getRiverAction');
+	// console.log('getRiverAction');
 	return {
 		type:GET_RIVER_ACTION
 	}
 }
 
 export function getRiverSuccessAction(payload){
-	console.log('getRiverSuccessAction payload:',payload);
+	// console.log('getRiverSuccessAction payload:',payload);
 	return {
 		type:GET_RIVER_SUCCESS_ACTION,
 		payload
@@ -314,4 +333,25 @@ export function pilihJenisSungaiAction(payload){
 		type:PILIH_JENIS_SUNGAI,
 		payload
 	}
-} 
+}
+
+export function getProjectAction(){
+	return {
+		type:GET_PROJECT_ACTION
+	}
+}
+
+export function getProjectSuccessAction(payload){
+	// console.log('getProjectSuccessAction payload:',payload);
+	return {
+		type:GET_PROJECT_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function getProjectFailedAction(payload){
+	return {
+		type:GET_PROJECT_FAILED_ACTION,
+		payload
+	}
+}
