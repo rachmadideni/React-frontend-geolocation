@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import Draw from '@urbica/react-map-gl-draw';
 
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+// import Card from '@material-ui/core/Card';
+// import CardActions from '@material-ui/core/CardActions';
+// import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -121,8 +121,8 @@ class RiverMap extends Component {
 	render(){		
 		const { 
 			river, 
-			hasAttribute, 
-			isRiverSelected, 
+			// hasAttribute, 
+			// isRiverSelected, 
 			featureId,
 			features,
 			dialogOpen } = this.state
@@ -149,11 +149,11 @@ class RiverMap extends Component {
 					 />
 					}
 				{/*onDrawDelete={ data => this.hapusSungai(data) }*/}
-				{	!this.props.layerVisibility.project &&				
+				
 					<FormRiverAttributes 					
 						featureId={featureId}
 						features={features} />
-				}
+				
 			</Fragment>
 		);
 	}

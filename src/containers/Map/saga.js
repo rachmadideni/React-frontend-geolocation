@@ -1,9 +1,12 @@
 import { 
 	call, put, all, takeLatest, 
 	// takeEvery, 
-	select } from 'redux-saga/effects';
+	//select
+	 } from 'redux-saga/effects';
 import request from '../../utils/request';
 import { api } from '../../environtments';
+
+import { push } from 'connected-react-router'
 
 import { 
 	// GET_GEOJSON_ACTION,
@@ -31,13 +34,14 @@ import {
 	hapusSungaiSuccessAction,
 	getProjectAttributeSuccessAction,
 	getProjectAttributeFailAction,
-	getProjectAction,
+	// getProjectAction,
 	getProjectSuccessAction,
 	getProjectFailedAction,
-	uploadProjectSuccessAction
+	uploadProjectSuccessAction,
+	addProjectSuccessAction
 } from './action';
 
-import { makeSelectRiverFeatures } from './selectors'
+// import { makeSelectRiverFeatures } from './selectors'
 
 import {
 	mapOptionsResponseToDisplay
@@ -57,10 +61,10 @@ export function* uploadFile(file){
 
 	try{
 		const response = yield call(request, endpoint, requestOpt);
-		console.log(response);
+		//console.log(response);
 		return response.data;
 	}catch(err){
-		console.log('uploadFile:',err);
+		//console.log('uploadFile:',err);
 		throw err;
 	}
 } 
@@ -71,11 +75,12 @@ export function* uploadProjectFile(action){
 	// console.log('action paylod id:',action.payload.id)
 	// TODO : kompress file
 	try{
-		const responseData = yield uploadFile({ file, projectId });
+		// const responseData = yield uploadFile({ file, projectId });
+		yield uploadFile({ file, projectId });
 		// console.log('saga response upload:',responseData);
 		yield put(uploadProjectSuccessAction());
 	}catch(err){
-		console.log('uploadProjectFile:',err);
+		//console.log('uploadProjectFile:',err);
 	}
 }
 
@@ -92,7 +97,7 @@ export function* getUploadFiles(featureId){
 
 // AMBIL SEMUA DATA AWAL PROJECT
 export function* fetchProjectAttribute(action){
-	console.log(action.payload);
+	// console.log(action.payload);
 	const featureId = action.payload;
 	const endpoint = `${api.host}/api/geojson/project/attribut/${featureId}`;
 	const requestOpt = { method:'GET' }
@@ -159,7 +164,7 @@ export function* getRiver(){
 	try{		
 		const response = yield call(request, endpoint, requestOpt);
 		yield put(getRiverSuccessAction(response.data))
-		console.log('getriver saga response:',response);
+		// console.log('getriver saga response:',response);
 	}catch(err){
 		yield put(getRiverFailedAction('Terjadi error saat mengambil data map!'))
 		yield put(setSnackbarAction(true))
@@ -171,7 +176,7 @@ export function* getRiver(){
 export function* addRiver(action){
 	
 	// let features = yield select(makeSelectRiverFeatures());
-	console.log(action);
+	//console.log(action);
 	let features = action.payload.features
 	let properties = action.payload.properties	
 	const endpoint = `${api.host}/api/geojson/sungai/add`;
@@ -188,10 +193,10 @@ export function* addRiver(action){
 
 	try{
 		const response = yield call(request, endpoint, requestOpt);
-		console.log('saga response:',response.response.data);
+		//console.log('saga response:',response.response.data);
 		return response.response.data;
 	}catch(err){
-		console.log('err:',err)
+		//console.log('err:',err)
 	}
 }
 
@@ -207,7 +212,7 @@ export function* getProject(){
 	try{		
 		const response = yield call(request, endpoint, requestOpt);
 		yield put(getProjectSuccessAction(response.data))
-		console.log('getProject saga response:',response);
+		//console.log('getProject saga response:',response);
 	}catch(err){
 		yield put(getProjectFailedAction('Terjadi error saat mengambil data project!'))
 		// yield put(setSnackbarAction(true))
@@ -216,7 +221,7 @@ export function* getProject(){
 }
 
 export function* addProject(action){
-	console.log('addProject:',action);
+	//console.log('addProject:',action);
 	
 	let features = action.payload.features
 	let properties = action.payload.properties	
@@ -233,17 +238,18 @@ export function* addProject(action){
 	};
 
 	try{
-		const response = yield call(request, endpoint, requestOpt);
-		console.log('saga response:',response);
-		// return response
-		return response.data;
+		// const response = yield call(request, endpoint, requestOpt);
+		yield call(request, endpoint, requestOpt);
+		//console.log('Add Project saga response:',response);
+		yield put(addProjectSuccessAction());
 	}catch(err){
-		console.log('err:',err)
+		//console.log('err:',err)
 	}	
+	// yield put(push('/dashboard')); 
 }
 
 export function* hapusRiver(action){
-	console.log(action);
+	//console.log(action);
 	let featureId = action.payload;
 	const endpoint = `${api.host}/api/geojson/sungai/hapus`;
 	const requestOpt = {
@@ -257,13 +263,13 @@ export function* hapusRiver(action){
 	};
 	try{
 		const response = yield call(request, endpoint, requestOpt);
-		console.log('saga response hapusRiver:', response);
+		//console.log('saga response hapusRiver:', response);
 		if(response.data){
 			yield put(hapusSungaiSuccessAction());
 			yield put(getRiverAction())
 		}		
 	}catch(err){
-		console.log('error saga:',err)
+		//console.log('error saga:',err)
 	}	
 }
 
@@ -308,7 +314,7 @@ export function* fetchRiverAttribute(action){
 		yield put(getRiverAttributeSuccessAction({ kecamatan:idkecm, sungai:nmsung, jenis_sungai:jenis_sungai, keterangan:keterangan }));
 
 	}catch(err){
-		console.log('error on saga:',err)
+		//console.log('error on saga:',err)
 		yield put(getRiverAttributeFailAction({
 			kecamatan:'',
 			sungai:'',
@@ -335,7 +341,7 @@ export function* getOptions(action){
 		}
 		
 	}	catch(err){
-		console.log(err)
+		//console.log(err)
 	}
 
 }

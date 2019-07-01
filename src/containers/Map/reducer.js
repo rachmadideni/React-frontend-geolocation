@@ -38,7 +38,10 @@ import {
 	GET_PROJECT_SUCCESS_ACTION,
 	GET_PROJECT_FAILED_ACTION,
 	UPLOAD_PROJECT_ACTION,
-	UPLOAD_PROJECT_SUCCESS_ACTION
+	UPLOAD_PROJECT_SUCCESS_ACTION,
+	ADD_PROJECT_ACTION,
+	ADD_PROJECT_SUCCESS_ACTION,
+	CHANGE_DRAW_MODE_ACTION
 } from './constants';
 
 export const initialState = fromJS({
@@ -51,11 +54,11 @@ export const initialState = fromJS({
 		longitude:119.494885,		
 		zoom:9			
 	},
-	mapStyle:'mapbox://styles/mapbox/streets-v11',// light-v9
+	mapStyle:'mapbox://styles/mapbox/streets-v11?optimize=true',// light-v9
 	layerVisibility:{
 		kecamatan:false,
 		sungai:true,
-		project:true
+		project:false
 	},
 	isDrawerOpen:false,
 	DASMODE:'EDIT',// enum : VIEW atau EDIT
@@ -112,6 +115,13 @@ function mapContainerReducer(state = initialState, action){
 			return state.set('tabValue',action.payload);
 		// case CHANGE_MAP_MODE_ACTION:
 		// 	return state;
+
+		case CHANGE_DRAW_MODE_ACTION:{
+			console.log('CHANGE_DRAW_MODE_ACTION = ', action.payload);
+			//return state;
+			return state.set('mode',action.payload.mode);			
+		}
+
 		case CHANGE_VIEWPORT_ACTION:
 			return state
 			.setIn(['viewport','latitude'],action.payload.latitude)
@@ -240,6 +250,11 @@ function mapContainerReducer(state = initialState, action){
 
 		case UPLOAD_PROJECT_SUCCESS_ACTION:
 			return state.set('loading',false);
+
+		case ADD_PROJECT_ACTION:
+			return state.set('loading',true);
+		case ADD_PROJECT_SUCCESS_ACTION:
+			return state.set('loading',false);					
 		default:
 			return state;
 	}

@@ -39,6 +39,8 @@ const makeSelectJenisSungai = () => createSelector(MapContainer, substate=>subst
 const makeSelectFormRiverData = () => createSelector(MapContainer, state=>state.getIn(['form','river']).toJS())
 const makeSelectFormProjectData = () => createSelector(MapContainer, state=>state.getIn(['form','project']).toJS())
 
+const makeSelectDrawMode = () => createSelector(MapContainer, state=>state.get('mode'));
+
 export {
 	makeSelectTabValue,
 	makeSelectMapConfig,
@@ -58,5 +60,6 @@ export {
 	makeSelectSnackBarState,
 	makeSelectJenisSungai,
 	makeSelectFormRiverData,
-	makeSelectFormProjectData
+	makeSelectFormProjectData,
+	makeSelectDrawMode
 }

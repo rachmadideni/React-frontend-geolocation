@@ -41,8 +41,10 @@ import {
 	GET_PROJECT_ATTRIBUTE_SUCCESS_ACTION,
 	GET_PROJECT_ATTRIBUTE_FAIL_ACTION,
 	ADD_PROJECT_ACTION,
+	ADD_PROJECT_SUCCESS_ACTION,
 	UPLOAD_PROJECT_ACTION,
-	UPLOAD_PROJECT_SUCCESS_ACTION
+	UPLOAD_PROJECT_SUCCESS_ACTION,
+	CHANGE_DRAW_MODE_ACTION
 } from './constants';
 
 // UBAH FORM PROJECT DATA
@@ -92,6 +94,12 @@ export function addProjectAction(payload){
 	return {
 		type:ADD_PROJECT_ACTION,
 		payload
+	}
+}
+
+export function addProjectSuccessAction(){
+	return {
+		type:ADD_PROJECT_SUCCESS_ACTION
 	}
 }
 
@@ -354,4 +362,11 @@ export function getProjectFailedAction(payload){
 		type:GET_PROJECT_FAILED_ACTION,
 		payload
 	}
+}
+
+export function changeDrawModeAction(payload){
+	return {
+		type:CHANGE_DRAW_MODE_ACTION,
+		payload
+	}	
 }

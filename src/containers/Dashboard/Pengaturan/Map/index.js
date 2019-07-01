@@ -107,10 +107,10 @@ class PengaturanMap extends React.Component {
 									<RadioGroup
 										value={this.props.mapStyle}
 										onChange={this.handleMapStyle}>
-											<FormControlLabel value="mapbox://styles/mapbox/streets-v11" label="Street" control={<Radio />} labelPlacement="end" /> 
-											<FormControlLabel value="mapbox://styles/mapbox/light-v10" label="Light" control={<Radio />} labelPlacement="end" /> 
-											<FormControlLabel value="mapbox://styles/mapbox/satellite-v9" label="Satelit" control={<Radio />} labelPlacement="end" /> 
-											<FormControlLabel value="mapbox://styles/mapbox/dark-v10" label="Gelap" control={<Radio />} labelPlacement="end" /> 
+											<FormControlLabel value="mapbox://styles/mapbox/streets-v11?optimize=true" label="Street" control={<Radio />} labelPlacement="end" /> 
+											<FormControlLabel value="mapbox://styles/mapbox/light-v10?optimize=true" label="Light" control={<Radio />} labelPlacement="end" /> 
+											<FormControlLabel value="mapbox://styles/mapbox/satellite-v9?optimize=true" label="Satelit" control={<Radio />} labelPlacement="end" /> 
+											<FormControlLabel value="mapbox://styles/mapbox/dark-v10?optimize=true" label="Gelap" control={<Radio />} labelPlacement="end" /> 
 									</RadioGroup>														
 							</Grid>
 							<Divider/>

@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import Grid from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import FormLabel from '@material-ui/core/FormLabel';
+// import Radio from '@material-ui/core/Radio';
+// import RadioGroup from '@material-ui/core/RadioGroup';
 import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
-import { color } from '../../../styles/constants'
+// import MenuItem from '@material-ui/core/MenuItem';
+// import { color } from '../../../styles/constants'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -40,56 +40,7 @@ import moment from 'moment';
 
 import { api } from '../../../environtments';
 
-/* UPLOAD Component */
-class UploadComp extends React.Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			upload:[0,1,2]
-		}
-	}
-
-	_addUploadItem = (index,event) => {
-		/*console.log(index);
-		console.log(event);
-		const upload = this.state.upload.slice();//copy
-		upload[index] = event.target.value;
-		this.setState({
-			upload:upload
-		})*/
-	}
-
-	_renderUpload = () => {
-		const { upload } = this.state;
-		return upload.map((item,index)=>{
-			return (		
-				<div key={index}>				
-					<input 
-						type="file" 
-						value="" />
-					<Button 
-					  variant="contained" 
-					  size="small"
-					  onClick={this._addUploadItem(index)}>
-					  +
-					</Button>					
-				</div>			
-			);
-		});		
-	}
-
-	render(){
-		const {
-			upload
-		} = this.state;
-
-		return (
-			<React.Fragment>
-			{this._renderUpload()}
-			</React.Fragment>
-		)
-	}
-}
+// import { Redirect } from 'react-router-dom';
 
 class FormProject extends React.Component {
 	constructor(props){
@@ -103,20 +54,41 @@ class FormProject extends React.Component {
 			},
 			isSubmitted:false,
 			files:null,
+			isValidSubmit:false
 		}
-		this.handleSubmit = this.handleSubmit.bind(this); 
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this._getProjectDate = this._getProjectDate.bind(this); 
 	}
 
 	componentDidMount(){
-		console.log(moment().format('YYYY-MM-DD'));
+		// console.log(moment().format('YYYY-MM-DD'));	
+		// console.log(this.props.dt.tglpro);
+		// console.log('history:',this.props);
+	}
+
+	_getProjectDate(){
+		const { tglpro } = this.props.dt;
+		if(!tglpro){
+			return {
+				tglpro:moment().toDate()				
+			}
+		}
+
+		return {
+      tglpro: moment(tglpro).toDate(),
+      displayDate: moment(tglpro).format('YYYY-MM-DD')      
+    };
 	}
 
 	componentDidUpdate(props,state){
+
+		// console.log('1=', props.featureId);
+		// console.log('2=', this.props.featureId);
+		// console.log('3=', this.state.featureId);
 		if (props.featureId !== this.props.featureId) {
-			if (this.props.featureId) {
-				this.props.getProjectAttribute(this.props.featureId);// call saga utk ambil atribut				
-			}
-			// console.log('features geometry:',this.props.features[0].geometry.coordinates)
+			if (this.props.featureId) {				
+				this.props.getProjectAttribute(this.props.featureId);// call saga utk ambil atribut								
+			}			
 			this.setState((state)=>{
 				return {
 					featureId:this.props.featureId,
@@ -131,25 +103,29 @@ class FormProject extends React.Component {
 		const {
 			nampro,
 			tglpro,
-			keterangan
+			// keterangan
 		} = this.props.dt
 
+		const {
+			addProject
+		} = this.props
+
 		const { features } = this.state;
-		console.log({ features });
+		
 		this.setState({
 			isSubmitted:true
 		})
-		//  
+		  
 		if(this.validasiNamaProject(nampro) && this.validasiTanggalProject(tglpro)){
 			alert('lolos validasi');
-			this.props.addProject({
+			// console.log('check history:',this.props);			
+			addProject({
 				features,
 				properties:this.props.dt
-			})
+			});
+			// return <Redirect to="/signin" />
 		}
-
 		return false;
-
 	}
 
 	validasiNamaProject(nama_project){
@@ -219,7 +195,7 @@ class FormProject extends React.Component {
 			return upload.map((item,index)=>{
 				return (
 					<a key={index} href={`${api.host}/api/static/${item.filename}`}>
-						<img 
+						<img alt=""
 							style={{
 								width:'55px',
 								height:'55px',
@@ -237,10 +213,12 @@ class FormProject extends React.Component {
 
 	}
 
+	
+
 	render(){
 
 		const { 
-			featureId 
+			featureId,			
 		} = this.state;
 
 		const {
@@ -249,6 +227,7 @@ class FormProject extends React.Component {
 			ubahTanggalProject,
 			ubahKeteranganProject
 		} = this.props;
+
 
 		return (
 			
@@ -259,7 +238,7 @@ class FormProject extends React.Component {
 
 				<FormWrapper>
 					<FormInnerWrapper
-						container
+						container="true"
 						direction="column"
 						style={{
 							display:'flex',
@@ -271,7 +250,7 @@ class FormProject extends React.Component {
 						<FormHeader judul="Atribut Project" />
 
 						<Grid 
-							item
+							item="true"
 							style={{ 
 								width:'40%',
 								borderRadius:'0',
@@ -289,7 +268,7 @@ class FormProject extends React.Component {
 								}}>
 								
 								<Grid 
-									item 
+									item="true" 
 									style={{									
 										borderRadius:'0',
 										boxShadow:'none',
@@ -338,7 +317,8 @@ class FormProject extends React.Component {
 							id="tglpro"
 							label="tanggal project"
 							type="date"
-							defaultValue={new Date().toString()}							
+							defaultValue={this._getProjectDate().displayDate}							
+							value={this._getProjectDate().displayDate}					
 							disabled={featureId ? false: true}
 							InputLabelProps={{
 			          shrink: true,
@@ -353,7 +333,7 @@ class FormProject extends React.Component {
 									}
 									return ubahTanggalProject(event.target.value)
 								}
-							} />
+							} />						
 
 			      <TextField 
 			      	id="keterangan"

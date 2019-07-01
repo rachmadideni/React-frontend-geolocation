@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import MapGL, { 
 	NavigationControl, 
-	FullscreenControl	
+	FullscreenControl,
+	LinearInterpolator	
 } from '@urbica/react-map-gl';
 
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
@@ -18,7 +19,7 @@ import injectReducer from '../../utils/injectReducer';
 import { 
 	changeTabValueAction,
 	changeViewportAction,
-	getGeojonAction,
+	// getGeojonAction,
 	putMarkerSuccessAction,
 	clearMarkerSuccessAction,
 	changeDasModeAction,
@@ -43,9 +44,9 @@ import {
 
 import { SUNGAI } from './constants';
 
-import BatasKecamatan from './Layer/BatasKecamatan';
+//import BatasKecamatan from './Layer/BatasKecamatan';
 import ProjectMark from './Layer/ProjectMark';
-import Sungai from './Layer/Sungai';
+// import Sungai from './Layer/Sungai';
 import RiverMap from './Layer/RiverMap';
 
 import LoadingDialog from '../../components/LoadingDialog';
@@ -64,8 +65,8 @@ class MapContainer extends React.Component {
 	}
 
 	componentWillMount(){
-		this.props.getRiver();
-		this.props.getProject();
+		// this.props.getRiver();
+		// this.props.getProject();
 	}
 
 	componentDidUpdate(){
@@ -73,6 +74,9 @@ class MapContainer extends React.Component {
 	}
 
 	componentDidMount(){
+		this.props.getRiver();
+		this.props.getProject();
+		// console.log(this.myMap)
 		// const { getGeojon } = this.props;
 		// getGeojon('sungai');
 
@@ -110,6 +114,41 @@ class MapContainer extends React.Component {
 		);
 	}
 
+	_renderDrawControlType = (e) => {
+		// console.log('_renderDrawControlType',e);
+		const {
+			layerVisibility
+		} = this.props
+
+		if(e){
+			if (e.type === "load") {
+				// if(layerVisibility.project){
+					this._callDrawProject();		
+				// }
+			}			
+		}
+	}
+
+	_callDrawProject = () => {
+		const { 
+			layerVisibility,
+			geodataProject, // data project
+			geodata // data sungai
+		} = this.props;
+
+		if(layerVisibility.project){
+			return (
+				<ProjectMark 
+					data = { geodataProject } riverData = { this.props.geodata } />
+			);			
+		}else if(layerVisibility.sungai){
+			return (
+				<RiverMap 
+					data={this.props.geodata} fetchRiver={this.props.getRiver} />
+			);
+		}
+	}
+
 	render(){
 		
 		const { 
@@ -118,7 +157,7 @@ class MapContainer extends React.Component {
 			viewport,
 			mapStyle,
 			layerVisibility,
-			DASMode,
+			// DASMode,
 			geodata,
 			geodataProject,
 			isLoading
@@ -129,7 +168,8 @@ class MapContainer extends React.Component {
 				<LoadingDialog 
 					isLoading={isLoading} />			
 				
-				<MapGL 					
+				<MapGL
+					ref = { (myMap) => { this.myMap = myMap; } } 					
 					accessToken = { mapConfig.token } 
 					latitude = { viewport.latitude } 
 					longitude = { viewport.longitude } 
@@ -139,29 +179,24 @@ class MapContainer extends React.Component {
 					onViewportChange = { 
 						viewport => this.handleViewportChange(viewport)
 					}
-					onLoad = { e=>console.log(e) }>
-					
-					{/*layerVisibility.kecamatan && <BatasKecamatan />*/}					
-					{						
+					onLoad = {e=>this._renderDrawControlType(e)} >
+
+					{this._callDrawProject()}
+										
+					{/*						
 						layerVisibility.project && 
 						<ProjectMark 
 							data = { geodataProject } riverData = { this.props.geodata } />
-					}
+					*/}
 					
-					{
+					{/*
 						// render river hanya jika features punya isi
 						// jike river visible = true dan data river ada   
-						(layerVisibility.sungai && geodata.features.length < 0) &&
+						(layerVisibility.sungai && geodata.features.length > 0) &&
 						<RiverMap 
 							data={this.props.geodata} 
-							fetchRiver={this.props.getRiver} />
-							/*
-						<Sungai 
-							data = { SUNGAI } 
-							geodata={geodata} dt={this.props.selectRiverFeatures} 
-							DASMode = { DASMode }>
-						</Sungai>*/
-					}					
+							fetchRiver={this.props.getRiver} />												
+					*/}					
 					{ this.renderNavigationControl() }				  					    			  
 				</MapGL>								
 			</Fragment>

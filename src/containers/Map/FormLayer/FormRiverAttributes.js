@@ -213,9 +213,7 @@ class FormRiverAttributes extends React.Component{
 
 		const {
 			sungai,
-			kecamatan,
-			keterangan,
-			jenis_sungai
+			kecamatan			
 		} = this.props.dt
 
 		const {
@@ -248,7 +246,7 @@ class FormRiverAttributes extends React.Component{
 	handleDelete = () => {		
 		const { featureId } = this.state;
 		const d = window.confirm('anda akan menghapus sungai')
-		if(d == true){
+		if(d === true){
 			this.props.hapusSungai(featureId);
 			// this.props.getRiver();			
 			// this.forceUpdate()
@@ -259,10 +257,11 @@ class FormRiverAttributes extends React.Component{
 
 		const { 
 			featureId,
-			kecamatan,
-			sungai,
-			jenis_sungai,
-			keterangan } = this.state;
+			// kecamatan,
+			// sungai,
+			// jenis_sungai,
+			// keterangan 
+		} = this.state;
 		
 		const { 
 			options,
@@ -277,7 +276,7 @@ class FormRiverAttributes extends React.Component{
 				// flex:1
 			}}>
 			<Wrapper 
-				container
+				container="true"
 				direction="column"				
 				style={{
 					display:'flex',					
@@ -286,7 +285,7 @@ class FormRiverAttributes extends React.Component{
 		
 				<FormWrapper>										
 					<FormInnerWrapper 
-						container
+						container="true"
 						direction="column"
 						style={{
 							display:'flex',
@@ -300,7 +299,7 @@ class FormRiverAttributes extends React.Component{
 							judul="Atribut Sungai" />
 
 						<Grid 
-							item
+							item="true"
 							style={{ 
 								width:'40%',
 								borderRadius:'0',
@@ -308,7 +307,7 @@ class FormRiverAttributes extends React.Component{
 							}}>
 							
 							<Grid 
-								container 
+								container="true" 
 								direction="row" 								
 								style={{									
 									borderRadius:'0',

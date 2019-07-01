@@ -10,7 +10,12 @@ function App(){
   		<Switch>
   			<Route exact path="/" render={() => <Redirect to="/signin" />} />
   			<Route path = "/signin" component = { SignIn } />
-  			<Route path = "/dashboard" component = { Dashboard } />
+  			<Route exact path = "/dashboard" 
+  				render={
+  					routeProps => (
+  						<Dashboard {...routeProps} />
+  					)} />
+  				{/*component = { Dashboard }*/}
     	</Switch>    	
 	);
 }
