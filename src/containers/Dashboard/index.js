@@ -47,6 +47,7 @@ class Dashboard extends React.Component {
 				<Grid 
 					item 
 					display="flex">
+					
 					<AppBar 
 						elevation={0} 
 						position="static" 
@@ -91,6 +92,7 @@ class Dashboard extends React.Component {
 
 					</AppBar>
 				</Grid>
+				
 				<Grid 
 					item
 					display="flex"					
@@ -102,12 +104,12 @@ class Dashboard extends React.Component {
             backgroundColor: 'white',
 	        }}>
 					<Switch>
+
 						<Route 
 							exact 
 							path="/dashboard" 
-							render = {
-								() => <DashboardOverviewPage history = { history } /> 
-							} />
+							render = {() => <DashboardOverviewPage history = { history } /> } />							
+
 					</Switch>
 				</Grid>
 			</Grid>

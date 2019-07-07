@@ -28,6 +28,7 @@
     "react-autosuggest": "^9.4.3",
     "react-dom": "^16.8.6",
     "react-map-gl": "^4.1.7",
+    "react-map-gl-geocoder": "^2.0.5",
     "react-mapbox-gl": "^4.4.0",
     "react-mapbox-gl-draw": "^2.0.0",
     "react-mobile-datepicker": "^4.0.1",

@@ -1,18 +1,22 @@
 import React from 'react';
-import MapRevised from '../MapRevised';
-// import MapContainer from '../Map';
+import { Switch, Route } from 'react-router-dom';
+import MapCrud from '../Map';
+import MapUtama from '../MapRevised';
 
 class DashboardOverviewPage extends React.Component {
-		componentDidMount(){
-			// console.log('DashboardOverviewPage',this.props.history);
-		}
+		
 		render(){
 			const { history } = this.props;
 			return (
-				<div>
-					<MapRevised 
-						history = { history } />
-				</div>
+				<Switch>
+					<Route 
+						exact 
+						path="/dashboard" render={ () => <MapUtama history = { history } /> } />
+					
+					<Route						
+						path="/dashboard/revised" render={()=><MapCrud />} />
+
+				</Switch>
 			);			
 		}
 }

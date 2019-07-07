@@ -380,9 +380,7 @@ class FormProject extends React.Component {
 							</div>
 
 						</div>
-
-			      
-
+			 
 					</form>
 				</FormWrapper>
 			</Wrapper>

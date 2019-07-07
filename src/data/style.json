@@ -1,6 +1,6 @@
 {
     "version": 8,
-    "name": "mapStyle_sungai",
+    "name": "Streets",
     "metadata": {
         "mapbox:type": "default",
         "mapbox:origin": "streets-v11",
@@ -15,23 +15,20 @@
             "1444855769305.6016": {"name": "Tunnels", "collapsed": true}
         },
         "mapbox:sdk-support": {
-            "js": "0.50.0",
+            "js": "0.54.0",
             "android": "6.7.0",
-            "ios": "4.6.0"
+            "ios": "4.7.0"
         }
     },
-    "center": [119.58874205311724, -4.788277945867719],
-    "zoom": 11,
-    "bearing": 0,
-    "pitch": 0,
-    "light": {"anchor": "map", "color": "hsl(0, 0%, 0%)"},
+    "center": [-122.4241, 37.78],
+    "zoom": 9,
     "sources": {
         "composite": {
-            "url": "mapbox://mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2,denirachmadi.cjvqd2n4y1yuh35pgy83ptxv5-4dnt4",
+            "url": "mapbox://mapbox.mapbox-streets-v8,mapbox.mapbox-terrain-v2",
             "type": "vector"
         }
     },
-    "sprite": "mapbox://sprites/denirachmadi/cjvql4ubd08p61cp6boqd9cxe/5ai059mm7rkvdk5nvzwa3qw9e",
+    "sprite": "mapbox://sprites/denirachmadi/cjxmoatue0hu21co7eplelnb7/5ai059mm7rkvdk5nvzwa3qw9e",
     "glyphs": "mapbox://fonts/denirachmadi/{fontstack}/{range}.pbf",
     "layers": [
         {
@@ -4863,48 +4860,6 @@
                 ]
             ],
             "layout": {
-                "text-line-height": 1.1,
-                "text-size": [
-                    "interpolate",
-                    ["cubic-bezier", 0.2, 0, 0.9, 1],
-                    ["zoom"],
-                    3,
-                    [
-                        "step",
-                        ["get", "symbolrank"],
-                        12,
-                        9,
-                        11,
-                        10,
-                        10.5,
-                        12,
-                        9.5,
-                        14,
-                        8.5,
-                        16,
-                        6.5,
-                        17,
-                        4
-                    ],
-                    15,
-                    [
-                        "step",
-                        ["get", "symbolrank"],
-                        28,
-                        9,
-                        26,
-                        10,
-                        23,
-                        11,
-                        21,
-                        12,
-                        20,
-                        13,
-                        19,
-                        15,
-                        17
-                    ]
-                ],
                 "icon-image": [
                     "case",
                     ["==", ["get", "capital"], 2],
@@ -4988,23 +4943,6 @@
                         ["DIN Offc Pro Medium", "Arial Unicode MS Regular"]
                     ]
                 ],
-                "text-justify": [
-                    "step",
-                    ["zoom"],
-                    [
-                        "match",
-                        ["get", "text_anchor"],
-                        ["bottom", "top"],
-                        "center",
-                        ["left", "bottom-left", "top-left"],
-                        "left",
-                        ["right", "bottom-right", "top-right"],
-                        "right",
-                        "center"
-                    ],
-                    8,
-                    "center"
-                ],
                 "text-offset": [
                     "step",
                     ["zoom"],
@@ -5065,8 +5003,67 @@
                     8,
                     "center"
                 ],
+                "text-justify": [
+                    "step",
+                    ["zoom"],
+                    [
+                        "match",
+                        ["get", "text_anchor"],
+                        ["bottom", "top"],
+                        "center",
+                        ["left", "bottom-left", "top-left"],
+                        "left",
+                        ["right", "bottom-right", "top-right"],
+                        "right",
+                        "center"
+                    ],
+                    8,
+                    "center"
+                ],
                 "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
-                "text-max-width": 7
+                "text-max-width": 7,
+                "text-line-height": 1.1,
+                "text-size": [
+                    "interpolate",
+                    ["cubic-bezier", 0.2, 0, 0.9, 1],
+                    ["zoom"],
+                    3,
+                    [
+                        "step",
+                        ["get", "symbolrank"],
+                        12,
+                        9,
+                        11,
+                        10,
+                        10.5,
+                        12,
+                        9.5,
+                        14,
+                        8.5,
+                        16,
+                        6.5,
+                        17,
+                        4
+                    ],
+                    15,
+                    [
+                        "step",
+                        ["get", "symbolrank"],
+                        28,
+                        9,
+                        26,
+                        10,
+                        23,
+                        11,
+                        21,
+                        12,
+                        20,
+                        13,
+                        19,
+                        15,
+                        17
+                    ]
+                ]
             },
             "paint": {
                 "text-color": "hsl(0, 0%, 0%)",
@@ -5132,35 +5129,18 @@
             "maxzoom": 10,
             "filter": ["==", ["get", "class"], "country"],
             "layout": {
-                "text-line-height": 1.1,
-                "text-size": [
-                    "interpolate",
-                    ["cubic-bezier", 0.2, 0, 0.7, 1],
-                    ["zoom"],
-                    1,
-                    ["step", ["get", "symbolrank"], 11, 4, 9, 5, 8],
-                    9,
-                    ["step", ["get", "symbolrank"], 28, 4, 22, 5, 21]
-                ],
                 "icon-image": "dot-11",
+                "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
+                "text-line-height": 1.1,
+                "text-max-width": 6,
                 "text-font": [
                     "DIN Offc Pro Medium",
                     "Arial Unicode MS Regular"
                 ],
-                "text-justify": [
+                "text-anchor": [
                     "step",
                     ["zoom"],
-                    [
-                        "match",
-                        ["get", "text_anchor"],
-                        ["bottom", "top"],
-                        "center",
-                        ["left", "bottom-left", "top-left"],
-                        "left",
-                        ["right", "bottom-right", "top-right"],
-                        "right",
-                        "center"
-                    ],
+                    ["coalesce", ["get", "text_anchor"], "center"],
                     7,
                     "center"
                 ],
@@ -5191,15 +5171,32 @@
                     7,
                     ["literal", [0, 0]]
                 ],
-                "text-anchor": [
+                "text-justify": [
                     "step",
                     ["zoom"],
-                    ["coalesce", ["get", "text_anchor"], "center"],
+                    [
+                        "match",
+                        ["get", "text_anchor"],
+                        ["bottom", "top"],
+                        "center",
+                        ["left", "bottom-left", "top-left"],
+                        "left",
+                        ["right", "bottom-right", "top-right"],
+                        "right",
+                        "center"
+                    ],
                     7,
                     "center"
                 ],
-                "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
-                "text-max-width": 6
+                "text-size": [
+                    "interpolate",
+                    ["cubic-bezier", 0.2, 0, 0.7, 1],
+                    ["zoom"],
+                    1,
+                    ["step", ["get", "symbolrank"], 11, 4, 9, 5, 8],
+                    9,
+                    ["step", ["get", "symbolrank"], 28, 4, 22, 5, 21]
+                ]
             },
             "paint": {
                 "icon-opacity": [
@@ -5221,20 +5218,12 @@
                 ],
                 "text-halo-width": 1.25
             }
-        },
-        {
-            "id": "sungai3",
-            "type": "line",
-            "source": "composite",
-            "source-layer": "sungai3",
-            "layout": {"line-join": "round"},
-            "paint": {"line-color": "hsl(206, 88%, 43%)", "line-width": 2}
         }
     ],
-    "created": "2019-05-16T11:43:08.695Z",
-    "id": "cjvql4ubd08p61cp6boqd9cxe",
-    "modified": "2019-05-16T12:03:36.267Z",
+    "created": "2019-07-03T03:20:06.919Z",
+    "id": "cjxmoatue0hu21co7eplelnb7",
+    "modified": "2019-07-03T03:20:06.919Z",
     "owner": "denirachmadi",
-    "visibility": "public",
+    "visibility": "private",
     "draft": false
 }

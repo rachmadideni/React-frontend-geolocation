@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import MapGL, { 
 	NavigationControl, 
-	FullscreenControl,
-	LinearInterpolator	
+	FullscreenControl	
 } from '@urbica/react-map-gl';
-
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
 import { compose } from 'redux';
@@ -42,14 +41,13 @@ import {
 	makeSelectLoading
 } from './selectors';
 
-import { SUNGAI } from './constants';
-
-//import BatasKecamatan from './Layer/BatasKecamatan';
 import ProjectMark from './Layer/ProjectMark';
-// import Sungai from './Layer/Sungai';
 import RiverMap from './Layer/RiverMap';
-
 import LoadingDialog from '../../components/LoadingDialog';
+
+// import { SUNGAI } from './constants';
+// import BatasKecamatan from './Layer/BatasKecamatan';
+// import Sungai from './Layer/Sungai';
 
 // Components
 // import DashboardTab from './DashboardTab';
@@ -59,18 +57,9 @@ class MapContainer extends React.Component {
 
 	constructor(props){
 		super(props);
-		this.state = {			
+		/*this.state = {			
 			sungai:SUNGAI,			
-		};		
-	}
-
-	componentWillMount(){
-		// this.props.getRiver();
-		// this.props.getProject();
-	}
-
-	componentDidUpdate(){
-		// this.props.getProject();	
+		};*/		
 	}
 
 	componentDidMount(){
@@ -87,9 +76,9 @@ class MapContainer extends React.Component {
 	}
 
 	// REDUX CHANGE TAB HANDLER
-	onChangeTabValue = value => {
+	/*onChangeTabValue = value => {
 		this.props.changeTabValue(value);
-	}
+	}*/
 
 	// REDUX HANDLE VIEWPORT CHANGES
 	handleViewportChange = (viewport) => {
@@ -114,17 +103,14 @@ class MapContainer extends React.Component {
 		);
 	}
 
-	_renderDrawControlType = (e) => {
-		// console.log('_renderDrawControlType',e);
+	_renderDrawControlType = (e) => {		
 		const {
 			layerVisibility
 		} = this.props
 
 		if(e){
 			if (e.type === "load") {
-				// if(layerVisibility.project){
 					this._callDrawProject();		
-				// }
 			}			
 		}
 	}
@@ -136,15 +122,17 @@ class MapContainer extends React.Component {
 			geodata // data sungai
 		} = this.props;
 
-		if(layerVisibility.project){
+		if (layerVisibility.project) {
 			return (
 				<ProjectMark 
-					data = { geodataProject } riverData = { this.props.geodata } />
+					data = { geodataProject } 
+					riverData = { this.props.geodata } />
 			);			
-		}else if(layerVisibility.sungai){
+		}else if (layerVisibility.sungai){
 			return (
 				<RiverMap 
-					data={this.props.geodata} fetchRiver={this.props.getRiver} />
+					data = { this.props.geodata } 
+					fetchRiver = { this.props.getRiver } />
 			);
 		}
 	}
@@ -152,15 +140,15 @@ class MapContainer extends React.Component {
 	render(){
 		
 		const { 
-			// tabValue,
 			mapConfig,
 			viewport,
 			mapStyle,
 			layerVisibility,
-			// DASMode,
 			geodata,
 			geodataProject,
 			isLoading
+			// DASMode,
+			// tabValue,
 		} = this.props;
 
 		return (
@@ -202,6 +190,20 @@ class MapContainer extends React.Component {
 			</Fragment>
 		);
 	}
+}
+
+MapContainer.propTypes = {
+	mapConfig: PropTypes.object,
+	viewport: PropTypes.object,
+	mapStyle: PropTypes.string,
+	layerVisibility: PropTypes.bool,
+	geodata: PropTypes.object,
+	geodataProject: PropTypes.object,
+	isLoading: PropTypes.bool,
+	handleViewportChange: PropTypes.func,
+	renderNavigationControl: PropTypes.func, 
+	_renderDrawControlType: PropTypes.func,
+	_callDrawProject: PropTypes.func,
 }
 
 const mapStateToProps = createStructuredSelector({
