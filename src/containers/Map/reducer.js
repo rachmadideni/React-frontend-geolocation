@@ -58,7 +58,7 @@ export const initialState = fromJS({
 	layerVisibility:{
 		kecamatan:false,
 		sungai:true,
-		project:false
+		project:true
 	},
 	isDrawerOpen:false,
 	DASMODE:'EDIT',// enum : VIEW atau EDIT

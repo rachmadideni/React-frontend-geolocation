@@ -11,8 +11,12 @@ import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountIcon from '@material-ui/icons/AccountCircleOutlined';
-import DashboardOverviewPage from '../DashboardOverviewPage';
 import MenuList from './DrawerMenu';
+
+// page
+import DashboardOverviewPage from '../DashboardOverviewPage';
+import MapDraw from '../Map';
+import MapUtama from '../MapRevised'
 
 import { createStructuredSelector } from 'reselect';
 import { makeSelectDrawerState } from '../Map/selectors';
@@ -108,7 +112,12 @@ class Dashboard extends React.Component {
 						<Route 
 							exact 
 							path="/dashboard" 
-							render = {() => <DashboardOverviewPage history = { history } /> } />							
+							render = {() => <MapUtama history = { history } /> } />
+
+						<Route 
+							exact 
+							path="/draw/:type(river|project)" 
+							render = {() => <MapDraw history = { history } /> } />							
 
 					</Switch>
 				</Grid>

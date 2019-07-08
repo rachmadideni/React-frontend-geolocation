@@ -13,6 +13,7 @@ import reducer from './reducer';
 import saga from './saga';
 import injectReducer from '../../utils/injectReducer';
 import injectSaga from '../../utils/injectSaga';
+
 import {
 	data_proyek,
 	data_sungai,
@@ -32,7 +33,11 @@ import {
 
 import {
 	changeDrawerStateAction
-} from '../Map/action'
+} from '../Map/action';
+
+import { 
+	makeSelectDrawerState 
+} from '../Map/selectors';
 
 // style.json
 import { defaultMapStyle, dataLayer } from '../../styles/map-style';
@@ -294,7 +299,8 @@ const mapStateToProps = createStructuredSelector({
 	data_sungai: data_sungai(),
 	data_upload: data_upload(),
 	attribut_proyek: attribut_proyek(),
-	viewport: viewport()
+	viewport: viewport(),
+	drawerState: makeSelectDrawerState(),
 })
 
 const mapDispatchToProps = dispatch => {
@@ -305,7 +311,7 @@ const mapDispatchToProps = dispatch => {
 		getProjectAttribute: value=>dispatch(getProjectAttributeAction(value)),
 		getProjectAttributeFail: () => dispatch(getProjectAttributeFailAction()),
 		changeViewport: viewport => dispatch(changeViewportAction(viewport)),
-		changeDrawerState: value=>dispatch(changeDrawerStateAction(value))		
+		changeDrawerState: value=>dispatch(changeDrawerStateAction(value))				
 	}
 }
 

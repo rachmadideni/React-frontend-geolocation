@@ -4,11 +4,13 @@ import { combineReducers } from 'redux-immutable';
 import { connectRouter } from 'connected-react-router/immutable';
 import history from './utils/history';
 import globalReducer from './containers/App/reducer';
+import mapContainer from './containers/Map/reducer';
 
 export default function createReducer(injectedReducers = {}){
 	const rootReducer = combineReducers({
 		global:globalReducer,
 		router:connectRouter(history),
+		mapContainer, 
 		...injectedReducers
 	});
 

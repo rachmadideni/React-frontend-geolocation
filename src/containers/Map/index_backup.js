@@ -1,12 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-
-import { Switch, Route } from 'react-router-dom';
-
-import DrawRiverPage from './DrawRiverPage';
-import DrawProjectPage from './DrawProjectPage';
-
-/*import MapGL, { 
+import MapGL, { 
 	NavigationControl, 
 	FullscreenControl	
 } from '@urbica/react-map-gl';
@@ -49,7 +43,7 @@ import {
 
 import ProjectMark from './Layer/ProjectMark';
 import RiverMap from './Layer/RiverMap';
-import LoadingDialog from '../../components/LoadingDialog';*/
+import LoadingDialog from '../../components/LoadingDialog';
 
 // import { SUNGAI } from './constants';
 // import BatasKecamatan from './Layer/BatasKecamatan';
@@ -61,7 +55,7 @@ import LoadingDialog from '../../components/LoadingDialog';*/
 
 class MapContainer extends React.Component {
 
-		/*componentDidMount(){
+		componentDidMount(){
 			this.props.getRiver();
 			this.props.getProject();			    					
 		}
@@ -121,11 +115,11 @@ class MapContainer extends React.Component {
 						fetchRiver = { this.props.getRiver } />
 				);
 			}
-		}*/
+		}
 
 	render(){
 		
-		/*const { 
+		const { 
 			mapConfig,
 			viewport,
 			mapStyle,
@@ -135,24 +129,14 @@ class MapContainer extends React.Component {
 			isLoading
 			// DASMode,
 			// tabValue,
-		} = this.props;*/
+		} = this.props;
 
 		return (
 			<Fragment>
-			<Switch>
-				<Route path="/draw/river" 
-				render={routeProps => (
-          	<DrawRiverPage {...routeProps} />
-        )}/>
-        <Route path="/draw/project" 
-				render={routeProps => (
-          	<DrawProjectPage {...routeProps} />
-        )}/>
-			</Switch>
-				{/*<LoadingDialog 
-					isLoading={isLoading} />*/}			
+				<LoadingDialog 
+					isLoading={isLoading} />			
 				
-				{/*<MapGL
+				<MapGL
 					ref = { (myMap) => { this.myMap = myMap; } } 					
 					accessToken = { mapConfig.token } 
 					latitude = { viewport.latitude } 
@@ -163,8 +147,10 @@ class MapContainer extends React.Component {
 					onViewportChange = { 
 						viewport => this.handleViewportChange(viewport)
 					}
-					onLoad = {e=>this._renderDrawControlType(e)} >*/}
+					onLoad = {e=>this._renderDrawControlType(e)} >
 
+					{ this._callDrawProject() }
+					{ this.renderNavigationControl() }				  					    			  
 										
 					{/*						
 						layerVisibility.project && 
@@ -180,13 +166,13 @@ class MapContainer extends React.Component {
 							data={this.props.geodata} 
 							fetchRiver={this.props.getRiver} />												
 					*/}					
-				{/*</MapGL>*/}								
+				</MapGL>								
 			</Fragment>
 		);
 	}
 }
 
-/*MapContainer.propTypes = {
+MapContainer.propTypes = {
 	mapConfig: PropTypes.object,
 	viewport: PropTypes.object,
 	mapStyle: PropTypes.string,
@@ -241,5 +227,4 @@ export default compose(
 	withReducer,
 	withSaga,
 	withConnect
-)(MapContainer);*/
-export default MapContainer;
+)(MapContainer);
