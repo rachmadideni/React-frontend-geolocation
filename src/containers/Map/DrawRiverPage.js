@@ -4,6 +4,7 @@ import MapGL, { NavigationControl, FullscreenControl} from '@urbica/react-map-gl
 import Draw from '@urbica/react-map-gl-draw';
 
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -13,7 +14,9 @@ import saga from './saga';
 // action
 import { 
 	getRiverAction,
-	changeViewportAction } from './action'
+	changeViewportAction,
+	updateGeodataRiver } from './action'
+
 // selector
 import { 
 	makeSelectLayerVisibility,
@@ -28,19 +31,23 @@ import {
 import LoadingDialog from '../../components/LoadingDialog';
 import FormRiver from './FormLayer/FormRiverAttributes';
 
+// utils
+import _ from 'lodash';
+
 class DrawRiverPage extends React.Component {
 	
 	constructor(props){
 		super(props);
 		this.state = {
 			featureId: null,
-			features: []
+			features: [],
+			temp_collection: this.props.riverData,
+			idsung: null,
+			mode:'simple_select'
 		}
+		this.drawComp = React.createRef();
 	}
-	componentDidMount(){
-		this.props.getRiver();
-	}
-
+	
 	handleViewportChange = viewport => {
 		const { changeViewport } = this.props;
 		const { latitude, longitude, zoom } = viewport;
@@ -60,25 +67,69 @@ class DrawRiverPage extends React.Component {
 		);
 	}
 
+	componentDidMount(){	
+		this.props.getRiver();
+				
+	}
+
+	componentDidUpdate(){
+		console.log(this.state.featureId);
+	}
+
+	_onDrawCreate = data => {
+		if(data.features.length > 0){
+			let featureId = data.features[0].id;
+			this.setState({
+				featureId,
+				features:data.features
+			})
+		}
+	}
+
 	getRiverAttributes = data => {
 
-		// console.log(data.features);
-				
-		if (data.features.length > 0){			
-			let props = data.features.map(item=>item.properties);
-			let featureId = props.featureId;
+		if (data.features.length > 0){
 			
-			if (props[0].hasOwnProperty('nmsung')) {				
-				return true;
-			}
-			else{
-				return false;	
+			let props = data.features[0].properties;
+			let features = data.features;
+
+			if (props.hasOwnProperty('nmsung')) {								
+					
+					let featureId = props.featureId;
+					let idsung = props.idsung;
+					
+					this.setState({
+						featureId,
+						features,
+						idsung
+					});
+
 			}
 
+			/*else {
+				
+					// deteksi sungai baru		
+					let featureId2 = data.features[0].id;
+					// console.log('tdk ada prop nmsung:', featureId2);
+					this.setState({
+						featureId:featureId2,
+						features,
+						idsung:null
+					});
+
+			}*/
+
+		}else{
+			// we do this to automatically reset the from previously fileed with data			
+			this.setState({
+				featureId: null,
+				// idsung:null
+			})
 		}
+	}
 
-		return false;
-
+	_onChange = geojson => {
+		
 	}
 
 
@@ -86,21 +137,33 @@ class DrawRiverPage extends React.Component {
 		const { isLoading, mapConfig, viewport, mapStyle } = this.props;
 		return (
 			<React.Fragment>
-				<LoadingDialog isLoading = { isLoading } />
+				<LoadingDialog 
+					isLoading = { isLoading } />
+				
 				<MapGL 
 					{...viewport} 					
 					accessToken = { mapConfig.token }
 					mapStyle = { mapStyle }
 					style={{ width: '100vw', height: '90vh' }}										
 					onViewportChange={vp=>this.handleViewportChange(vp)}>
+					
 					{this.renderNavigationControl()}
 
+					<div style={{ position:'absolute',top:10,left:500,bottom:0 }}>
+						{/*JSON.stringify(this.state.temp_collection)*/}
+					</div>
+					
 					<Draw 
-						data={this.props.riverData}
-						onChange = { value => console.log(value) }
-						onDrawSelectionChange = { data => this.getRiverAttributes(data) } />
+						ref = { this.drawComp }
+						data = { this.props.riverData }
+						onChange = { geojson => this.props.updateGeodataRiver(geojson) }
+						onDrawSelectionChange = { data => this.getRiverAttributes(data) } 
+						onDrawCreate={ data => this._onDrawCreate(data) }/>
 
-					<FormRiver />
+					<FormRiver 
+						featureId = { this.state.featureId }
+						idsung = { this.state.idsung }
+						features = {this.state.features}  />
 
 				</MapGL>					
 			</React.Fragment>
@@ -132,6 +195,7 @@ function mapDispatchToProps(dispatch){
 	return {
 		getRiver: () => dispatch(getRiverAction()),
 		changeViewport: ({ latitude, longitude, zoom }) => dispatch(changeViewportAction({ latitude, longitude, zoom })),
+		updateGeodataRiver: geojson => dispatch(updateGeodataRiver(geojson)),
 	}
 }
 

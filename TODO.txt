@@ -1,0 +1,16 @@
+[] buat page drawriver cek
+[] cek fitur tambah garis sungai
+[] cek fitur hapus garis sungai
+[] cek fitur simpan atribut sungai
+
+
+[] buat page drawProject
+[] cek fitur tambah project
+[] cek fitur hapus project
+[] cek fitur simpan atribut project
+[] cek fitur upload file project
+
+[] fix geocode untuk map gabungan
+[] tambahkan item panjang sungai (km) ke tooltip hover
+[] buat fitur export/download river & project sebagai 1 geojson file
+

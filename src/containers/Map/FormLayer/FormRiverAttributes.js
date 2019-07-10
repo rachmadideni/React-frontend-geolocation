@@ -104,8 +104,10 @@ class FormRiverAttributes extends React.Component{
 		super(props);
 		this.state = {			
 			featureId:null,
-			kecamatan:null,
+			features:[],
+			idsung:null,			
 			sungai:'',
+			kecamatan:null,
 			jenis_sungai:"1",
 			keterangan:'',
 			error:{
@@ -117,6 +119,41 @@ class FormRiverAttributes extends React.Component{
 		}
 
 		this.handleSubmit = this.handleSubmit.bind(this); 
+	}
+
+	componentDidUpdate(props){
+		
+		// console.log('___________________');
+		// console.log('child updated!');		
+		//console.log('props.featureId = ' + props.featureId + ', this.props.featureId = ' + this.props.featureId);
+		// console.log('state idsung = ' + state.idsung + ', this.props.idsung = ' + this.props.idsung);
+		// console.log(props.featureId);		
+		// console.log('state',state);
+		
+		//if(this.props.featureId !== state.featureId){
+						
+		// if(props.idsung !== this.props.idsung){			
+		// console.log('kondisi:', props.featureId !== this.props.featureId)
+		// console.log(props.featureId);				
+		
+		/*if (props.featureId !== this.props.featureId) {			
+			
+			if(this.props.idsung){
+				this.props.getRiverAttribute(this.props.idsung);// call saga utk ambil atribut				
+			}
+
+			this.setState( state => {
+				return {
+					featureId: this.props.featureId,
+					features: this.props.features,
+    			idsung: this.props.idsung
+				}
+			});
+
+		}*/			
+		
+
+
 	}
 
 	validasiSungai(nama_sungai){
@@ -163,24 +200,10 @@ class FormRiverAttributes extends React.Component{
 	}
 
 	componentDidMount(){
-		this.props.getOptions('kecamatan');
-		console.log('featureId on mount',this.state.featureId);
+		this.props.getOptions('kecamatan');		
 	}	
 
-	componentDidUpdate(props,state){
-		if(props.featureId !== this.props.featureId){
-			if(this.props.featureId){
-				this.props.getRiverAttribute(this.props.featureId);// call saga utk ambil atribut				
-			}
-			// console.log('features geometry:',this.props.features[0].geometry.coordinates)
-			this.setState((state)=>{
-				return {
-					featureId:this.props.featureId,
-					features:this.props.features
-				}
-			})
-		}		
-	}
+	
 	
 	// simpan ke state komponen
 	handleChange = (event, name) => {	
@@ -197,7 +220,8 @@ class FormRiverAttributes extends React.Component{
 				kecamatan:'',
 				sungai:'',
 				jenis_sungai:"1",
-				keterangan:''				
+				keterangan:'',
+				idsung:''				
 			}
 		})
 
@@ -232,13 +256,7 @@ class FormRiverAttributes extends React.Component{
 			this.props.addRiver({ 
 				features, 
 				properties:this.props.dt 
-			});
-			/*
-			param: featureId
-			featureId akan mengambil 
-
-			 */
-			// this.resetForm();
+			});		
 		}
 		return false;
 	}
@@ -272,17 +290,14 @@ class FormRiverAttributes extends React.Component{
 			ubahKeterangan } = this.props;		
 		
 		return(
-			<div style={{
-				// flex:1
-			}}>
+			<div>
 			<Wrapper 
 				container="true"
 				direction="column"				
 				style={{
 					display:'flex',					
 				}}>
-				
-		
+						
 				<FormWrapper>										
 					<FormInnerWrapper 
 						container="true"
@@ -292,11 +307,9 @@ class FormRiverAttributes extends React.Component{
 							borderRadius:'0',
 							boxShadow:'none',
 							width:'100%',
-
 						}}>						
 
-						<FormHeader 
-							judul="Atribut Sungai" />
+						<FormHeader judul="Atribut Sungai" />
 
 						<Grid 
 							item="true"
@@ -327,17 +340,22 @@ class FormRiverAttributes extends React.Component{
 						</Grid>						
 					</FormInnerWrapper>
 
+				{/* disabled={featureId ? false: true} */}
+				{/*
+						di action button :
+						disabled = { featureId ? false : true || !!this.state.error.sungai }
+						disabled = { featureId ? false : true || !!this.state.error.sungai }
+				*/}
 					<form 
 						noValidate 
-						autoComplete="off" 
-						disabled={featureId ? false: true}
+						autoComplete="off" 						
 						onSubmit={this.handleSubmit}>
 
 						<TextField 
 							id="attr1" 
 							label="nama sungai" 
 							autoFocus={true}
-							disabled={featureId ? false: true} 
+							
 							value={dt.sungai}
 							onChange = { 
 								event =>{
@@ -367,13 +385,12 @@ class FormRiverAttributes extends React.Component{
 									return ubahJenisSungai(event.target.value)
 									//this.handleChange(event,'jenis_sungai')
 								}}>
-							<FormControlLabel 
-								disabled={featureId ? false: true} 
+							<FormControlLabel 								
 								value="1" 
 								label="sungai utama" 
 								control={<Radio />} labelPlacement="end" />
-							<FormControlLabel 
-								disabled={featureId ? false: true} 
+
+							<FormControlLabel 								
 								value="2" 
 								label="anak sungai" 
 								control={<Radio />} labelPlacement="end" />
@@ -382,8 +399,7 @@ class FormRiverAttributes extends React.Component{
 						{/* simpan ke state : jenis_sungai */}						
 						
 						<TextField 
-							select 
-							disabled={featureId ? false: true} 
+							select 							
 							id = "nmkecm" 							
 							value = {dt.kecamatan} 
 							onChange = { event => {
@@ -408,8 +424,7 @@ class FormRiverAttributes extends React.Component{
 
 						<TextField 
 							multiline
-							rows={3}
-							disabled={featureId ? false: true} 
+							rows={3}							
 							id="attr3" 
 							label="keterangan" 
 							value={dt.keterangan}
@@ -429,16 +444,17 @@ class FormRiverAttributes extends React.Component{
 							fullWidth
 							onClick = { this.handleSubmit }										
 							color="primary"
-							disabled = { featureId ? false : true || !!this.state.error.sungai }>
+							>
 							Simpan Atribut
 						</ActionButton>
+
 						<ActionButton 									
 							size="small" 
 							variant="contained" 
 							success={false}										
 							fullWidth
 							onClick = { this.handleDelete }																				
-							disabled = { featureId ? false : true || !!this.state.error.sungai }>
+							>
 							Hapus
 						</ActionButton>
 
@@ -464,7 +480,7 @@ function mapDispatchToProps(dispatch){
 		ubahJenisSungai:value=>dispatch(ubahJenisSungaiAction(value)),
 		ubahKecamatan:value=>dispatch(ubahKecamatanAction(value)),
 		ubahKeterangan:value=>dispatch(ubahKeteranganAction(value)),
-		getRiverAttribute: featureId=>dispatch(getRiverAttributeAction(featureId)),
+		getRiverAttribute: idsung=>dispatch(getRiverAttributeAction(idsung)),
 		addRiver: features=>dispatch(addRiverAction(features)),
 		hapusSungai: value=>dispatch(hapusSungaiAction(value)),
 		getRiver: ()=>dispatch(getRiverAction()),

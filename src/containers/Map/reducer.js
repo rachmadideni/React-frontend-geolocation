@@ -41,7 +41,8 @@ import {
 	UPLOAD_PROJECT_SUCCESS_ACTION,
 	ADD_PROJECT_ACTION,
 	ADD_PROJECT_SUCCESS_ACTION,
-	CHANGE_DRAW_MODE_ACTION
+	CHANGE_DRAW_MODE_ACTION,
+	UPDATE_GEODATA_RIVER
 } from './constants';
 
 export const initialState = fromJS({
@@ -95,6 +96,7 @@ export const initialState = fromJS({
 			sungai:'',
 			jenis_sungai:"1",
 			keterangan:'',
+			idsung:''
 		},
 		project:{
 			id:'',
@@ -174,6 +176,10 @@ function mapContainerReducer(state = initialState, action){
 			return state
 				.set('loading',false)
 				.setIn(['error', 'message'], action.payload);
+
+		// TEST UPDATE STATE GEODATA RIVER
+		case UPDATE_GEODATA_RIVER:
+			return state.setIn(['geodata','river'], new Map(action.payload));
 
 		case SET_SNACKBAR_ACTION:
 			return state.set('snackBarOpen', action.payload);

@@ -176,7 +176,7 @@ export function* getRiver(){
 export function* addRiver(action){
 	
 	// let features = yield select(makeSelectRiverFeatures());
-	//console.log(action);
+	console.log('saga add river payload: ', action.payload);
 	let features = action.payload.features
 	let properties = action.payload.properties	
 	const endpoint = `${api.host}/api/geojson/sungai/add`;
@@ -193,7 +193,7 @@ export function* addRiver(action){
 
 	try{
 		const response = yield call(request, endpoint, requestOpt);
-		//console.log('saga response:',response.response.data);
+		console.log('saga response:',response.response.data);
 		return response.response.data;
 	}catch(err){
 		//console.log('err:',err)
@@ -297,29 +297,30 @@ export function* hapusRiver(action){
 
 // ambil atribut/properti sungai berdasarkan featureId
 export function* fetchRiverAttribute(action){
-	// console.log(action);
-	const featureId = action.payload;
-	const endpoint = `${api.host}/api/geojson/sungai/attribut/${featureId}`;
+	console.log('saga fetchRiverAttribute featureId : ', action.payload);
+	// const featureId = action.payload;
+	const idsung = action.payload;
+	const endpoint = `${api.host}/api/geojson/sungai/attribut/${idsung}`;
 	const requestOpt = { method:'GET' }
 	try{
 		const response = yield call(request, endpoint, requestOpt);
-		// console.log('saga fetchRiverAttribute:',response);
-
-		
+		console.log('saga fetchRiverAttribute:',response);
 		const idkecm = response.data[0].idkecm;
 		const nmsung = response.data[0].nmsung;
 		const jenis_sungai = response.data[0].jenis_sungai.toString();
-		const keterangan = response.data[0].keterangan;
+		const keterangan = response.data[0].keterangan ? response.data[0].keterangan : '';
+		const idsungai = response.data[0].idsung;
 
-		yield put(getRiverAttributeSuccessAction({ kecamatan:idkecm, sungai:nmsung, jenis_sungai:jenis_sungai, keterangan:keterangan }));
+		yield put(getRiverAttributeSuccessAction({ kecamatan:idkecm, sungai:nmsung, jenis_sungai:jenis_sungai, keterangan:keterangan, idsung:idsungai }));
 
 	}catch(err){
-		//console.log('error on saga:',err)
+		console.log('error on saga:',err)
 		yield put(getRiverAttributeFailAction({
 			kecamatan:'',
 			sungai:'',
 			jenis_sungai:'1',
-			keterangan:''
+			keterangan:'',
+			idsung:''
 		}))
 	}
 }
@@ -332,7 +333,7 @@ export function* getOptions(action){
 
 	try{
 		const response = yield call(request,endpoint, requestOpt);
-		console.log('saga response getOptions:',response);
+		// console.log('saga response getOptions:',response);
 		if(response.status === 200){
 			const data = response.data;
 			const options = mapOptionsResponseToDisplay(optionKey,data);

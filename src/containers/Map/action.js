@@ -44,7 +44,8 @@ import {
 	ADD_PROJECT_SUCCESS_ACTION,
 	UPLOAD_PROJECT_ACTION,
 	UPLOAD_PROJECT_SUCCESS_ACTION,
-	CHANGE_DRAW_MODE_ACTION
+	CHANGE_DRAW_MODE_ACTION,
+	UPDATE_GEODATA_RIVER
 } from './constants';
 
 // UBAH FORM PROJECT DATA
@@ -367,6 +368,13 @@ export function getProjectFailedAction(payload){
 export function changeDrawModeAction(payload){
 	return {
 		type:CHANGE_DRAW_MODE_ACTION,
+		payload
+	}	
+}
+
+export function updateGeodataRiver(payload){
+	return {
+		type:UPDATE_GEODATA_RIVER,
 		payload
 	}	
 }
