@@ -25,15 +25,31 @@ export function* login(){
 	};
 
 	try{
+		let errorMsg = null;
+    let msgScope = 'local';
+		
 		const response = yield call(request, endpoint, requestOpt);
-		const token = response.data.token;	
-		yield put(setAuthTokenAction(token));		
-		yield put(loginSuccessAction());
+		const token = response.data.token;
+		
+		if(token){
+			yield put(setAuthTokenAction(token));
+			yield put(loginSuccessAction());
+		}else{
+			errorMsg = 'Login Error! Silahkan cek ulang data yang anda masukkan'
+			yield put(
+	      loginErrorAction({
+	        messageScope: msgScope,
+	        message: errorMsg,
+	      })
+	    );
+		}
+			
 	}catch(err){
+			console.log('err message: ', err);
     	let errorMsg = null;
     	let msgScope = 'local';
     	if(err){
-    		errorMsg = 'Login Error! Silahkan cek ulang data yang anda masukkan'; 
+    		errorMsg = 'Error ! koneksi tidak tersambung ke database'; 
     		yield put(
 		      loginErrorAction({
 		        messageScope: msgScope,
