@@ -45,8 +45,126 @@ import {
 	UPLOAD_PROJECT_ACTION,
 	UPLOAD_PROJECT_SUCCESS_ACTION,
 	CHANGE_DRAW_MODE_ACTION,
-	UPDATE_GEODATA_RIVER
+	UPDATE_GEODATA_RIVER,
+	INSERT_RIVER_FEATURES,
+	INSERT_RIVER_FEATURES_SUCCESS,
+	INSERT_RIVER_FEATURES_ERROR,
+	CLEAR_RIVER_FORM,
+	DOWNLOAD_EXPORT_ACTION,
+	DOWNLOAD_EXPORT_SUCCESS_ACTION,
+	DOWNLOAD_EXPORT_ERROR_ACTION,
+	ADD_NEW_RIVER_ACTION,
+	ADD_NEW_RIVER_SUCCESS_ACTION,
+	ADD_NEW_RIVER_ERROR_ACTION,
+	UPDATE_RIVER_PROPERTY_ACTION,
+	UPDATE_RIVER_PROPERTY_SUCCESS_ACTION,
+	UPDATE_RIVER_PROPERTY_ERROR_ACTION,
+	GET_RIVER_ATTRIBUTE_BYID_ACTION,
+	GET_RIVER_ATTRIBUTE_BYID_SUCCESS_ACTION,
+	GET_RIVER_ATTRIBUTE_BYID_FAIL_ACTION,
+	QUERY_PROPERTI_ACTION,
+	QUERY_PROPERTI_SUCCESS_ACTION,
+	QUERY_PROPERTI_ERROR_ACTION,
+	UPDATE_FEATURES_ACTION,
+	REPLACE_MAP_ACTION,
+	REPLACE_MAP_SUCCESS_ACTION,
+	REPLACE_MAP_ERROR_ACTION,
 } from './constants';
+
+
+export function replaceMapAction(payload){
+	return {
+		type:REPLACE_MAP_ACTION,
+		payload
+	}
+}
+
+export function replaceMapSuccessAction(payload){
+	return {
+		type:REPLACE_MAP_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function replaceMapErrorAction(payload){
+	return {
+		type:REPLACE_MAP_ERROR_ACTION,
+		payload
+	}
+}
+
+export function updateFeaturesAction(payload){
+	return {
+		type:UPDATE_FEATURES_ACTION,
+		payload
+	}
+}
+
+// BACKUP PROPERTI SUNGAI (18/07/2019)
+export function queryPropertiAction(payload){
+	return {
+		type:QUERY_PROPERTI_ACTION,
+		payload
+	}
+}
+
+export function queryPropertiSuccessAction(payload){
+	return {
+		type:QUERY_PROPERTI_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function queryPropertiErrorAction(payload){
+	return {
+		type:QUERY_PROPERTI_ERROR_ACTION,
+		payload
+	}
+}
+
+// UPDATE PROPERTY SNGAI BARU (15/07/2019)
+export function updateRiverPropertyAction(payload){
+	return {
+		type:UPDATE_RIVER_PROPERTY_ACTION,
+		payload
+	}	
+}
+
+export function updateRiverPropertySuccessAction(payload){
+	return {
+		type:UPDATE_RIVER_PROPERTY_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function updateRiverPropertyErrorAction(payload){
+	return {
+		type:UPDATE_RIVER_PROPERTY_ERROR_ACTION,
+		payload
+	}
+}
+	
+
+// TAMBAH SUNGAI BARU (15/07/2019)
+export function AddNewRiverAction(payload){
+	return {
+		type:ADD_NEW_RIVER_ACTION,
+		payload
+	}
+}
+
+export function AddNewRiverSuccessAction(){
+	return {
+		type:ADD_NEW_RIVER_SUCCESS_ACTION		
+	}
+}
+
+export function AddNewRiverErrorAction(){
+	return {
+		type:ADD_NEW_RIVER_ERROR_ACTION		
+	}
+}
+
 
 // UBAH FORM PROJECT DATA
 export function ubahNamaProjectAction(value){
@@ -166,6 +284,28 @@ export function getRiverAttributeSuccessAction(payload){
 export function getRiverAttributeFailAction(payload){
 	return {
 		type:GET_RIVER_ATTRIBUTE_FAIL_ACTION,
+		payload
+	}
+}
+
+// ambil attribut sungai baru (15/07/2019)
+export function getRiverAttributeByIdAction(payload){
+	return {
+		type:GET_RIVER_ATTRIBUTE_BYID_ACTION,
+		payload
+	}
+}
+
+export function getRiverAttributeByIdSuccessAction(payload){
+	return {
+		type:GET_RIVER_ATTRIBUTE_BYID_SUCCESS_ACTION,
+		payload
+	}	
+}
+
+export function getRiverAttributeByIdFailAction(payload){
+	return {
+		type:GET_RIVER_ATTRIBUTE_BYID_FAIL_ACTION,
 		payload
 	}
 }
@@ -377,4 +517,51 @@ export function updateGeodataRiver(payload){
 		type:UPDATE_GEODATA_RIVER,
 		payload
 	}	
+}
+
+export function insertRiverFeaturesAction(payload){
+	return {
+		type:INSERT_RIVER_FEATURES,
+		payload
+	}	
+}
+
+export function insertRiverFeaturesSuccessAction(){
+	return {
+		type:INSERT_RIVER_FEATURES_SUCCESS,		
+	}	
+}
+
+export function insertRiverFeaturesErrorAction(payload){
+	return {
+		type:INSERT_RIVER_FEATURES_ERROR,
+		payload
+	}	
+}
+
+export function clearRiverFormAction(){
+	return {
+		type:CLEAR_RIVER_FORM
+	}
+}
+
+export function downloadExportAction(payload){
+	return {
+		type:DOWNLOAD_EXPORT_ACTION,
+		payload
+	}
+}
+
+export function downloadExportSuccessAction(payload){
+	return {
+		type:DOWNLOAD_EXPORT_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function downloadExportErrorAction(payload){
+	return {
+		type:DOWNLOAD_EXPORT_ERROR_ACTION,
+		payload
+	}
 }

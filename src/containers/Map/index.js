@@ -5,6 +5,8 @@ import { Switch, Route } from 'react-router-dom';
 
 import DrawRiverPage from './DrawRiverPage';
 import DrawProjectPage from './DrawProjectPage';
+import DrawRiverShapePage from './DrawRiverShapePage';
+import DownloadPage from '../DownloadPage';
 
 /*import MapGL, { 
 	NavigationControl, 
@@ -139,16 +141,37 @@ class MapContainer extends React.Component {
 
 		return (
 			<Fragment>
-			<Switch>
-				<Route path="/draw/river" 
-				render={routeProps => (
-          	<DrawRiverPage {...routeProps} />
-        )}/>
-        <Route path="/draw/project" 
-				render={routeProps => (
-          	<DrawProjectPage {...routeProps} />
-        )}/>
-			</Switch>
+				<Switch>
+					
+					<Route 
+					exact
+					path="/draw/riverAtribut" 
+					render={routeProps => (
+	          	<DrawRiverPage {...routeProps} />
+	        )} />
+
+	        <Route 
+						exact
+						path="/draw/riverShape" 
+						render={routeProps => (
+		          	<DrawRiverShapePage {...routeProps} />
+		        )} />
+
+	        <Route 
+	        	exact 
+	        	path="/draw/project" 
+						render={routeProps => (
+		          	<DrawProjectPage {...routeProps} />
+		        )} />
+
+		      <Route 
+	        	exact 
+	        	path="/download" 
+						render={routeProps => (
+		          	<DownloadPage {...routeProps} />
+		        )} />
+
+				</Switch>
 				{/*<LoadingDialog 
 					isLoading={isLoading} />*/}			
 				

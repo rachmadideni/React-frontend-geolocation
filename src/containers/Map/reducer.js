@@ -1,5 +1,5 @@
 import { fromJS, List, Map } from 'immutable';
-
+import { forEach } from 'lodash/collection';
 import {
 	// CHANGE_MAP_MODE_ACTION,	
 	CHANGE_TABVALUE_ACTION,
@@ -42,7 +42,20 @@ import {
 	ADD_PROJECT_ACTION,
 	ADD_PROJECT_SUCCESS_ACTION,
 	CHANGE_DRAW_MODE_ACTION,
-	UPDATE_GEODATA_RIVER
+	UPDATE_GEODATA_RIVER,
+	INSERT_RIVER_FEATURES,
+	INSERT_RIVER_FEATURES_SUCCESS,
+	INSERT_RIVER_FEATURES_ERROR,
+	CLEAR_RIVER_FORM,
+	GET_RIVER_ATTRIBUTE_BYID_SUCCESS_ACTION,
+	GET_RIVER_ATTRIBUTE_BYID_FAIL_ACTION,
+	UPDATE_RIVER_PROPERTY_ACTION,
+	QUERY_PROPERTI_ACTION,
+	QUERY_PROPERTI_SUCCESS_ACTION,
+	QUERY_PROPERTI_ERROR_ACTION,
+	UPDATE_FEATURES_ACTION,
+	UPDATE_FEATURES_SUCCESS_ACTION,
+	UPDATE_FEATURES_ERROR_ACTION
 } from './constants';
 
 export const initialState = fromJS({
@@ -62,7 +75,8 @@ export const initialState = fromJS({
 		project:true
 	},
 	isDrawerOpen:false,
-	DASMODE:'EDIT',// enum : VIEW atau EDIT
+	// DASMODE:'EDIT',// enum : VIEW atau EDIT
+	DASMODE:'edit_shape',
 	mode:'simple_select',
 	tabValue:0,
 	marker:[],
@@ -105,7 +119,9 @@ export const initialState = fromJS({
 			ketera:'',
 			upload:[]
 		}
-	}
+	},
+	queryProperti:{},
+	updatedFeatures:[]
 });
 
 function mapContainerReducer(state = initialState, action){
@@ -115,12 +131,8 @@ function mapContainerReducer(state = initialState, action){
 		}
 		case CHANGE_TABVALUE_ACTION:
 			return state.set('tabValue',action.payload);
-		// case CHANGE_MAP_MODE_ACTION:
-		// 	return state;
 
-		case CHANGE_DRAW_MODE_ACTION:{
-			console.log('CHANGE_DRAW_MODE_ACTION = ', action.payload);
-			//return state;
+		case CHANGE_DRAW_MODE_ACTION:{						
 			return state.set('mode',action.payload.mode);			
 		}
 
@@ -166,12 +178,12 @@ function mapContainerReducer(state = initialState, action){
 
 		case GET_RIVER_ACTION:
 			return state.set('loading',true);
-		case GET_RIVER_SUCCESS_ACTION:{
-			// console.log('reducer action payload:', action.payload);
-			// return state.setIn(['geodata','river','features'], new List(action.payload.features));
+
+		case GET_RIVER_SUCCESS_ACTION:{						
 			return state.set('loading',false).setIn(['geodata','river','features'], new List(action.payload));
 			//return state.updateIn(['geodata','river','features'], features => features.push(...action.payload));			
 		}
+
 		case GET_RIVER_FAILED_ACTION:
 			return state
 				.set('loading',false)
@@ -180,6 +192,65 @@ function mapContainerReducer(state = initialState, action){
 		// TEST UPDATE STATE GEODATA RIVER
 		case UPDATE_GEODATA_RIVER:
 			return state.setIn(['geodata','river'], new Map(action.payload));
+
+		// tambah feature ke features di geodata > river
+		case INSERT_RIVER_FEATURES:
+			return state.set('loading',true).updateIn(['geodata','river','features'], features => features.push(action.payload));
+		case INSERT_RIVER_FEATURES_SUCCESS:
+			return state.set('loading',false);
+		case INSERT_RIVER_FEATURES_ERROR:
+			return state;
+		
+		// clear form 
+		case CLEAR_RIVER_FORM:
+			return state.setIn(['form','river'], 
+				new Map({				
+					kecamatan:null,
+					sungai:'',
+					jenis_sungai:"1",
+					keterangan:'',
+					idsung:''
+				}));
+
+		// QUERY PROPERTI
+		case QUERY_PROPERTI_ACTION:			
+			return state.set('loading',true);
+
+		case QUERY_PROPERTI_SUCCESS_ACTION:
+			return state.set('loading',false).setIn(['queryProperti'], new Map(action.payload))
+
+		case QUERY_PROPERTI_ERROR_ACTION:
+			return state.set('loading',false).setIn(['queryProperti'], new Map())
+		// END QUERY PROPERTI
+
+		// UPDATE FEATURES (River Shape)
+		case UPDATE_FEATURES_ACTION:{
+			const updatedFeatures = state.get('updatedFeatures').toJS();
+			
+			/*forEach(updatedFeatures, item=>{
+				
+				if(!!item && updatedFeatures.indexOf(item) < 0){
+					updatedFeatures.push(item)					
+				}
+			});*/
+
+			if(updatedFeatures.includes(action.payload)){
+				return state;
+			}
+				return state.updateIn(['updatedFeatures'], id=>id.push(action.payload));				
+		}
+		
+
+		case UPDATE_FEATURES_SUCCESS_ACTION:{
+
+		}
+		case UPDATE_FEATURES_ERROR_ACTION:{
+
+		}
+
+		// case REPLACE_MAP_ACTION:
+		// case REPLACE_MAP_SUCCESS_ACTION:
+		// case REPLACE_MAP_ERROR_ACTION:
 
 		case SET_SNACKBAR_ACTION:
 			return state.set('snackBarOpen', action.payload);
@@ -220,6 +291,15 @@ function mapContainerReducer(state = initialState, action){
 		}
 
 		case GET_RIVER_ATTRIBUTE_FAIL_ACTION:{
+			return state.setIn(['form','river'], new Map(action.payload))
+		}
+
+		// action response utk ambil atribut sungai berdasarkan idsung
+		case GET_RIVER_ATTRIBUTE_BYID_SUCCESS_ACTION:{
+			return state.setIn(['form','river'], new Map(action.payload));
+		}
+
+		case GET_RIVER_ATTRIBUTE_BYID_FAIL_ACTION:{
 			return state.setIn(['form','river'], new Map(action.payload))
 		}
 

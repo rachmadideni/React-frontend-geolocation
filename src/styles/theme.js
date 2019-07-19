@@ -4,6 +4,7 @@ import { color } from './constants';
 export const theme = createMuiTheme({
 	typography: {
     useNextVariants: true,
+    fontSize:14
   },
 	palette:{
 		primary:{

@@ -25,7 +25,9 @@ import {
 	getRiverAttributeAction,
 	addRiverAction,
 	hapusSungaiAction,
-	getRiverAction } from '../../Map/action';
+	getRiverAction,
+	updateRiverPropertyAction
+} from '../../Map/action';
 
 import { 
 	makeSelectOptions,
@@ -33,6 +35,12 @@ import {
 	makeSelectFormRiverData } from '../../Map/selectors';
 
 import isEmpty from 'validator/lib/isEmpty';
+
+import Slide from '@material-ui/core/Slide';
+
+function Transition(props){
+	return <Slide direction="up" {...props} />;
+}
 
 const Wrapper = styled(Grid)`
 	&& {
@@ -103,7 +111,7 @@ class FormRiverAttributes extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {			
-			featureId:null,
+			featureId:this.props.featureId,
 			features:[],
 			idsung:null,			
 			sungai:'',
@@ -121,7 +129,7 @@ class FormRiverAttributes extends React.Component{
 		this.handleSubmit = this.handleSubmit.bind(this); 
 	}
 
-	componentDidUpdate(props){
+	componentDidUpdate(props,state){
 		
 		// console.log('___________________');
 		// console.log('child updated!');		
@@ -150,10 +158,19 @@ class FormRiverAttributes extends React.Component{
 				}
 			});
 
-		}*/			
+		}*/	
+
+		// penting harus ada. klo tdk ada user tdk bisa update properti sungai yang baru dibuat
+		console.log(this.state.featureId)
+		console.log(this.props.featureId)
+		if(this.props.featureId !== state.featureId){
+			this.setState(state=>{
+				return {
+					featureId:this.props.featureId
+				}
+			})
+		}
 		
-
-
 	}
 
 	validasiSungai(nama_sungai){
@@ -252,12 +269,37 @@ class FormRiverAttributes extends React.Component{
 			alert('lolos validasi');
 			// alert(this.state.featureId);			
 			// alert(this.props.dt.sungai);
-			console.log('state:',this.state.features);
-			this.props.addRiver({ 
+			// console.log('state:',this.state.features);
+			
+			// disabled semenetra
+			/*this.props.addRiver({ 
 				features, 
 				properties:this.props.dt 
-			});		
+			});*/
+
+			// tes update property
+			// console.log(this.props.featureId);
+			const property = this.props.dt;
+			/*
+			property = {
+				kecamatan:2,
+				sungai:"tb2",
+				jenis_sungai:"2",
+				keterangan:"tb2",
+				idsung:null
+			}
+			 */
+			
+			// isi properti sungai (setelah user membuat sungai baru)
+			this.props.updateRiverProperty({
+				featureId:this.state.featureId,
+				property:property
+			});
+
+			this.props.handleFormOpen(false);
+			this.props.clearRiverForm();
 		}
+
 		return false;
 	}
 
@@ -290,8 +332,8 @@ class FormRiverAttributes extends React.Component{
 			ubahKeterangan } = this.props;		
 		
 		return(
-			<div>
-			<Wrapper 
+			<Slide direction="right" in={this.props.isFormOpen} mountOnEnter unmountOnExit>
+			<Wrapper 				
 				container="true"
 				direction="column"				
 				style={{
@@ -461,7 +503,7 @@ class FormRiverAttributes extends React.Component{
 					</form>
 				</FormWrapper>
 			</Wrapper>
-			</div>
+			</Slide>
 		)
 	}
 }
@@ -484,6 +526,7 @@ function mapDispatchToProps(dispatch){
 		addRiver: features=>dispatch(addRiverAction(features)),
 		hapusSungai: value=>dispatch(hapusSungaiAction(value)),
 		getRiver: ()=>dispatch(getRiverAction()),
+		updateRiverProperty: (property)=>dispatch(updateRiverPropertyAction(property))
 	}
 }
 

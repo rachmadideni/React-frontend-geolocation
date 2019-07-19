@@ -18,7 +18,14 @@ import {
 	ADD_RIVER_ACTION,
 	ADD_PROJECT_ACTION,
 	HAPUS_SUNGAI_ACTION,
-	UPLOAD_PROJECT_ACTION
+	UPLOAD_PROJECT_ACTION,
+	DOWNLOAD_EXPORT_ACTION,
+	INSERT_RIVER_FEATURES,
+	ADD_NEW_RIVER_ACTION,
+	UPDATE_RIVER_PROPERTY_ACTION,
+	GET_RIVER_ATTRIBUTE_BYID_ACTION,
+	QUERY_PROPERTI_ACTION,
+	REPLACE_MAP_ACTION
 } from './constants';
 
 import { 
@@ -38,7 +45,24 @@ import {
 	getProjectSuccessAction,
 	getProjectFailedAction,
 	uploadProjectSuccessAction,
-	addProjectSuccessAction
+	addProjectSuccessAction,
+	downloadExportAction,
+	downloadExportSuccessAction,
+	downloadExportErrorAction,
+	insertRiverFeaturesAction,
+	insertRiverFeaturesSuccessAction,
+	insertRiverFeaturesErrorAction,
+	AddNewRiverAction,
+	AddNewRiverSuccessAction,
+	AddNewRiverErrorAction,
+	getRiverAttributeByIdSuccessAction,
+	getRiverAttributeByIdFailAction,
+	updateRiverPropertySuccessAction,
+	updateRiverPropertyErrorAction,
+	queryPropertiSuccessAction,
+	queryPropertiErrorAction,
+	replaceMapSuccessAction,
+	replaceMapErrorAction
 } from './action';
 
 // import { makeSelectRiverFeatures } from './selectors'
@@ -46,6 +70,140 @@ import {
 import {
 	mapOptionsResponseToDisplay
 } from './helpers';
+
+// REPLACE MAP SUNGAI (18/07/2019)
+export function* replaceMap(action){
+	try{
+		const data = action.payload
+		const endpoint = `${api.host}/api/geojson/sungai/replaceMap`;
+		const requestOpt = {
+			method:'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				data
+	    })	    
+		};
+		const response = yield call(request, endpoint, requestOpt);
+		console.log(action.payload);
+		/*if(response.status === 200){
+			yield put(replaceMapSuccessAction())			
+		}*/
+	}catch(err){
+		if(err){
+			console.log(err.message)
+			yield put(replaceMapErrorAction())
+		}
+	}
+}
+
+
+// QUERY PROPERTI SUNGAI (18/07/2019)
+export function* queryProperti(action){
+
+	try{
+
+		const endpoint = `${api.host}/api/geojson/sungai/queryProperti/${action.payload}`;
+		const requestOpt = { method:'GET' }
+		const response = yield call(request, endpoint, requestOpt);
+
+		if(response.status === 200){
+			yield put(queryPropertiSuccessAction(response.data))			
+		}
+	}catch(err){
+		if(err){
+			yield put(queryPropertiErrorAction()) 			
+		}
+	}
+}
+
+// tambah sungai baru (15/07/2019)
+export function* AddNewRiver(action){
+	try{
+		const data = action.payload
+		const endpoint = `${api.host}/api/geojson/sungai/addNew`;
+		const requestOpt = {
+			method:'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				data
+	    })	    
+		};
+
+		const response = yield call(request, endpoint, requestOpt);
+		console.log('SAGA AddNewRiver response:',response);
+		// yield put(AddNewRiverAction(action.	paylo))
+		// yield put(AddNewRiverSuccessAction())
+	}catch(err){
+		if(err){
+			yield put(AddNewRiverErrorAction('error tambah sungai baru!'))
+		}
+	}
+}
+
+// TODO
+export function* updateRiverProperty(action){
+	try{
+		console.log('start SAGA updateRiverProperty :',action.payload);
+		const endpoint = `${api.host}/api/geojson/sungai/updateProperty`;
+		const requestOpt = {
+			method:'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				featureId:action.payload.featureId,
+				property:action.payload.property
+	    })	    
+		};
+		const response = yield call(request, endpoint, requestOpt);
+		console.log('saga update property response : ', response);
+		yield put(updateRiverPropertySuccessAction());
+	}catch(err){
+		if(err) 
+		yield put(updateRiverPropertyErrorAction())
+	}
+}
+
+/*
+const requestOpt = {
+		method:'POST',
+		headers: {
+  		'Content-Type': 'application/json',      
+    },
+		body: JSON.stringify({
+      features,
+      properties
+    })	    
+	};
+
+	try{
+		const response = yield call(request, endpoint, requestOpt);
+		console.log('saga response:',response.response.data);
+		return response.response.data;
+ */
+
+
+
+
+// insert river features action
+export function* insertRiverFeatures(action){
+	console.log('saga insertRiverFeatures :',action.payload);
+	try{
+		// yield put(insertRiverFeaturesAction(action.payload))		
+		yield put(insertRiverFeaturesSuccessAction())		
+	}catch(err){
+		if(err){
+			yield put(insertRiverFeaturesErrorAction());
+			console.log('saga errors:',err.message);
+		}
+	}
+}
+
+
 
 // upload file
 export function* uploadFile(file){
@@ -295,13 +453,17 @@ export function* hapusRiver(action){
 	}
 }*/
 
-// ambil atribut/properti sungai berdasarkan featureId
+// ambil atribut/properti sungai berdasarkan id sungai
+// ini memanggil data berdasarkan id sungai
+// khusus data yang sudah ada property di database
+
 export function* fetchRiverAttribute(action){
-	console.log('saga fetchRiverAttribute featureId : ', action.payload);
+	console.log('saga fetchRiverAttribute by id sungai : ', action.payload);
 	// const featureId = action.payload;
 	const idsung = action.payload;
 	const endpoint = `${api.host}/api/geojson/sungai/attribut/${idsung}`;
 	const requestOpt = { method:'GET' }
+	
 	try{
 		const response = yield call(request, endpoint, requestOpt);
 		console.log('saga fetchRiverAttribute:',response);
@@ -325,6 +487,37 @@ export function* fetchRiverAttribute(action){
 	}
 }
 
+// 
+
+export function* fetchRiverAttributeById(action){
+	console.log('start SAGA fetchRiverAttributeById :', action.payload);
+	const featureId = action.payload;
+	const endpoint = `${api.host}/api/geojson/sungai/attributById/${featureId}`;
+	const requestOpt = { method:'GET' }	
+	try{
+		const response = yield call(request, endpoint, requestOpt);
+		console.log('result SAGA fetchRiverAttributeById :', response);
+		const idkecm = response.data[0].idkecm;
+		const nmsung = response.data[0].nmsung;
+		const jenis_sungai = response.data[0].jenis_sungai.toString();
+		const keterangan = response.data[0].keterangan ? response.data[0].keterangan : '';
+		const idsungai = response.data[0].idsung;
+
+		yield put(getRiverAttributeByIdSuccessAction({ kecamatan:idkecm, sungai:nmsung, jenis_sungai:jenis_sungai, keterangan:keterangan, idsung:idsungai }));
+
+	}catch(err){
+		if(err)
+			yield put(getRiverAttributeByIdFailAction({
+				kecamatan:'',
+				sungai:'',
+				jenis_sungai:'1',
+				keterangan:'',
+				idsung:''
+			}))
+	}
+}
+
+
 export function* getOptions(action){
 	// todo : select token first
 	const optionKey = action.payload;	
@@ -344,7 +537,24 @@ export function* getOptions(action){
 	}	catch(err){
 		//console.log(err)
 	}
+}
 
+export function* downloadExport(action){
+
+	const fileNameToDownload = action.payload
+	const endpoint = `${api.host}/api/geojson/download/${fileNameToDownload}`;
+	const requestOpt = { method:'GET' }
+	
+	try{
+		const response = yield call(request, endpoint, requestOpt);
+		if(response.data){
+			yield put(downloadExportSuccessAction())
+		}
+	}catch(err){
+		if(err){
+			yield put(downloadExportErrorAction());
+		}
+	}
 }
 
 export default function* MapContainerSaga(){
@@ -357,7 +567,14 @@ export default function* MapContainerSaga(){
 		takeLatest(GET_PROJECT_ATTRIBUTE_ACTION, fetchProjectAttribute),
 		takeLatest(ADD_PROJECT_ACTION, addProject),
 		takeLatest(GET_PROJECT_ACTION, getProject),
-		takeLatest(UPLOAD_PROJECT_ACTION, uploadProjectFile)
+		takeLatest(UPLOAD_PROJECT_ACTION, uploadProjectFile),
+		takeLatest(DOWNLOAD_EXPORT_ACTION, downloadExport),
+		takeLatest(INSERT_RIVER_FEATURES, insertRiverFeatures),
+		takeLatest(ADD_NEW_RIVER_ACTION, AddNewRiver),
+		takeLatest(UPDATE_RIVER_PROPERTY_ACTION, updateRiverProperty),
+		takeLatest(GET_RIVER_ATTRIBUTE_BYID_ACTION, fetchRiverAttributeById),
+		takeLatest(QUERY_PROPERTI_ACTION, queryProperti),
+		takeLatest(REPLACE_MAP_ACTION, replaceMap)
 		//addRiver(),
 		//takeLatest(GET_GEOJSON_ACTION, getGeojson)
 	]);

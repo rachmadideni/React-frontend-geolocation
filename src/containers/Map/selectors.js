@@ -41,6 +41,14 @@ const makeSelectFormProjectData = () => createSelector(MapContainer, state=>stat
 
 const makeSelectDrawMode = () => createSelector(MapContainer, state=>state.get('mode'));
 
+// select last inserted features without 
+const selectFeatures = () => createSelector(MapContainer, state=>state.getIn(['geodata','river','features']).toJS()); 
+
+// updatedGeometry
+const makeSelectUpdatedFeatures = () => createSelector(MapContainer, state=>state.get('updatedFeatures'));
+
+// const selectNewFeatureOnly = () => createSelector( selectFeatures, state => state.slice(-1) ) 
+// console.log(selectFeatures);
 export {
 	makeSelectTabValue,
 	makeSelectMapConfig,
@@ -61,5 +69,7 @@ export {
 	makeSelectJenisSungai,
 	makeSelectFormRiverData,
 	makeSelectFormProjectData,
-	makeSelectDrawMode
+	makeSelectDrawMode,
+	selectFeatures,
+	makeSelectUpdatedFeatures
 }

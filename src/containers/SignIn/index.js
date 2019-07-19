@@ -34,6 +34,9 @@ import injectSaga from '../../utils/injectSaga';
 
 import isEmpty from 'validator/lib/isEmpty';
 
+// logo
+import LogoPU from '../../icons/logo_pu';
+
 const FormTitle = styled(props=>{
 	const { weight, ...baseProps } = props;
 	return (
@@ -172,7 +175,7 @@ class SignIn extends React.Component {
 				alignItems="center"
 				justify="center"
 				style={{ 					
-					height:'80vh'
+					height:'80vh',					
 				}}>			
 					<LoadingDialog isLoading={isLoading} />
 					<form						
@@ -184,16 +187,28 @@ class SignIn extends React.Component {
 						}}
 						onSubmit={this.handleSubmit}>
 						
-						<FormTitle 
-							variant="h5"
-							align="center"
-							gutterBottom
-							weight={600}
-							style={{
-								color:`${color.primary}`
-							}}>
-							Sign In
-						</FormTitle>
+						<Grid 
+							style={{ 
+								display:'flex',
+								flex:1,								
+								flexDirection:'row',
+								align:'center', 
+								alignItems:'center',
+								justifyContent: 'space-around'
+						}}>
+							<LogoPU style={{ width:36,height:36,alignItems:'center' }}/>
+							<FormTitle 
+								variant="h5"
+								align="center"
+								gutterBottom
+								weight={600}
+								style={{
+									color:`${color.primary}`
+								}}>								
+									SIG Dinas Kabupaten Pangkep
+							</FormTitle>
+						</Grid>
+						
 
 						<Grid item xs>
 							<TextField 

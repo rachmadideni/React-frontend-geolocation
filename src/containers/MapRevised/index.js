@@ -2,9 +2,10 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { fromJS } from 'immutable';
 
-import MapGL, { Marker, Popup } from 'react-map-gl';
+import MapGL, { Marker, Popup, FlyToInterpolator } from 'react-map-gl';
 import Pin from './component/Pin';
 import PopupContent from './component/PopupContent';
+import List from './component/List';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -40,12 +41,14 @@ import {
 } from '../Map/selectors';
 
 // style.json
-import { defaultMapStyle, dataLayer } from '../../styles/map-style';
+import { defaultMapStyle, dataLayer, labelSungai } from '../../styles/map-style';
 import _ from 'lodash'
 
 // geocoder
-import Geocoder from 'react-map-gl-geocoder'
-import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
+// import Geocoder from 'react-map-gl-geocoder'
+// import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
+
+import * as turf from '@turf/turf'
 
 class MapRevised extends Component {
 
@@ -61,11 +64,12 @@ class MapRevised extends Component {
 	      longitude: 119.494885,
 	      zoom: 8
 	    }
-  
 		}
+
+		this.mapRef = React.createRef()
 	}
 
-	mapRef = React.createRef()
+	
 	
 	resize = () => {
     this.handleViewportChange({
@@ -83,8 +87,9 @@ class MapRevised extends Component {
 		window.addEventListener('resize', this.resize)
     this.resize()
 
-    /*const map = this.reactMap.getMap();    
-    map.on('load', ()=> {
+    const map = this.mapRef.current.getMap();
+    // console.log(map);    
+    /*map.on('load', ()=> {
     	map.addLayer({
     		"id":"sung",
     		"type":"line",
@@ -134,18 +139,27 @@ class MapRevised extends Component {
 			// console.log(JSON.stringify(this.props.data_sungai))	
 		}else{
 			this._load_data_sungai(this.props.data_sungai);
+			this._load_label_sungai(this.props.data_sungai);
 			// console.log(JSON.stringify(this.props.data_sungai))	
 		}
 	}
 
 	_load_data_sungai = data => {	
-		const mapStyle = 
-		defaultMapStyle.setIn(['sources','incomeByState'], fromJS({type:'geojson',data}))
+		const mapStyle = defaultMapStyle.setIn(['sources','incomeByState'], fromJS({type:'geojson',data}))
 		.set('layers', defaultMapStyle.get('layers').push(dataLayer));
+		// console.log(mapStyle.toJS());
 			
 		this.setState({
 			mapStyle:mapStyle
 		})
+	}
+
+	_load_label_sungai = data => {
+		const mapStyle = defaultMapStyle.setIn(['sources','dataLabelSungai'], fromJS({type:'geojson',data}))
+		.set('layers',defaultMapStyle.get('layers').push(labelSungai));
+		// this.setState({
+		// 	mapStyle:mapStyle
+		// })
 	}
 
 	_onHover = event => {
@@ -154,7 +168,16 @@ class MapRevised extends Component {
 			srcEvent: {offsetX, offsetY}
 		} = event;
 		const hoveredFeature = features && features.find(f => f.layer.id === 'data_sungai');
-		this.setState({ hoveredFeature, x: offsetX, y: offsetY});		
+		// console.log(features);
+		// if(event.features.length > 0){
+			// console.log('> 0')
+			// const featureId = features[0].properties.featureId;			
+		 	// console.log('featureID:',featureId);			
+		// }
+		// if(featureId){
+			this.setState({ hoveredFeature, x: offsetX, y: offsetY});		
+		// }
+
 	}
 
 	_renderTooltip() {
@@ -206,7 +229,14 @@ class MapRevised extends Component {
 				</Popup>
 			)
 		)
+	}
 
+	_RenderList = () => {
+		return (
+			<Fragment>
+				<List list_sungai={this.props.data_sungai} onViewportChange={this._goToViewport} />
+			</Fragment>
+		);
 	}
 
 	_handleViewport = viewport => {
@@ -220,18 +250,18 @@ class MapRevised extends Component {
   }
 
 	// if you are happy with Geocoder default settings, you can just use handleViewportChange directly
-  handleGeocoderViewportChange = (viewport) => {
+  /*handleGeocoderViewportChange = (viewport) => {
     const geocoderDefaultOverrides = { transitionDuration: 1000 }
 
     return this.handleViewportChange({
       ...viewport,
       ...geocoderDefaultOverrides
     })
-  }
+  }*/
 
   // https://docs.mapbox.com/help/tutorials/local-search-geocoding-api/
   // https://docs.mapbox.com/mapbox-gl-js/example/forward-geocode-custom-data/
-	_forwardGeocoder = (query) => {
+	/*_forwardGeocoder = (query) => {
 		const { data_sungai } = this.props;
 		if(data_sungai){
 			var matchingFeatures = [];
@@ -251,12 +281,27 @@ class MapRevised extends Component {
 			}
 			return matchingFeatures;			
 		}
-	}
+	}*/
+
+	_goToViewport = (longitude,latitude) => {
+		// console.log('longitude:',longitude);
+		// console.log('latitude:',latitude);
+		//{longitude, latitude}
+		// console.log('Longitude:',longitude);
+		// console.log('latitude:',latitude);
+    this.handleViewportChange({
+      longitude,
+      latitude,
+      zoom: 12,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionDuration: 1000
+    });
+  };
 
 	render(){
 //ref={(reactMap) => this.reactMap = reactMap}
 		const { mapStyle } = this.state;
-		const { viewport } = this.props;
+		const { viewport } = this.state;
 		return (
 			<div style={{
 				width:'100%',
@@ -270,20 +315,21 @@ class MapRevised extends Component {
 					height={'90vh'}
 					mapboxApiAccessToken={'pk.eyJ1IjoiZGVuaXJhY2htYWRpIiwiYSI6ImNqdXptYTVoMzFhZWs0ZnMwbmI3dG00eWgifQ.tkFYtFMZwzujEkvtz9_Oiw'}					
 					mapStyle={mapStyle}
-					onViewportChange = { viewport => this._handleViewport(viewport) }
+					onViewportChange = { viewport => this.handleViewportChange(viewport) }
 					onHover={this._onHover}>					
 					{this._renderProyek()}
 					{this._renderPopup()}
 					{this._renderTooltip()}
+					{this._RenderList()}
 
-					<Geocoder
+					{/*<Geocoder
           	mapRef={this.mapRef}
           	onViewportChange={this.handleGeocoderViewportChange}
           	mapboxApiAccessToken={'pk.eyJ1IjoiZGVuaXJhY2htYWRpIiwiYSI6ImNqdXptYTVoMzFhZWs0ZnMwbmI3dG00eWgifQ.tkFYtFMZwzujEkvtz9_Oiw'} 
           	localGeocoder={this._forwardGeocoder}
           	placeholder="masukkan nama sungai" 
-          	zoom={18}
-          	reverseGeocode={true} />
+          	zoom={12}
+          	reverseGeocode={true} />*/}
 
 				</MapGL>
 			</div>

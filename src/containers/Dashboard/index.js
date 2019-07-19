@@ -11,16 +11,19 @@ import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountIcon from '@material-ui/icons/AccountCircleOutlined';
-import MenuList from './DrawerMenu';
+import DrawerMenu from './DrawerMenu';
 
 // page
 import DashboardOverviewPage from '../DashboardOverviewPage';
 import MapDraw from '../Map';
 import MapUtama from '../MapRevised'
+import DownloadPage from '../DownloadPage'
 
 import { createStructuredSelector } from 'reselect';
 import { makeSelectDrawerState } from '../Map/selectors';
 import { changeDrawerStateAction } from '../Map/action';
+
+import LogoPU from '../../icons/logo_pu';
 
 class Dashboard extends React.Component {
 
@@ -58,40 +61,40 @@ class Dashboard extends React.Component {
 						color="primary">
 
 						<Toolbar>							
-							<IconButton 
-								onClick={ this.toggleDrawer }>
-								<MenuIcon 
-									fontSize="small" 
-									style={{ 
-										color: 'white'
-									}} />
+							<IconButton onClick={ this.toggleDrawer }>
+								<MenuIcon fontSize="small" style={{ color: 'white' }} />
 							</IconButton>							
-							<Typography 
-								variant="h6" 
-								color="inherit" 
-								style={{ 
-									flexGrow: 1,
-									fontSize:18,
-									paddingLeft:10 
-								}}>
-									{'webgis'}
-							</Typography>
-							<IconButton disableRipple>
-								<AccountIcon 
-									fontSize="small" 
+							
+							<Grid container style={{ paddingLeft:10, paddingTop:15,margin:0,justifyContent:'center' }}>
+								<LogoPU style={{ 
+									width:28,
+									height:28,
+									paddingBottom:'0px',
+								}}/>
+								<Typography 
+									variant="body1" 
+									color="inherit" 
 									style={{ 
-										color:'white'
-									}} />
+										flexGrow: 1,
+										//fontSize:18,
+										paddingLeft:10 
+									}}>
+
+										{'Sistem Informasi Geografis Dinas Kabupaten Pangkep'}
+								</Typography>
+							<IconButton disableRipple>
+								<AccountIcon fontSize="small" style={{ color:'white' }} />
 							</IconButton>
+							</Grid>
 						</Toolbar>
 
 						<Drawer 
-							style = {{ 
-								color:'#333333' 
-							}}
+							style = {{ color:'#333333' }}
 							open = { drawerState }
 							onClose = { this.toggleDrawer }>							
-							<MenuList />
+							<DrawerMenu 
+								history={history}
+								toggleDrawer={this.toggleDrawer} />
 						</Drawer>
 
 					</AppBar>
@@ -116,8 +119,13 @@ class Dashboard extends React.Component {
 
 						<Route 
 							exact 
-							path="/draw/:type(river|project)" 
-							render = {() => <MapDraw history = { history } /> } />							
+							path="/draw/:type(riverShape|riverAtribut|project)" 
+							render = {() => <MapDraw history = { history } /> } />
+
+						<Route
+							exact
+							path="/download"
+							render={()=> <DownloadPage history={history} /> } />							
 
 					</Switch>
 				</Grid>

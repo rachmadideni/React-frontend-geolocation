@@ -13,10 +13,19 @@ import { makeSelectDASMode } from '../../../Map/selectors';
 import { changeDasModeAction } from '../../../Map/action';
 
 class DasModeTab extends React.Component {
-
-	handleDASMode = (event,value) =>{		
-		this.props.changeDasMode(value);
+	constructor(props){
+		super(props);
 	}
+
+	handleDASMode = (event,value) =>{
+		const { history } = this.props;		
+		this.props.changeDasMode(value);
+		// return history.replace('/draw/river');
+	}
+
+	componentDidMount(){
+		console.log('DasModeTab : ',this.props);
+	}	
 
 	render(){
 		return (
@@ -34,12 +43,14 @@ class DasModeTab extends React.Component {
 						component="legend">
 						DAS Mode
 					</FormLabel>
+
 					<RadioGroup
 						value={this.props.DASMode}
 						onChange={this.handleDASMode}>
-							<FormControlLabel value="VIEW" label="View" control={<Radio />} labelPlacement="end" /> 
-							<FormControlLabel value="EDIT" label="Edit" control={<Radio />} labelPlacement="end" /> 											
-					</RadioGroup>								
+							<FormControlLabel value="edit_shape" label="Edit Shape" control={<Radio />} labelPlacement="end" /> 
+							<FormControlLabel value="edit_atribut" label="Edit Atribut" control={<Radio />} labelPlacement="end" /> 											
+					</RadioGroup>
+													
 				</FormControl>								
 			</Grid>
 		);

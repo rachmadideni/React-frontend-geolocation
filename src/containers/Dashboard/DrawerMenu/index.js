@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
@@ -24,8 +25,12 @@ import {
 import reducer from '../reducer';
 import injectReducer from '../../../utils/injectReducer';
 import {
-	mainDrawerTabValue
+	mainDrawerTabValue,	
 } from '../selectors';
+
+import { makeSelectDrawerState } from '../../Map/selectors';
+
+import { changeDrawerStateAction } from '../../Map/action';
 
 const BaseTabs = styled(Tabs).attrs({
 	classes:{
@@ -98,27 +103,73 @@ class Drawer extends React.Component{
 			},
 			{
 				icon:RiverIcon,
-				label:'DAS'
+				label:'DAS SHAPE'
+			},{
+				icon:RiverIcon,
+				label:'DAS ATRIBUT'
 			},{
 				icon:WorldIcon,
 				label:'PROJECT'
+			},{
+				icon:WorldIcon,
+				label:'Download'
 			}
 		]
 	}
 
+	componentDidMount(){
+		console.log('drawer menu props:', this.props);
+	}
+
 	handleTabChange = (event,value) => {
-		const { changeMainDrawerTabValue } = this.props;		
-		return changeMainDrawerTabValue(value);		
+		const { 
+			changeMainDrawerTabValue,
+			mainDrawerTabValue,
+			history,
+			drawerState } = this.props;
+
+		changeMainDrawerTabValue(value);
+
+		if (value === 0) {
+			return history.replace('/dashboard');
+		}
+
+		if(value===1){
+			// return history.replace('/dashboard');
+			this.toggleDrawer();
+			return history.replace('/draw/riverShape');
+		}
+
+		if(value===2){
+			// return history.replace('/dashboard');
+			this.toggleDrawer();
+			return history.replace('/draw/riverAtribut');
+		}
+
+		if(value===3){
+			this.toggleDrawer();
+			return history.replace('/draw/project');
+		}
+
+		if(value===4){
+			this.toggleDrawer();
+			return history.replace('/download');
+		}
+		return null;
+		// return changeMainDrawerTabValue(value);		
 	}
 
 	handleDASMode = (event,value) =>{		
 		this.props.changeDasMode(value);
 	}
 
+	toggleDrawer = () =>{
+		this.props.toggleDrawer();
+	}
+
 	render(){
-		const {
-			mainDrawerTabValue
-		} = this.props
+		const { mainDrawerTabValue,history } = this.props
+
 		return (
 			<Grid 
 				container 
@@ -126,7 +177,6 @@ class Drawer extends React.Component{
 				style={{ 										
 					width:'40vw',
 					height:'100%',
-					// backgroundColor:'pink'					
 				}}>				
 				<Grid 
 	    		container 
@@ -136,7 +186,6 @@ class Drawer extends React.Component{
 	    			height:'100%',
 	    			overflowX:'hidden',
 						overflowY:'hidden'
-	    			//backgroundColor:'tomato' 
 	    		}}>
 		      	<Grid item 		      		
 		      		style={{ 
@@ -158,10 +207,12 @@ class Drawer extends React.Component{
 						}
 						{
 							mainDrawerTabValue === 1 &&
-							<TabContainer item>										
-								<DasTab />								
+							<TabContainer item {...this.props}>
+
+								<DasTab history={this.props} />																
 							</TabContainer>							 
 						}
+						
 				</Grid>
 			</Grid>
 		)
@@ -169,12 +220,14 @@ class Drawer extends React.Component{
 }
 
 const mapStateToProps = createStructuredSelector({
-	mainDrawerTabValue: mainDrawerTabValue()
+	mainDrawerTabValue: mainDrawerTabValue(),
+	drawerState: makeSelectDrawerState()
 });
 
 function mapDispatchToProps(dispatch){
 	return {
-		changeMainDrawerTabValue: value => dispatch(changeMainDrawerTabValueAction(value))
+		changeMainDrawerTabValue: value => dispatch(changeMainDrawerTabValueAction(value)),
+		changeDrawerState: value => dispatch(changeDrawerStateAction(value)),
 	}
 }
 
