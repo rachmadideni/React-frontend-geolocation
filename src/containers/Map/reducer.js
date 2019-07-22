@@ -1,5 +1,5 @@
 import { fromJS, List, Map } from 'immutable';
-import { forEach } from 'lodash/collection';
+// import { forEach } from 'lodash/collection';
 import {
 	// CHANGE_MAP_MODE_ACTION,	
 	CHANGE_TABVALUE_ACTION,
@@ -47,15 +47,18 @@ import {
 	INSERT_RIVER_FEATURES_SUCCESS,
 	INSERT_RIVER_FEATURES_ERROR,
 	CLEAR_RIVER_FORM,
+	CLEAR_PROJECT_FORM,
 	GET_RIVER_ATTRIBUTE_BYID_SUCCESS_ACTION,
 	GET_RIVER_ATTRIBUTE_BYID_FAIL_ACTION,
-	UPDATE_RIVER_PROPERTY_ACTION,
+	// UPDATE_RIVER_PROPERTY_ACTION,
 	QUERY_PROPERTI_ACTION,
 	QUERY_PROPERTI_SUCCESS_ACTION,
 	QUERY_PROPERTI_ERROR_ACTION,
 	UPDATE_FEATURES_ACTION,
-	UPDATE_FEATURES_SUCCESS_ACTION,
-	UPDATE_FEATURES_ERROR_ACTION
+	// UPDATE_FEATURES_SUCCESS_ACTION,
+	// UPDATE_FEATURES_ERROR_ACTION,
+	DOWNLOAD_EXPORT_SUCCESS_ACTION,
+	DOWNLOAD_EXPORT_ERROR_ACTION
 } from './constants';
 
 export const initialState = fromJS({
@@ -121,11 +124,23 @@ export const initialState = fromJS({
 		}
 	},
 	queryProperti:{},
-	updatedFeatures:[]
+	updatedFeatures:[],
+	exportFile:{
+		name:'',
+		file:'',
+		error:''
+	}
 });
 
 function mapContainerReducer(state = initialState, action){
-	switch(action.type){		
+	switch(action.type){
+
+		case DOWNLOAD_EXPORT_SUCCESS_ACTION:
+			// return state.setIn(['exportFile','name'], action.payload);
+			return state.setIn(['exportFile','file'], action.payload);
+		case DOWNLOAD_EXPORT_ERROR_ACTION:
+			return state.setIn(['exportFile','error'], action.payload);
+
 		case PUSH_RIVER_PROP_KEYVAL_ACTION:{
 				return state.setIn(['features',0,'properties'], new Map(action.payload));
 		}
@@ -212,6 +227,15 @@ function mapContainerReducer(state = initialState, action){
 					idsung:''
 				}));
 
+		case CLEAR_PROJECT_FORM:
+			return state.setIn(['form','project'], new Map({
+				id:'',
+				nampro:'',
+				tglpro:'',
+				ketera:'',
+				upload:[]
+			}));
+
 		// QUERY PROPERTI
 		case QUERY_PROPERTI_ACTION:			
 			return state.set('loading',true);
@@ -226,27 +250,18 @@ function mapContainerReducer(state = initialState, action){
 		// UPDATE FEATURES (River Shape)
 		case UPDATE_FEATURES_ACTION:{
 			const updatedFeatures = state.get('updatedFeatures').toJS();
-			
-			/*forEach(updatedFeatures, item=>{
-				
-				if(!!item && updatedFeatures.indexOf(item) < 0){
-					updatedFeatures.push(item)					
-				}
-			});*/
-
 			if(updatedFeatures.includes(action.payload)){
 				return state;
 			}
 				return state.updateIn(['updatedFeatures'], id=>id.push(action.payload));				
-		}
-		
+		}		
 
-		case UPDATE_FEATURES_SUCCESS_ACTION:{
+		// case UPDATE_FEATURES_SUCCESS_ACTION:{
 
-		}
-		case UPDATE_FEATURES_ERROR_ACTION:{
+		// }
+		// case UPDATE_FEATURES_ERROR_ACTION:{
 
-		}
+		// }
 
 		// case REPLACE_MAP_ACTION:
 		// case REPLACE_MAP_SUCCESS_ACTION:

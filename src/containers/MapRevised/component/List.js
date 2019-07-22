@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Grid from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+
 import * as turf from '@turf/turf'
 
 const Container = styled.div`
@@ -112,15 +112,7 @@ class List extends React.Component {
 							onChange = {e=>this._changeKeyword(e)} 
 							margin="normal" 
 							fullWidth />
-						<Button 									
-							size="small" 
-							variant="contained" 							
-							fullWidth
-							onClick = { e=>console.log(e) }										
-							color="primary">
-							submit
-						</Button>
-					{/*JSON.stringify(this.props.list_sungai)*/}
+						
 					</form>
 					<TableWrapper>
 						<table>
@@ -130,8 +122,7 @@ class List extends React.Component {
 								</tr>
 							</thead>
 							<tbody>
-							{filteredList.map((item,index)=>{
-								{/*console.log(item.properties.nmsung);*/}
+							{filteredList.map((item,index)=>{								
 								let coord = item.geometry.coordinates;
 								let line = turf.lineString(coord);
 								let len1 = turf.length(line,{ units: 'kilometers' });
@@ -148,7 +139,6 @@ class List extends React.Component {
 										</CustomTd>
 										<td>{`kec. ${item.properties.nmkecm }`}</td>
 										<td>{`Panjang: ${len2} km`}</td>
-									{/*<CustomTd onClick={e=>this.props.onViewportChange(e,coord[0])}><b>{`${item.properties.nmsung}, `}</b>{` kec. ${item.properties.nmkecm}`}</CustomTd>*/}
 								</CustomTr>									
 								);
 							})}

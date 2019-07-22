@@ -2,7 +2,7 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
@@ -51,7 +51,7 @@ const BaseTabs = styled(Tabs).attrs({
 const IconTab = styled(Tab).attrs({
 	classes:{
 		selected:'selected',
-		labelContainer:'label-container'
+		// labelContainer:'label-container'
 	}
 })`
 	&& {
@@ -60,12 +60,12 @@ const IconTab = styled(Tab).attrs({
 		opacity:0.5;
 		transition: background-color 200ms ease-in-out;
 		
-		.label-container{
-			margin-top:6px;
-			font-size:10px;
-			padding:0;
-			line-height: 1;
-		}
+		// .label-container{
+		// 	margin-top:6px;
+		// 	font-size:10px;
+		// 	padding:0;
+		// 	line-height: 1;
+		// }
 	}
 	&.selected{
 		background-color:#354577;
@@ -124,9 +124,10 @@ class Drawer extends React.Component{
 	handleTabChange = (event,value) => {
 		const { 
 			changeMainDrawerTabValue,
-			mainDrawerTabValue,
-			history,
-			drawerState } = this.props;
+			// mainDrawerTabValue,
+			// drawerState, 
+			history
+		} = this.props;
 
 		changeMainDrawerTabValue(value);
 
@@ -168,7 +169,11 @@ class Drawer extends React.Component{
 	}
 
 	render(){
-		const { mainDrawerTabValue,history } = this.props
+		
+		const { 
+			mainDrawerTabValue,
+			//history 
+		} = this.props
 
 		return (
 			<Grid 

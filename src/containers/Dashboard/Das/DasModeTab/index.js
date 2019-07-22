@@ -12,13 +12,12 @@ import { createStructuredSelector } from 'reselect';
 import { makeSelectDASMode } from '../../../Map/selectors';
 import { changeDasModeAction } from '../../../Map/action';
 
-class DasModeTab extends React.Component {
-	constructor(props){
-		super(props);
-	}
+// Page di dalam drawer berisi pilihan edit_shape & edit_atribut
+
+class DasModeTab extends React.Component {	
 
 	handleDASMode = (event,value) =>{
-		const { history } = this.props;		
+		// const { history } = this.props;		
 		this.props.changeDasMode(value);
 		// return history.replace('/draw/river');
 	}

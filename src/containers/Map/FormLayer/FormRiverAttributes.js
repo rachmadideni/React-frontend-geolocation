@@ -1,20 +1,21 @@
 import React from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import Grid from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
+import Slide from '@material-ui/core/Slide';
 
-import { color } from '../../../styles/constants'
-
+// import { color } from '../../../styles/constants'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+
 import { 
 	getOptionsAction, 
 	pilihJenisSungaiAction,
@@ -36,76 +37,78 @@ import {
 
 import isEmpty from 'validator/lib/isEmpty';
 
-import Slide from '@material-ui/core/Slide';
+import { 
+	Wrapper,
+	FormWrapper,
+	FormInnerWrapper,
+	FormHeader,
+	ActionButton } from '../../../components/Form';
 
-function Transition(props){
-	return <Slide direction="up" {...props} />;
-}
+// const Wrapper = styled(Grid)`
+// 	&& {
+// 		width:30vw;
+// 		padding:0;
+// 		position:absolute;
+// 		top:20px;
+// 		left:20px;
+// 		padding-top:15px;
+// 		padding-bottom:15px;
+// 		padding-left:28px;
+// 		padding-right:28px;
+// 	}
+// `
 
-const Wrapper = styled(Grid)`
-	&& {
-		width:30vw;
-		padding:0;
-		position:absolute;
-		top:20px;
-		left:20px;
-		padding-top:15px;
-		padding-bottom:15px;
-		padding-left:28px;
-		padding-right:28px;
-	}
-`
-const FormWrapper = styled(Grid)`
-	&& {
-		width:100%;		
-		border-radius:0;
-		box-shadow:none;
-	}
-`
+// const FormWrapper = styled(Grid)`
+// 	&& {
+// 		width:100%;		
+// 		border-radius:0;
+// 		box-shadow:none;
+// 	}
+// `
 
-const ActionButton = styled(Button).attrs({
-	classes:{ root:'root',disabled:'.disabled',label:'label' }
-})`
-	.label {
-		text-transform:capitalize;
-	}
-	&&{
-		color:white;
-		background-color:${props=>props.success ? color.success : color.danger};
-		box-shadow:none;
-		margin-bottom:5px;
-		margin-right:5px;
-		'&::hover': {
-			background-color:'orange'
-		}
-	}
-`
+// const ActionButton = styled(Button).attrs({
+// 	classes:{ root:'root',disabled:'.disabled',label:'label' }
+// })`
+// 	.label {
+// 		text-transform:capitalize;
+// 	}
+// 	&&{
+// 		color:white;
+// 		background-color:${props=>props.success ? color.success : color.danger};
+// 		box-shadow:none;
+// 		margin-bottom:5px;
+// 		margin-right:5px;
+// 		'&::hover': {
+// 			background-color:'orange'
+// 		}
+// 	}
+// `
 
-const HeaderStyled = styled(Grid)`
-	width:60%;
-	border-radius:0;
-	box-shadow:none;
-`
+// const HeaderStyled = styled(Grid)`
+// 	width:60%;
+// 	border-radius:0;
+// 	box-shadow:none;
+// `
 
-function FormHeader(props){
-	return (
-		<HeaderStyled>
-			<Typography 
-				align="left" 
-				color="secondary" 
-				variant="subtitle2">
-					{props.judul}
-			</Typography>
-		</HeaderStyled>
-	)
-}
+// function FormHeader(props){
+// 	return (
+// 		<HeaderStyled>
+// 			<Typography 
+// 				align="left" 
+// 				color="secondary" 
+// 				variant="subtitle2">
+// 					{props.judul}
+// 			</Typography>
+// 		</HeaderStyled>
+// 	)
+// }
 
-const FormInnerWrapper = styled(Grid)`
-	display:flex;
-	width:100%;
-	border-radius:0;
-	box-shadow:none;
-`
+// const FormInnerWrapper = styled(Grid)`
+// 	display:flex;
+// 	width:100%;
+// 	border-radius:0;
+// 	box-shadow:none;
+// `
 
 class FormRiverAttributes extends React.Component{
 	constructor(props){
@@ -257,20 +260,13 @@ class FormRiverAttributes extends React.Component{
 			kecamatan			
 		} = this.props.dt
 
-		const {
-			features
-		} = this.state
-
 		this.setState({
 			isSubmitted:true
 		})
 
 		if(this.validasiSungai(sungai) && this.validasiKecamatan(kecamatan)){
-			alert('lolos validasi');
-			// alert(this.state.featureId);			
-			// alert(this.props.dt.sungai);
-			// console.log('state:',this.state.features);
-			
+			// alert('lolos validasi');
+
 			// disabled semenetra
 			/*this.props.addRiver({ 
 				features, 
@@ -278,7 +274,6 @@ class FormRiverAttributes extends React.Component{
 			});*/
 
 			// tes update property
-			// console.log(this.props.featureId);
 			const property = this.props.dt;
 			/*
 			property = {
@@ -308,8 +303,7 @@ class FormRiverAttributes extends React.Component{
 		const d = window.confirm('anda akan menghapus sungai')
 		if(d === true){
 			this.props.hapusSungai(featureId);
-			// this.props.getRiver();			
-			// this.forceUpdate()
+			this.props.clearRiverForm();
 		}
 	}
 
@@ -331,8 +325,14 @@ class FormRiverAttributes extends React.Component{
 			ubahKecamatan,
 			ubahKeterangan } = this.props;		
 		
-		return(
-			<Slide direction="right" in={this.props.isFormOpen} mountOnEnter unmountOnExit>
+		return (
+			
+			<Slide 
+				direction="right" 
+				in={this.props.isFormOpen} 
+				mountOnEnter 
+				unmountOnExit>
+			
 			<Wrapper 				
 				container="true"
 				direction="column"				
@@ -382,12 +382,6 @@ class FormRiverAttributes extends React.Component{
 						</Grid>						
 					</FormInnerWrapper>
 
-				{/* disabled={featureId ? false: true} */}
-				{/*
-						di action button :
-						disabled = { featureId ? false : true || !!this.state.error.sungai }
-						disabled = { featureId ? false : true || !!this.state.error.sungai }
-				*/}
 					<form 
 						noValidate 
 						autoComplete="off" 						
@@ -404,16 +398,12 @@ class FormRiverAttributes extends React.Component{
 									if(this.state.isSubmitted){
 										this.validasiSungai(event.target.value)
 									}
-
-									return ubahNamaSungai(event.target.value)
-									//return this.handleChange(event, 'sungai') 
+									return ubahNamaSungai(event.target.value)									
 							}} 
 							margin="normal" 
 							fullWidth 
 							error={!!this.state.error.sungai}
 							helperText={this.state.error.sungai} />
-
-						{/* simpan ke state : sungai */}
 						
 						<FormLabel 
 							component="legend">
@@ -425,7 +415,6 @@ class FormRiverAttributes extends React.Component{
 							onChange = { 
 								event=> {
 									return ubahJenisSungai(event.target.value)
-									//this.handleChange(event,'jenis_sungai')
 								}}>
 							<FormControlLabel 								
 								value="1" 
@@ -437,8 +426,6 @@ class FormRiverAttributes extends React.Component{
 								label="anak sungai" 
 								control={<Radio />} labelPlacement="end" />
 						</RadioGroup>
-
-						{/* simpan ke state : jenis_sungai */}						
 						
 						<TextField 
 							select 							
@@ -449,7 +436,6 @@ class FormRiverAttributes extends React.Component{
 									this.validasiKecamatan(event.target.value)
 								}
 								return ubahKecamatan(event.target.value)
-								//return this.handleChange(event, 'kecamatan')	
 							}} 
 							margin = "normal" 
 							fullWidth
@@ -471,22 +457,17 @@ class FormRiverAttributes extends React.Component{
 							label="keterangan" 
 							value={dt.keterangan}
 							onChange = { event => {
-								return ubahKeterangan(event.target.value)
-								//this.handleChange(event, 'keterangan')
+								return ubahKeterangan(event.target.value)								
 							}}
 							margin="normal" 
 							fullWidth />
 
-					{/* simpan ke state : keterangan */}
-
 						<ActionButton 									
 							size="small" 
 							variant="contained" 
-							success={true}
+							success="true"
 							fullWidth
-							onClick = { this.handleSubmit }										
-							color="primary"
-							>
+							onClick = { this.handleSubmit }>
 							Simpan Atribut
 						</ActionButton>
 

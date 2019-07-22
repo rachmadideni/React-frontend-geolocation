@@ -2,6 +2,7 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -11,13 +12,17 @@ import {
 	downloadExportAction
 } from '../Map/action';
 
-import { makeSelectLoading } from '../Map/selectors';
+import { 
+	makeSelectLoading,
+	makeSelectExportFileName } from '../Map/selectors';
 
 import saga from '../Map/saga';
 import injectSaga from '../../utils/injectSaga';
 
 import LoadingDialog from '../../components/LoadingDialog';
 
+import { api } from '../../environtments';
+import { saveAs } from 'file-saver';
 
 class DownloadPage extends React.Component {
 	
@@ -26,8 +31,21 @@ class DownloadPage extends React.Component {
 		return this.props.downloadExport(filename);
 	}
 
+	// _createBlob = jsonFile => {
+	// 	let file = new Blob([JSON.stringify(jsonFile)],{
+	// 		type:'application/json',
+	// 		name:
+	// 	});
+	// }
+
+	_downloadFile = () => {
+		const { ExportFileName } = this.props;
+		saveAs(`${api.host}/api/static/${ExportFileName}`,'export.json');
+	}
+
 	render(){
-		const { isLoading } = this.props
+		const { isLoading,ExportFileName } = this.props
+		// const fileLocation = `${api.host}/api/static/${ExportFileName}`
 		return (
 			<Grid
 				container
@@ -53,21 +71,53 @@ class DownloadPage extends React.Component {
 							{'Download Data Sungai dan Proyek'}
 					</Typography>
 					<Typography 
-						variant="subtitle1">
-						{`Tombol Download digunakan untuk mengambil data sungai & proyek yang telah dibuat. 
-							Selanjutnya Data ini diupload ulang di website Dinas PU Kabupaten Pangkep`}
+						variant="body1">
+						{`
+							Gunakan tombol export data untuk menggenerate data sungai dan project yang telah dibuat.
+							selanjutnya klik link "Download File" dan simpan ke komputer anda. 
+							Data generate ini selanjutnya bisa diupload melalui website Dinas PU Kabupaten Pangkep`}
 					</Typography>
 				</Grid>
 
-				<Grid item>				
+				<Grid 
+					item 
+					style={{
+						alignItems:'center',
+						justifyContent:'center',
+						height:'50px'
+					}}>				
 					<Button 
 						variant="contained"
 						color="primary"
 						fullWidth
 						onClick={this._onClickExport}
 						style={{ marginTop:10}}>
-							Download
+							Export Data
 						</Button>
+						<Typography 
+							color="primary"
+							variant="subtitle1">
+						{ExportFileName && 
+							
+							<React.Fragment>
+								{/*<Link 
+									color="primary" 
+									target="_blank" 
+									href={'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(ExportFileName))}
+									download={`output.json`}
+									>Download File
+								</Link>*/}
+
+								<Link
+									color="primary"
+									href="#"
+									onClick={this._downloadFile}>
+									Download File
+								</Link>
+							</React.Fragment>
+
+						}
+						</Typography>
 				</Grid>				
 
 			</Grid>
@@ -76,7 +126,8 @@ class DownloadPage extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-	isLoading: makeSelectLoading()
+	isLoading: makeSelectLoading(),
+	ExportFileName: makeSelectExportFileName()
 });
 
 function mapDispatchToProps(dispatch){

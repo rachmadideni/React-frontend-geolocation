@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import ReactDOM from 'react-dom';
 import { fromJS } from 'immutable';
 
 import MapGL, { Marker, Popup, FlyToInterpolator } from 'react-map-gl';
@@ -41,14 +40,17 @@ import {
 } from '../Map/selectors';
 
 // style.json
-import { defaultMapStyle, dataLayer, labelSungai } from '../../styles/map-style';
+import { 
+	defaultMapStyle, 
+	dataLayer, 
+	// labelSungai 
+} from '../../styles/map-style';
+
 import _ from 'lodash'
 
 // geocoder
 // import Geocoder from 'react-map-gl-geocoder'
 // import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
-
-import * as turf from '@turf/turf'
 
 class MapRevised extends Component {
 
@@ -78,35 +80,11 @@ class MapRevised extends Component {
     })
   }
 
-  
-
 	componentDidMount(){
 		this.props.getProject();
 		this.props.getRiver();
-
 		window.addEventListener('resize', this.resize)
-    this.resize()
-
-    const map = this.mapRef.current.getMap();
-    // console.log(map);    
-    /*map.on('load', ()=> {
-    	map.addLayer({
-    		"id":"sung",
-    		"type":"line",
-    		"source":{
-    			"type":"geojson",
-    			"data":this.props.data_sungai
-    		},
-				"layout": {
-				"line-join": "round",
-				"line-cap": "round"
-				},
-				"paint": {					
-					"line-color":"hsl(206, 88%, 43%)",
-					"line-width":3
-				}
-    	});
-    });*/      		 
+    this.resize();
 	}
 
 	componentWillUnmount() {
@@ -139,7 +117,7 @@ class MapRevised extends Component {
 			// console.log(JSON.stringify(this.props.data_sungai))	
 		}else{
 			this._load_data_sungai(this.props.data_sungai);
-			this._load_label_sungai(this.props.data_sungai);
+			// this._load_label_sungai(this.props.data_sungai);
 			// console.log(JSON.stringify(this.props.data_sungai))	
 		}
 	}
@@ -154,13 +132,13 @@ class MapRevised extends Component {
 		})
 	}
 
-	_load_label_sungai = data => {
-		const mapStyle = defaultMapStyle.setIn(['sources','dataLabelSungai'], fromJS({type:'geojson',data}))
-		.set('layers',defaultMapStyle.get('layers').push(labelSungai));
-		// this.setState({
-		// 	mapStyle:mapStyle
-		// })
-	}
+	// _load_label_sungai = data => {
+	// 	const mapStyle = defaultMapStyle.setIn(['sources','dataLabelSungai'], fromJS({type:'geojson',data}))
+	// 	.set('layers',defaultMapStyle.get('layers').push(labelSungai));
+	// 	// this.setState({
+	// 	// 	mapStyle:mapStyle
+	// 	// })
+	// }
 
 	_onHover = event => {
 		const {

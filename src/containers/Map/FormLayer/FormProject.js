@@ -25,7 +25,8 @@ import {
 	ubahKeteranganProjectAction,
 	getProjectAttributeAction,
 	addProjectAction,
-	uploadProjectAction
+	uploadProjectAction,
+	hapusProjectAction
 } from '../../Map/action';
 
 import { 
@@ -42,6 +43,8 @@ import { api } from '../../../environtments';
 
 // import { Redirect } from 'react-router-dom';
 
+import ImgsViewer from 'react-images-viewer'
+
 class FormProject extends React.Component {
 	constructor(props){
 		super(props);
@@ -54,7 +57,9 @@ class FormProject extends React.Component {
 			},
 			isSubmitted:false,
 			files:null,
-			isValidSubmit:false
+			isValidSubmit:false,
+			isImageViewerOpen:false,
+			imageList:[]
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this._getProjectDate = this._getProjectDate.bind(this); 
@@ -117,7 +122,7 @@ class FormProject extends React.Component {
 		})
 		  
 		if(this.validasiNamaProject(nampro) && this.validasiTanggalProject(tglpro)){
-			alert('lolos validasi');
+			// alert('lolos validasi');
 			// console.log('check history:',this.props);			
 			addProject({
 				features,
@@ -189,12 +194,24 @@ class FormProject extends React.Component {
 	}
 
 	_renderFiles = () => {
-		const { upload } = this.props.dt
-		// console.log('upload',upload);
+
+		const { 
+			upload, 
+			id 
+		} = this.props.dt;
+		
+		const { 
+			featureId 
+		} = this.state;
+		
 		if(upload.length > 0){
 			return upload.map((item,index)=>{
 				return (
-					<a key={index} href={`${api.host}/api/static/${item.filename}`}>
+					<a 						
+						onClick={
+							(featureId && id) ? e=>this._handleImageToShow(e,index) : false 
+						} 
+						key={index} >
 						<img alt=""
 							style={{
 								width:'55px',
@@ -213,7 +230,49 @@ class FormProject extends React.Component {
 
 	}
 
-	
+	_closeImageViewer = () => {
+		this.setState((state,props)=>{
+			return {
+				isImageViewerOpen:false
+			}
+		})
+	}
+
+	_handleImageToShow = (e,index) => {
+		e.preventDefault();
+
+		const { upload } = this.props.dt	
+		const n = [];
+		n.push({src:`${api.host}/api/static/${upload[index].filename}`})
+		this.setState((state,props)=>{
+			return {
+				isImageViewerOpen:true,
+				imageList:n
+			}
+		});
+
+	}
+
+	_renderImgViewer = () => {
+		return (
+			<React.Fragment>
+				<ImgsViewer
+					isOpen={this.state.isImageViewerOpen}
+					onClose={this._closeImageViewer}
+					imgs={this.state.imageList}
+					showThumbnails={false} />			
+			</React.Fragment>
+		);		
+	}
+
+	_handleDelete = () => {
+		const { featureId } = this.state;
+		const d = window.confirm('anda akan menghapus Project');
+		if(d === true){
+			this.props.hapusProject(featureId);
+			this.props.clearProjectForm();
+		}
+	}
 
 	render(){
 
@@ -232,13 +291,15 @@ class FormProject extends React.Component {
 		return (
 			
 			<Wrapper 
-				container 
+				
 				direction="column" 
-				style={{ display:'flex',height:'450px' }}>
+				style={{ display:'flex' }}>
+
+				{this._renderImgViewer()}
 
 				<FormWrapper>
 					<FormInnerWrapper
-						container="true"
+						
 						direction="column"
 						style={{
 							display:'flex',
@@ -250,15 +311,14 @@ class FormProject extends React.Component {
 						<FormHeader judul="Atribut Project" />
 
 						<Grid 
-							item="true"
+							item
 							style={{ 
 								width:'40%',
 								borderRadius:'0',
 								boxShadow:'none'								
 							}}>
 
-							<Grid 
-								container 
+							<Grid 								
 								direction="row" 								
 								style={{									
 									borderRadius:'0',
@@ -268,26 +328,18 @@ class FormProject extends React.Component {
 								}}>
 								
 								<Grid 
-									item="true" 
+									item 
 									style={{									
 										borderRadius:'0',
 										boxShadow:'none',
 									}}>
 
-									<ActionButton 									
-											size="small" 
-											variant="contained" 
-											success="true"
-											onClick = { this.handleSubmit }										
-											fullWidth
-											disabled = { 
-												featureId ? false : true || !!this.state.error.nampro }>
-											Simpan Atribut
-										</ActionButton>
+									
 								</Grid>
 							</Grid>
 						</Grid>
 					</FormInnerWrapper>
+
 					<form
 						noValidate 
 						autoComplete="off" 
@@ -352,7 +404,8 @@ class FormProject extends React.Component {
 			      <div 
 			      	style={{ 
 			      		backgroundColor:'none',
-			      		height:'35px'
+			      		height:'35px',
+			      		marginBottom:'15px'
 			      	}}>
 
 							<input 
@@ -374,13 +427,43 @@ class FormProject extends React.Component {
 							<div style={{
 								flex:1,
 								width:'100%',
-								height:'150px'
+								height:'150px',
+								marginBottom:'50px',
+								paddingBottom:'20px'
 							}}>
 							{this._renderFiles()}							
 							</div>
 
 						</div>
+
+						<Grid style={{ paddingTop:'55px' }}>
+
+						<ActionButton 									
+								size="small" 
+								variant="contained" 
+								success="true"
+								onClick = { this.handleSubmit }										
+								fullWidth
+								disabled = { 
+									featureId ? false : true || !!this.state.error.nampro
+								}>
+								Simpan Atribut
+							</ActionButton>
 			 
+							<ActionButton 
+								size="small" 
+								variant="contained"
+								success={false} 
+								fullWidth 
+								onClick={this._handleDelete} 
+								disabled = { 
+									featureId ? false : true || !!this.state.error.nampro
+								}>
+								Hapus Project
+							</ActionButton>
+
+						</Grid>
+
 					</form>
 				</FormWrapper>
 			</Wrapper>
@@ -390,7 +473,7 @@ class FormProject extends React.Component {
 
 FormProject.propTypes = {
 	featureId: PropTypes.string,
-  features: PropTypes.array,
+  // features: PropTypes.object,
   dt: PropTypes.object,// form data
   validasiNamaProject: PropTypes.func,
   validasiTanggalProject: PropTypes.func,
@@ -413,7 +496,8 @@ function mapDispatchToProps(dispatch){
 		ubahKeteranganProject: value=>dispatch(ubahKeteranganProjectAction(value)),
 		getProjectAttribute: featureId=>dispatch(getProjectAttributeAction(featureId)),
 		addProject: features=>dispatch(addProjectAction(features)),
-		uploadProject: file=>dispatch(uploadProjectAction(file))		
+		uploadProject: file=>dispatch(uploadProjectAction(file)),
+		hapusProject: featureId => dispatch(hapusProjectAction(featureId))		
 	}
 }
 

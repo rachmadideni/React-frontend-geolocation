@@ -1,15 +1,8 @@
 import React,{ Fragment, Component } from 'react';
-// import Card from '@material-ui/core/Card';
-// import CardActionArea from '@material-ui/core/CardActionArea';
-// import CardContent from '@material-ui/core/CardContent';
-
 import { api } from '../../../environtments';
 
 export default class PopupContent extends Component {
-	componentDidMount(){
-		// console.log('popup content : ',this.props)
-	}
-
+	
 	_renderProp = () => {
 		const { features } = this.props;		
 		var prop = [];
@@ -19,9 +12,7 @@ export default class PopupContent extends Component {
            	prop.push(features[k].properties);           	
            }
         }
-    }
-    
-    // console.log(prop)
+    }    
 
     return prop.map((item,index)=>{
     	return (
@@ -40,17 +31,17 @@ export default class PopupContent extends Component {
     })
 	}
 
-	_renderUpload = () => {
-    	const { data_upload } = this.props;
-    	console.log(data_upload['files']);
-    	/*if(files.length > 0){
-	    	return files.map(item=>{
-	    		return (
-	    			<div>{item.filename}</div>
-	    		);
-	    	})    		
-    	}*/
-    }
+    // _renderUpload = () => {
+    //    	const { data_upload } = this.props;
+    //    	console.log(data_upload['files']);
+    //    	if(files.length > 0){
+    //     	return files.map(item=>{
+    //     		return (
+    //     			<div>{item.filename}</div>
+    //     		);
+    //     	})    		
+    //    	}
+    //    }
 
   _renderInfo = () => {
   	const { attribut_proyek } = this.props;
@@ -69,6 +60,7 @@ export default class PopupContent extends Component {
     			{attribut_proyek.upload.map((item,i)=>{
     				return (
     					<img 
+                            alt={`img-${i}`}
     						key={`img-${i}`} 
     						src={`${api.host}/api/static/${item.filename}`}
     						style={{
@@ -95,11 +87,8 @@ export default class PopupContent extends Component {
 				paddingTop:0,
 				paddingBottom:0
 			}}>
-				<div 
-					style={{
-						paddingTop:0
-					}}>
-					{this._renderInfo()}					
+				<div style={{ paddingTop:0 }}>
+                {this._renderInfo()}					
 				</div>
 			</div>
 		);

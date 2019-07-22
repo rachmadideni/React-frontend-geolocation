@@ -40,7 +40,7 @@ import LoadingDialog from '../../components/LoadingDialog';
 import FormRiver from './FormLayer/FormRiverAttributes';
 
 // utils
-import _ from 'lodash';
+// import _ from 'lodash';
 // import Tour from 'reactour'
 // import { contentStyle, CustomHelper } from './FormLayer/TourBadgeRiver';
 
@@ -108,9 +108,7 @@ class DrawRiverPage extends React.Component {
 			
 			this.props.clearRiverForm();
 			
-			if (features[0].properties.hasOwnProperty('idsung')) {
-			// if(!_.isEmpty(features[0].properties.idsung) ){
-				console.log('BySungai')
+			if (features[0].properties.hasOwnProperty('idsung')) {							
 				this.setState({
 					featureId:features[0].properties.featureId
 					// featureId:features[0].id
@@ -127,7 +125,6 @@ class DrawRiverPage extends React.Component {
 				});
 
 				return this.props.getRiverAttributeById(features[0].properties.featureId);
-				// return this.props.getRiverAttributeById(features[0].id);
 			}
 			
 		}else{
@@ -145,19 +142,22 @@ class DrawRiverPage extends React.Component {
 			this.props.insertRiverFeatures(features);
 			
 			const lastFeatureData = this.props.lastFeature.slice(-1);
-			this.props.AddNewRiver(lastFeatureData);  					
-			// console.log('lastFeature:',this.props.lastFeature.slice(-1))
-			let featureId = data.features[0].id;
-			this.setState({
-				featureId,
-				features:data.features
-			})
-			
-			this.props.clearRiverForm(); // kosongkan form & clear state form > river 
-			this._handleFormOpen(true); // tampilkan form
-			
-		}
 
+			// run saga (input sungai tanpa informasi properti)
+			this.props.AddNewRiver(lastFeatureData);
+
+			// set id ke state featureId
+			let featureId = data.features[0].id;
+			this.setState((state,props)=> {
+				return {
+					featureId,
+					features:data.features
+				}
+			});
+			this.props.getRiver();
+			// this.props.clearRiverForm(); // kosongkan form & clear state form > river 
+			// this._handleFormOpen(true); // tampilkan form			
+		}
 	}
 
 	_handleFormOpen = (status) => {

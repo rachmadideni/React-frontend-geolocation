@@ -26,17 +26,12 @@ import {
 	makeSelectMapViewport,
 	makeSelectMapStyle,
 	makeSelectRiverData,
-	selectFeatures,
-	makeSelectDASMode,
-	makeSelectUpdatedFeatures
+	//selectFeatures,
+	//makeSelectDASMode,
+	// makeSelectUpdatedFeatures
 } from './selectors';
 
-import * as turf from '@turf/meta'
-
-class DrawRiverShape extends React.Component {
-	constructor(props){
-		super(props);
-	}
+class DrawRiverShape extends React.Component {	
 
 	componentDidMount(){
 		this.props.getRiver();
@@ -62,72 +57,25 @@ class DrawRiverShape extends React.Component {
 	}
 
 	_onDrawUpdate = e => {
-		
-		console.log(e.action === "change_coordinates" )
-		
 		if(e.action === "change_coordinates"){
-			// this.props.updateFeatures(e.features[0].properties.featureId);
-			// console.log(e.features);
 			this.props.replaceMap(e.features);
-		}
-			// jika features sdh ada do nothing
-			// jika features belum ada update api call (hapus data dan upload yg baru)
-
-			/*
-			
-			"features": [{
-          "id":"1",
-          "type": "Feature",
-          "geometry": {
-          	"type": "LineString",
-      		"coordinates": [
-          	[119.59022000,-4.85900194],
-          	[119.58540944,-4.86026750],
-          	[119.58148222,-4.86365306]
-          ]},
-          "properties": {
-              "idkecm": 1,
-              "nmkecm": "minasa",
-              "idsung": 1,
-              "nmsung": "Salo Maleleng"
-          }
-      }]
-			 */
-
-		
+			this.props.getRiver();
+		}		
 	}
 
-	_onSelectionChange = e => {
-		// console.log(e.features[0].properties.featureId);
-		// console.log('selectionChange');
-		// this.props.updateFeatures(e.features[0].properties.featureId);
-		if(e.features.length > 0){
-			// console.log(e.features);
-			const features = e.features;
-			const featureId = features[0].properties.featureId;
-			console.log(featureId);
-			// this.props.queryProperti(featureId);			
-		}
+	// _onSelectionChange = e => {
+	// 	// console.log(e.features[0].properties.featureId);
+	// 	// console.log('selectionChange');
+	// 	// this.props.updateFeatures(e.features[0].properties.featureId);
+	// 	if(e.features.length > 0){
+	// 		// console.log(e.features);
+	// 		const features = e.features;
+	// 		const featureId = features[0].properties.featureId;
+	// 		// console.log(featureId);
+	// 		// this.props.queryProperti(featureId);			
+	// 	}
 
-		/*turf.geomEach(features, (currentGeometry, featureIndex, featureProperties, featureBBox, featureId)=>{
-			console.log(currentGeometry);
-			console.log(featureProperties);
-			console.log(featureBBox);
-			console.log(featureId);
-		});*/
-
-		// turf.getGeom(point)
-
-		/*turf.featureEach(features, function (currentFeature, featureIndex) {
-		  console.log(currentFeature);
-		  console.log(featureIndex);
-		});*/
-	}
-
-	_onChange = e => {
-		// console.log('onCHange:',e);
-		
-	}
+	// }	
  
 	render(){
 
@@ -140,8 +88,10 @@ class DrawRiverShape extends React.Component {
 		//onChange={e=>console.log('edit_shape onChange :',e)}
 		return (
 			<React.Fragment>
+				
 				<LoadingDialog 
 					isLoading = { isLoading } />
+
 					<MapGL 
 						ref = { this.mapGl }
 						{...viewport} 					
@@ -152,28 +102,32 @@ class DrawRiverShape extends React.Component {
 
 						{this.renderNavigationControl()}
 
-
 							<Draw 
 								ref={ this.drawShapeRiver }
-								data={ this.props.riverData }
-								
-								onDrawSelectionChange = { e=>this._onSelectionChange(e) }								
+								data={ this.props.riverData }																
 								onDrawUpdate={e=>this._onDrawUpdate(e)}
-								onChange={e=>this._onChange(e)}
-
-								trashControl={false}
-								polygonControl={false}
 								lineStringControl={false}
 								pointControl={false}
 								combineFeaturesControl={false}
-								uncombineFeaturesControl={false} 
-								 />
-						
+								uncombineFeaturesControl={false}
+								trashControl={false}
+								polygonControl={false} />						
 
 					</MapGL>
 			</React.Fragment>
 		);
 	}
+}
+
+DrawRiverShape.propTypes = {
+	isLoading:PropTypes.bool,
+	mapConfig:PropTypes.object.isRequired,
+	viewport:PropTypes.object,
+	mapStyle:PropTypes.object,
+	riverData:PropTypes.object,
+	getRiver:PropTypes.func.isRequired,
+	changeViewport:PropTypes.func.isRequired,
+	replaceMap:PropTypes.func.isRequired
 }
 
 const mapStateToProps = createStructuredSelector({	
@@ -182,9 +136,9 @@ const mapStateToProps = createStructuredSelector({
 	viewport: makeSelectMapViewport(),
 	mapStyle: makeSelectMapStyle(),	
 	riverData:makeSelectRiverData(),
-	lastFeature: selectFeatures(),
-	das_mode:makeSelectDASMode(),
-	SelectUpdatedFeatures: makeSelectUpdatedFeatures()
+	// lastFeature: selectFeatures(),
+	// das_mode:makeSelectDASMode(),
+	// SelectUpdatedFeatures: makeSelectUpdatedFeatures()
 });
 
 function mapDispatchToProps(dispatch){

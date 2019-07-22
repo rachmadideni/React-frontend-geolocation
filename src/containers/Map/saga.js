@@ -6,8 +6,6 @@ import {
 import request from '../../utils/request';
 import { api } from '../../environtments';
 
-import { push } from 'connected-react-router'
-
 import { 
 	// GET_GEOJSON_ACTION,
 	GET_OPTIONS_ACTION,
@@ -25,7 +23,10 @@ import {
 	UPDATE_RIVER_PROPERTY_ACTION,
 	GET_RIVER_ATTRIBUTE_BYID_ACTION,
 	QUERY_PROPERTI_ACTION,
-	REPLACE_MAP_ACTION
+	REPLACE_MAP_ACTION,
+	HAPUS_PROJECT_ACTION,
+	GET_DOWNLOAD_FILES,
+	REPLACE_COORD_ACTION
 } from './constants';
 
 import { 
@@ -46,13 +47,13 @@ import {
 	getProjectFailedAction,
 	uploadProjectSuccessAction,
 	addProjectSuccessAction,
-	downloadExportAction,
+	// downloadExportAction,
 	downloadExportSuccessAction,
 	downloadExportErrorAction,
-	insertRiverFeaturesAction,
+	// insertRiverFeaturesAction,
 	insertRiverFeaturesSuccessAction,
 	insertRiverFeaturesErrorAction,
-	AddNewRiverAction,
+	// AddNewRiverAction,
 	AddNewRiverSuccessAction,
 	AddNewRiverErrorAction,
 	getRiverAttributeByIdSuccessAction,
@@ -62,7 +63,11 @@ import {
 	queryPropertiSuccessAction,
 	queryPropertiErrorAction,
 	replaceMapSuccessAction,
-	replaceMapErrorAction
+	replaceMapErrorAction,
+	hapusProjectSuccessAction,
+	hapusProjectErrorAction,
+	replaceCoordinatesProjectSuccessAction,
+	replaceCoordinatesProjectErrorAction
 } from './action';
 
 // import { makeSelectRiverFeatures } from './selectors'
@@ -70,6 +75,28 @@ import {
 import {
 	mapOptionsResponseToDisplay
 } from './helpers';
+
+
+export function* getDownloadFiles(action){
+	try{
+		const data = action.payload
+		const endpoint = `${api.host}/api/geojson/download/${data}`;
+		const requestOpt = {
+			method:'GET'  
+		};
+
+		const response = yield call(request, endpoint, requestOpt);
+		if(response.data){
+			let blob = response.data.blob();
+			console.log(blob);
+		} 
+		
+	}catch(err){
+		if(err){
+			console.log(err.message)
+		}
+	}
+}
 
 // REPLACE MAP SUNGAI (18/07/2019)
 export function* replaceMap(action){
@@ -86,14 +113,39 @@ export function* replaceMap(action){
 	    })	    
 		};
 		const response = yield call(request, endpoint, requestOpt);
-		console.log(action.payload);
+		// console.log(action.payload);
 		/*if(response.status === 200){
 			yield put(replaceMapSuccessAction())			
 		}*/
 	}catch(err){
 		if(err){
-			console.log(err.message)
+			// console.log(err.message)
 			yield put(replaceMapErrorAction())
+		}
+	}
+}
+
+// REPLACE COORD PROJECT (22/07/2019)
+export function* replaceCoordProject(action){
+	try{
+		const data = action.payload;
+		const endpoint = `${api.host}/api/geojson/project/replaceCoordinate`;
+		const requestOpt = {
+			method:'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({data})	    
+		};
+
+		const response = yield call(request, endpoint, requestOpt);		
+		if(response.status === 200){
+			yield put(replaceCoordinatesProjectSuccessAction(response.data))
+			yield getProject();
+		}		
+
+	}catch(err){
+		if(err){
+			// console.log(err.message);
+			yield put(replaceCoordinatesProjectErrorAction(err.message))
 		}
 	}
 }
@@ -321,12 +373,10 @@ export function* getRiver(){
 
 	try{		
 		const response = yield call(request, endpoint, requestOpt);
-		yield put(getRiverSuccessAction(response.data))
-		// console.log('getriver saga response:',response);
+		yield put(getRiverSuccessAction(response.data))		
 	}catch(err){
 		yield put(getRiverFailedAction('Terjadi error saat mengambil data map!'))
-		yield put(setSnackbarAction(true))
-		// console.log('error on saga:',err)
+		yield put(setSnackbarAction(true))		
 	}
 }
 
@@ -382,12 +432,12 @@ export function* addProject(action){
 	//console.log('addProject:',action);
 	
 	let features = action.payload.features
-	let properties = action.payload.properties	
+	let properties = action.payload.properties
 	const endpoint = `${api.host}/api/geojson/project/add`;
 	const requestOpt = {
 		method:'POST',
 		headers: {
-  		'Content-Type': 'application/json',      
+  		'Content-Type': 'application/json',   
     },
 		body: JSON.stringify({
       features,
@@ -403,8 +453,40 @@ export function* addProject(action){
 	}catch(err){
 		//console.log('err:',err)
 	}	
-	// yield put(push('/dashboard')); 
+	
 }
+
+
+// delete project by featureId
+export function* hapusproject(action){
+
+	let featureId = action.payload;
+	const endpoint = `${api.host}/api/geojson/project/hapus`;
+	const requestOpt = {
+		method:'POST',
+		headers: {
+  		'Content-Type': 'application/json',      
+    },
+		body: JSON.stringify({
+      featureId
+    })
+	};
+
+	try{
+		const response = yield call(request, endpoint, requestOpt);
+		if(response.data){
+			yield put(hapusProjectSuccessAction())
+			yield getProject();
+		}
+	}catch(err){
+		if(err){
+		yield put(hapusProjectErrorAction())	
+		}
+	}
+
+}
+
+
 
 export function* hapusRiver(action){
 	//console.log(action);
@@ -548,11 +630,12 @@ export function* downloadExport(action){
 	try{
 		const response = yield call(request, endpoint, requestOpt);
 		if(response.data){
-			yield put(downloadExportSuccessAction())
+			console.log('saga download : ',response.data);
+			yield put(downloadExportSuccessAction(response.data))
 		}
 	}catch(err){
 		if(err){
-			yield put(downloadExportErrorAction());
+			yield put(downloadExportErrorAction(err.message));
 		}
 	}
 }
@@ -574,7 +657,10 @@ export default function* MapContainerSaga(){
 		takeLatest(UPDATE_RIVER_PROPERTY_ACTION, updateRiverProperty),
 		takeLatest(GET_RIVER_ATTRIBUTE_BYID_ACTION, fetchRiverAttributeById),
 		takeLatest(QUERY_PROPERTI_ACTION, queryProperti),
-		takeLatest(REPLACE_MAP_ACTION, replaceMap)
+		takeLatest(REPLACE_MAP_ACTION, replaceMap),
+		takeLatest(HAPUS_PROJECT_ACTION, hapusproject),
+		takeLatest(GET_DOWNLOAD_FILES, getDownloadFiles),
+		takeLatest(REPLACE_COORD_ACTION, replaceCoordProject)
 		//addRiver(),
 		//takeLatest(GET_GEOJSON_ACTION, getGeojson)
 	]);

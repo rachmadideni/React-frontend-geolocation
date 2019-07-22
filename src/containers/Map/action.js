@@ -50,6 +50,7 @@ import {
 	INSERT_RIVER_FEATURES_SUCCESS,
 	INSERT_RIVER_FEATURES_ERROR,
 	CLEAR_RIVER_FORM,
+	CLEAR_PROJECT_FORM,
 	DOWNLOAD_EXPORT_ACTION,
 	DOWNLOAD_EXPORT_SUCCESS_ACTION,
 	DOWNLOAD_EXPORT_ERROR_ACTION,
@@ -69,8 +70,35 @@ import {
 	REPLACE_MAP_ACTION,
 	REPLACE_MAP_SUCCESS_ACTION,
 	REPLACE_MAP_ERROR_ACTION,
+	HAPUS_PROJECT_ACTION,
+	HAPUS_PROJECT_SUCCESS_ACTION,
+	HAPUS_PROJECT_ERROR_ACTION,
+	REPLACE_COORD_ACTION,
+	REPLACE_COORD_SUCCESS_ACTION,
+	REPLACE_COORD_ERROR_ACTION
 } from './constants';
 
+
+export function replaceCoordinatesProjectAction(payload){
+	return {
+		type:REPLACE_COORD_ACTION,
+		payload
+	}
+}
+
+export function replaceCoordinatesProjectSuccessAction(payload){
+	return {
+		type:REPLACE_COORD_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function replaceCoordinatesProjectErrorAction(payload){
+	return {
+		type:REPLACE_COORD_ERROR_ACTION,
+		payload
+	}
+}
 
 export function replaceMapAction(payload){
 	return {
@@ -323,6 +351,24 @@ export function hapusSungaiSuccessAction(){
 	}
 }
 
+export function hapusProjectAction(payload){
+	return {
+		type:HAPUS_PROJECT_ACTION,
+		payload
+	}
+}
+
+export function hapusProjectSuccessAction(){
+	return {
+		type:HAPUS_PROJECT_SUCCESS_ACTION
+	}
+}
+
+export function hapusProjectErrorAction(){
+	return {
+		type:HAPUS_PROJECT_ERROR_ACTION
+	}
+}
 
 export function pushRiverPropKeyValAction(payload){
 	return {
@@ -544,6 +590,13 @@ export function clearRiverFormAction(){
 		type:CLEAR_RIVER_FORM
 	}
 }
+
+export function clearProjectFormAction(){
+	return {
+		type:CLEAR_PROJECT_FORM
+	}
+}
+
 
 export function downloadExportAction(payload){
 	return {

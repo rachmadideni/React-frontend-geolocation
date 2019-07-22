@@ -47,6 +47,10 @@ const selectFeatures = () => createSelector(MapContainer, state=>state.getIn(['g
 // updatedGeometry
 const makeSelectUpdatedFeatures = () => createSelector(MapContainer, state=>state.get('updatedFeatures'));
 
+// select export file name
+const makeSelectExportFileName = () => createSelector(MapContainer, state=>state.getIn(['exportFile','file']))
+
+
 // const selectNewFeatureOnly = () => createSelector( selectFeatures, state => state.slice(-1) ) 
 // console.log(selectFeatures);
 export {
@@ -71,5 +75,6 @@ export {
 	makeSelectFormProjectData,
 	makeSelectDrawMode,
 	selectFeatures,
-	makeSelectUpdatedFeatures
+	makeSelectUpdatedFeatures,
+	makeSelectExportFileName
 }

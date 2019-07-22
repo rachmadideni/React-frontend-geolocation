@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MapGL, { Source, Layer, NavigationControl, FullscreenControl } from '@urbica/react-map-gl';
+import MapGL, { Source, Layer, Marker, NavigationControl, FullscreenControl } from '@urbica/react-map-gl';
 import Draw from '@urbica/react-map-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import { compose } from 'redux';
@@ -13,7 +13,9 @@ import saga from './saga';
 import {
 	getRiverAction,
 	getProjectAction,
-	changeViewportAction
+	changeViewportAction,
+	clearProjectFormAction,
+	replaceCoordinatesProjectAction
 } from './action'
 
 // selector
@@ -26,12 +28,11 @@ import {
 	makeSelectMapStyle
 } from './selectors';
 
+
 // component
 import LoadingDialog from '../../components/LoadingDialog';
 import FormProject from './FormLayer/FormProject';
-
-// utils
-import _ from 'lodash';
+import { RoomSharp } from '@material-ui/icons';
 
 class DrawProjectPage extends React.Component {
 	
@@ -41,7 +42,9 @@ class DrawProjectPage extends React.Component {
 			// project:{}, // this.props.projectData
 			// river:{}, // this.props.riverData
 			featureId:null,
-			features:[]	
+			features:[],
+			markerLng:null,
+			markerLat:null	
 		}
 	}
 
@@ -60,21 +63,30 @@ class DrawProjectPage extends React.Component {
 		});
 	}
 
+	renderNavigationControl = () => {
+		return (
+			<React.Fragment>
+				<NavigationControl showZoom position='bottom-right' />
+				<FullscreenControl position='bottom-right' />
+			</React.Fragment>
+		);
+	}
+
 	// syntax : componentDidUpdate(prevProps, prevState, snapshot)
 	componentDidUpdate(prevProps, prevState){
 			
 		// console.log(prevProps.projectData); // props turunan atau dari redux
 		// console.log(prevState.project); // previous state
 		
-		if(prevState.project !== prevProps.projectData){
-			console.log('tdk sama');
-			// this.setState({
-			// 	project: prevProps.projectData,
-   //  		river: prevProps.riverData
-			// })
-		}else{
-			// console.log('props dan state project === sama');			
-		}
+		// if(prevState.project !== prevProps.projectData){
+		// 	console.log('tdk sama');
+		// 	// this.setState({
+		// 	// 	project: prevProps.projectData,
+  //  //  		river: prevProps.riverData
+		// 	// })
+		// }else{
+		// 	// console.log('props dan state project === sama');			
+		// }
 	}
 
 	_onSelectedProject = data => {
@@ -82,13 +94,18 @@ class DrawProjectPage extends React.Component {
 			const currentProperties = data.features[0].properties;
 			const featureId = data.features[0].id;
 			const features = data.features;
+
+			const markerLng = data.features[0].geometry.coordinates[0];
+			const markerLat = data.features[0].geometry.coordinates[1];
 			if(currentProperties.hasOwnProperty('nampro')){
 				// user memilih point yg sdh ada datanya
 				// console.log('kondisi 1')
 				this.setState(state=>{
 					return {
 						featureId,
-						features
+						features,
+						markerLng,
+						markerLat
 					}
 				});
 			}else{
@@ -97,28 +114,77 @@ class DrawProjectPage extends React.Component {
 				this.setState(state=>{
 					return {
 						featureId,
-						features
+						features,
+						markerLng,
+						markerLat
 					}
 				});
 			}
 		}else{
-			// jika user mengklik pada map
-			// console.log('kondisi 3')
+
+			// jika user mengklik pada map			
 			this.setState(state=>{
 				return {
-					featureId:null
+					featureId:null,					
+					markerLng:null,
+					markerLat:null
 				}
 			});
-		}
+		}		
 	}
 
 	_updateCollection = collection => {
-		this.setState((state,props)=>{
-			// console.log(state);
+		this.setState((state,props)=>{			
 			return{
 				project:collection
 			}
 		})
+	}
+
+	_onDrawCreate = data => {
+		if(data.features.length > 0){
+			
+			let features = data.features[0];
+			let featureId = data.features[0].id;
+			
+			this.setState((state,props)=>{
+				return {
+					featureId,
+					features
+				}
+			});
+
+			this.props.getProject();
+		}
+	}
+
+	_renderMarkerinNewPoint = () => {
+		const { markerLng, markerLat } = this.state;
+		
+
+		if(markerLng && markerLat){
+			return (
+				<Marker 
+					longitude={markerLng} 
+					latitude={markerLat}
+					offset={[0,-15]}>
+						
+							<RoomSharp style={{
+								color:'green',
+								fontWeight:'bold',
+								fontSize:24							
+							}}/>							
+						
+					</Marker>
+			);			
+		}
+	}
+
+	_onDrawUpdate = data => {
+		if(data.action === 'move'){
+			console.log(data.features);
+			this.props.replaceCoordinatesProject(data.features);
+		}
 	}
 
 	render(){
@@ -138,6 +204,9 @@ class DrawProjectPage extends React.Component {
 				mapStyle = { mapStyle }
 				style = { { width: '100vw', height: '90vh' } }					
 				onViewportChange = { viewport => this.handleViewportChange(viewport) }>
+
+				{this.renderNavigationControl()}
+				{this._renderMarkerinNewPoint()}
 				
 				<Source 
 					id="river" 
@@ -154,12 +223,22 @@ class DrawProjectPage extends React.Component {
 
 				<FormProject 
 					featureId={this.state.featureId} 
-					features={this.state.features} />
-				
+					features={this.state.features}
+					clearProjectForm={this.props.clearProjectForm} />
+								
 				<Draw 
-					data={this.props.projectData} 
+					data = { this.props.projectData }
 					onChange={collection=>this._updateCollection(collection)} 
-					onDrawSelectionChange={data=>this._onSelectedProject(data)} />
+					onDrawCreate={e=>this._onDrawCreate(e)}
+					onDrawUpdate={e=>this._onDrawUpdate(e)}
+					onDrawSelectionChange={data=>this._onSelectedProject(data)}
+					displayControlsDefault={false}
+					lineStringControl={false}
+					trashControl={false}
+					polygonControl={false}
+					combineFeaturesControl={false}
+					uncombineFeaturesControl={false} 
+					pointControl={true} />
 
 			</MapGL>
 			</React.Fragment>
@@ -189,7 +268,9 @@ function mapDispatchToProps(dispatch){
 	return {
 		getRiver: () => dispatch(getRiverAction()),
 		getProject: () => dispatch(getProjectAction()),
-		changeViewport: ({ latitude, longitude, zoom }) => dispatch(changeViewportAction({ latitude, longitude, zoom })),		
+		changeViewport: ({ latitude, longitude, zoom }) => dispatch(changeViewportAction({ latitude, longitude, zoom })),
+		clearProjectForm: () => dispatch(clearProjectFormAction()),
+		replaceCoordinatesProject: features => dispatch(replaceCoordinatesProjectAction(features))
 	}
 }
 

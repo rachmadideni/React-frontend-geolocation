@@ -10,32 +10,21 @@ buat halaman utk draw sungai, draw project & map utama (gabungan keduanya tanpa 
  */
 
 class DashboardOverviewPage extends React.Component {
-		
-		render(){
-			const { history } = this.props;
+		render(){			
 			return (
 				<Switch>
-
 					<Route 
 						exact 
-						path="/dashboard" component = { MapUtama } /> 
-					
+						path="/dashboard" component = { MapUtama } /> 					
 					<Route
 						exact						
 						path="/draw/sungai" component = { MapCrud }  />
-
 					<Route
 						exact						
 						path="/draw/proyek" component = { MapCrud }  />
-
 				</Switch>
 			);			
 		}
 }
-
-/*
-render={ () => <MapCrud history = { history } /> } />
-render={()=><MapUtama />}
- */
 
 export default DashboardOverviewPage;
