@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { fromJS } from 'immutable';
 
-import MapGL, { Marker, Popup, FlyToInterpolator } from 'react-map-gl';
+import MapGL, { Marker, Popup, FlyToInterpolator, NavigationControl } from 'react-map-gl';
 import Pin from './component/Pin';
 import PopupContent from './component/PopupContent';
 import List from './component/List';
@@ -19,7 +19,8 @@ import {
 	data_sungai,
 	data_upload,
 	attribut_proyek,
-	viewport
+	viewport,
+	accessToken
 } from './selector';
 
 import {
@@ -48,6 +49,8 @@ import {
 
 import _ from 'lodash'
 
+// import { Wrapper } from '../../components/Form';
+
 // geocoder
 // import Geocoder from 'react-map-gl-geocoder'
 // import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
@@ -64,7 +67,7 @@ class MapRevised extends Component {
 	      height: 400,
 	      latitude: -4.851693,
 	      longitude: 119.494885,
-	      zoom: 8
+	      zoom: 10
 	    }
 		}
 
@@ -83,12 +86,12 @@ class MapRevised extends Component {
 	componentDidMount(){
 		this.props.getProject();
 		this.props.getRiver();
-		window.addEventListener('resize', this.resize)
-    this.resize();
+		// window.addEventListener('resize', this.resize)
+    // this.resize();
 	}
 
 	componentWillUnmount() {
-    window.removeEventListener('resize', this.resize)
+    // window.removeEventListener('resize', this.resize)
   }
 
 	_renderProyek = () => {
@@ -122,11 +125,9 @@ class MapRevised extends Component {
 		}
 	}
 
-	_load_data_sungai = data => {	
+	_load_data_sungai = data => {
 		const mapStyle = defaultMapStyle.setIn(['sources','incomeByState'], fromJS({type:'geojson',data}))
-		.set('layers', defaultMapStyle.get('layers').push(dataLayer));
-		// console.log(mapStyle.toJS());
-			
+		.set('layers', defaultMapStyle.get('layers').push(dataLayer));					
 		this.setState({
 			mapStyle:mapStyle
 		})
@@ -197,10 +198,12 @@ class MapRevised extends Component {
 		return (
 			attribut_proyek.lat && (
 				<Popup
-					tipSize={5}
+					tipSize={10}
+					offsetTop={30}
+					offsetLeft={10}
+					anchor="top"					
 					longitude={attribut_proyek.lng} 
 					latitude={attribut_proyek.lat}										
-					anchor="top"
 					closeOnClick={false}
 					onClose={()=>getProjectAttributeFail()}>
 					<PopupContent attribut_proyek={attribut_proyek} />
@@ -212,7 +215,9 @@ class MapRevised extends Component {
 	_RenderList = () => {
 		return (
 			<Fragment>
-				<List list_sungai={this.props.data_sungai} onViewportChange={this._goToViewport} />
+				<List 
+					list_sungai={this.props.data_sungai} 
+					onViewportChange={this._goToViewport} />
 			</Fragment>
 		);
 	}
@@ -276,22 +281,36 @@ class MapRevised extends Component {
     });
   };
 
+  _renderNavigationControl = () => {
+  	// const { viewport } = this.state;
+  	return (
+	  	<div 
+	  		className="nav" 
+	  		style={{
+	  			position:'absolute',
+	  			right:10,
+	  			bottom:25
+	  		}}>
+	      <NavigationControl 
+	      	onViewportChange = { viewport => this.handleViewportChange(viewport)  } />
+	    </div>
+  	);
+  }
+
 	render(){
 //ref={(reactMap) => this.reactMap = reactMap}
 		const { mapStyle } = this.state;
 		const { viewport } = this.state;
+		const { accessToken } = this.props;
 		return (
-			<div style={{
-				width:'100%',
-				height:'100%'
-			}}>
+			
 
 				<MapGL
 					ref={this.mapRef}
 					{...viewport}
-					width={'100vw'}
-					height={'90vh'}
-					mapboxApiAccessToken={'pk.eyJ1IjoiZGVuaXJhY2htYWRpIiwiYSI6ImNqdXptYTVoMzFhZWs0ZnMwbmI3dG00eWgifQ.tkFYtFMZwzujEkvtz9_Oiw'}					
+					width={'100%'}
+					height={'100%'}
+					mapboxApiAccessToken={accessToken}					
 					mapStyle={mapStyle}
 					onViewportChange = { viewport => this.handleViewportChange(viewport) }
 					onHover={this._onHover}>					
@@ -299,6 +318,7 @@ class MapRevised extends Component {
 					{this._renderPopup()}
 					{this._renderTooltip()}
 					{this._RenderList()}
+					{this._renderNavigationControl()}
 
 					{/*<Geocoder
           	mapRef={this.mapRef}
@@ -310,7 +330,7 @@ class MapRevised extends Component {
           	reverseGeocode={true} />*/}
 
 				</MapGL>
-			</div>
+			
 		);
 	}
 
@@ -325,6 +345,7 @@ const mapStateToProps = createStructuredSelector({
 	attribut_proyek: attribut_proyek(),
 	viewport: viewport(),
 	drawerState: makeSelectDrawerState(),
+	accessToken: accessToken()
 })
 
 const mapDispatchToProps = dispatch => {

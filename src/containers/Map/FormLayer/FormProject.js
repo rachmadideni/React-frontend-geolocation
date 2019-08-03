@@ -1,16 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
 import Grid from '@material-ui/core/Card';
-// import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import FormLabel from '@material-ui/core/FormLabel';
-// import Radio from '@material-ui/core/Radio';
-// import RadioGroup from '@material-ui/core/RadioGroup';
 import Button from '@material-ui/core/Button';
-// import MenuItem from '@material-ui/core/MenuItem';
-// import { color } from '../../../styles/constants'
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -40,9 +32,6 @@ import isEmpty from 'validator/lib/isEmpty';
 import moment from 'moment';
 
 import { api } from '../../../environtments';
-
-// import { Redirect } from 'react-router-dom';
-
 import ImgsViewer from 'react-images-viewer'
 
 class FormProject extends React.Component {
@@ -73,9 +62,11 @@ class FormProject extends React.Component {
 
 	_getProjectDate(){
 		const { tglpro } = this.props.dt;
+		// console.log(moment().toDate());
 		if(!tglpro){
 			return {
-				tglpro:moment().toDate()				
+				// tglpro:moment().toDate()
+				tglpro:new Date().toISOString().substring(0, 10)				
 			}
 		}
 
@@ -87,13 +78,13 @@ class FormProject extends React.Component {
 
 	componentDidUpdate(props,state){
 
-		// console.log('1=', props.featureId);
-		// console.log('2=', this.props.featureId);
-		// console.log('3=', this.state.featureId);
 		if (props.featureId !== this.props.featureId) {
+		// if (this.props.featureId !== state.featureId) {
+			// console.log()
 			if (this.props.featureId) {				
 				this.props.getProjectAttribute(this.props.featureId);// call saga utk ambil atribut								
-			}			
+			}
+
 			this.setState((state)=>{
 				return {
 					featureId:this.props.featureId,
@@ -339,7 +330,10 @@ class FormProject extends React.Component {
 							</Grid>
 						</Grid>
 					</FormInnerWrapper>
-
+					{/*
+						defaultValue={this._getProjectDate().displayDate}
+						value={this._getProjectDate().displayDate}					
+					*/}
 					<form
 						noValidate 
 						autoComplete="off" 
@@ -368,9 +362,8 @@ class FormProject extends React.Component {
 						<TextField 
 							id="tglpro"
 							label="tanggal project"
-							type="date"
-							defaultValue={this._getProjectDate().displayDate}							
-							value={this._getProjectDate().displayDate}					
+							type="date"							 
+							value = { this._getProjectDate().displayDate }
 							disabled={featureId ? false: true}
 							InputLabelProps={{
 			          shrink: true,

@@ -1,5 +1,6 @@
 import React,{ Fragment, Component } from 'react';
 import { api } from '../../../environtments';
+import Typography from '@material-ui/core/Typography';
 
 export default class PopupContent extends Component {
 	
@@ -48,13 +49,30 @@ export default class PopupContent extends Component {
   	return (
   		<Fragment>
     		<div style={{
-    			maxHeight:'100px',
-    			overflowY:'auto'
-    		}}>
-    			<h5>{attribut_proyek.nampro}</h5>
-    			<p style={{ fontSize:11 }}>{attribut_proyek.ketera}</p>
-    			<p>{attribut_proyek.featureId}</p>
-    			<hr/>
+    			//maxHeight:'200px',
+    			overflowY:'auto',
+                boxShadow:'2',
+                elevation:2
+    		}}>    			
+                <Typography 
+                    variant="h5" 
+                    color="primary"
+                    style={{
+                        fontSize:16
+                    }}>
+                    {attribut_proyek.nampro}
+                </Typography>
+    			<Typography 
+                    variant="subtitle1"
+                    color="inherit"
+                    style={{
+                        fontSize:15
+                    }}>
+                    {attribut_proyek.ketera}                
+                </Typography>
+                
+    			{/*<p>{attribut_proyek.featureId}</p>*/}
+    			{/*<hr/>*/}
     		</div>
     		<div>
     			{attribut_proyek.upload.map((item,i)=>{
@@ -82,8 +100,9 @@ export default class PopupContent extends Component {
 				position:'relative',
 				top:0,
 				width:250,
-				height:150,				
+				// height:150,				
 				maxWidth:345,
+                padding:'10px',
 				paddingTop:0,
 				paddingBottom:0
 			}}>

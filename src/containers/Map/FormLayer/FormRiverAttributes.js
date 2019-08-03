@@ -164,8 +164,8 @@ class FormRiverAttributes extends React.Component{
 		}*/	
 
 		// penting harus ada. klo tdk ada user tdk bisa update properti sungai yang baru dibuat
-		console.log(this.state.featureId)
-		console.log(this.props.featureId)
+		// console.log(this.state.featureId)
+		// console.log(this.props.featureId)
 		if(this.props.featureId !== state.featureId){
 			this.setState(state=>{
 				return {
@@ -304,6 +304,7 @@ class FormRiverAttributes extends React.Component{
 		if(d === true){
 			this.props.hapusSungai(featureId);
 			this.props.clearRiverForm();
+			this.props.handleFormOpen(false);
 		}
 	}
 

@@ -10,10 +10,11 @@ import Tab from '@material-ui/core/Tab';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import RiverIcon from '@material-ui/icons/Fingerprint';
 import WorldIcon from '../../../icons/world';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 // TAB 1 & 2
 import Pengaturan from '../Pengaturan'
-import DasTab from '../Das'
+// import DasTab from '../Das'
 
 // redux
 import { createStructuredSelector } from 'reselect';
@@ -74,7 +75,7 @@ const IconTab = styled(Tab).attrs({
 	}
 `
 const TabContainer = styled(Grid)`
-	width:94%;
+	width:600px;
 	height:100%;
 	backgroundColor:none;
 	overflowX:hidden;
@@ -98,6 +99,10 @@ class Drawer extends React.Component{
 	getLeftTabsIcon(){
 		return [
 			{
+				icon:DashboardIcon,
+				label:'Dashboard'
+			},
+			{
 				icon:SettingsIcon,
 				label:'Pengaturan'
 			},
@@ -117,47 +122,44 @@ class Drawer extends React.Component{
 		]
 	}
 
-	componentDidMount(){
-		console.log('drawer menu props:', this.props);
-	}
-
 	handleTabChange = (event,value) => {
-		const { 
+		
+		const {
 			changeMainDrawerTabValue,
-			// mainDrawerTabValue,
-			// drawerState, 
 			history
 		} = this.props;
 
 		changeMainDrawerTabValue(value);
 
 		if (value === 0) {
+			this.toggleDrawer();
 			return history.replace('/dashboard');
 		}
 
-		if(value===1){
-			// return history.replace('/dashboard');
+		if(value===1){						
+			return history.replace('/dashboard');
+		}
+
+		if(value===2){			
 			this.toggleDrawer();
 			return history.replace('/draw/riverShape');
 		}
 
-		if(value===2){
-			// return history.replace('/dashboard');
+		if(value===3){			
 			this.toggleDrawer();
 			return history.replace('/draw/riverAtribut');
 		}
 
-		if(value===3){
+		if(value===4){
 			this.toggleDrawer();
 			return history.replace('/draw/project');
 		}
 
-		if(value===4){
+		if(value===5){
 			this.toggleDrawer();
 			return history.replace('/download');
 		}
 		return null;
-		// return changeMainDrawerTabValue(value);		
 	}
 
 	handleDASMode = (event,value) =>{		
@@ -180,14 +182,15 @@ class Drawer extends React.Component{
 				container 
 				wrap="nowrap" 				
 				style={{ 										
-					width:'40vw',
+					// width:'40vw',
 					height:'100%',
-				}}>				
+				}}>
+
 				<Grid 
 	    		container 
 	    		direction="column" 
 	    		style={{ 
-	    			width:'94%',
+	    			//width:'94%',
 	    			height:'100%',
 	    			overflowX:'hidden',
 						overflowY:'hidden'
@@ -205,18 +208,17 @@ class Drawer extends React.Component{
 
 						</Grid>
 						{
-							mainDrawerTabValue === 0 && 
+							mainDrawerTabValue === 1 && 
 							<TabContainer item>
 								<Pengaturan /> 
 							</TabContainer>
 						}
-						{
-							mainDrawerTabValue === 1 &&
+						{/*
+							mainDrawerTabValue === 2 &&
 							<TabContainer item {...this.props}>
-
 								<DasTab history={this.props} />																
 							</TabContainer>							 
-						}
+						*/}
 						
 				</Grid>
 			</Grid>

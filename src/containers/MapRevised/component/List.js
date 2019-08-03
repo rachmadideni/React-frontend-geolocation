@@ -6,11 +6,11 @@ import TextField from '@material-ui/core/TextField';
 
 import * as turf from '@turf/turf'
 
-const Container = styled.div`
+const Container = styled(Grid)`
 	&& {
 		position:absolute;
-		top:10px;
-		left:10px;
+		top:20px;
+		left:20px;
 		width:450px;
 		height:450px;
 		background-color:#FFFFFF;
@@ -59,16 +59,13 @@ class List extends React.Component {
 	}
 
 	_changeKeyword = e => {
-		//console.log(e);
-		let currentList = this.props.list_sungai.features;
-		let newlist = currentList.filter(item=>{
-			// console.log(item.properties.nmsung.toLowerCase())
-			let lc = item.properties.nmsung.toLowerCase();
-			let filter = e.target.value.toLowerCase();
-			return lc.includes(filter);
+		
+		let currentList = this.props.list_sungai.features; // array features
+		let newlist = currentList.filter(item=>{			
+				let lc = item.properties.nmsung.toLowerCase();
+				let filter = e.target.value;
+				return lc.includes(filter);
 		});
-
-		//console.log(newlist);
 
 		this.setState({
 			keyword:e.target.value,
@@ -91,18 +88,20 @@ class List extends React.Component {
 						align="left" 
 						color="secondary" 
 						variant="subtitle2">
-							{'cari sungai'}
+							{'Browse Data sungai'}
 					</Typography>
 					<Typography 
 						align="left" 						
 						variant="body1"
-						style={{ fontSize:11 }}>
-							{'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure, sequi!'}
+						style={{ fontSize:14 }}>
+							{'masukkan Nama Sungai pada inputan di bawah ini'}
 					</Typography>
+					
 					<form 
 							noValidate 
 							autoComplete="off" 						
 							onSubmit={e=>console.log(e)}>
+
 						<TextField 
 							id="cari_sungai" 
 							label="Keyword"

@@ -56,7 +56,8 @@ export const initialState = fromJS({
 				zoom:9,
 				bearing: 0,
         pitch: 0
-			}
+			},
+			accessToken:'pk.eyJ1IjoiZGVuaXJhY2htYWRpIiwiYSI6ImNqdXptYTVoMzFhZWs0ZnMwbmI3dG00eWgifQ.tkFYtFMZwzujEkvtz9_Oiw'
 		},
 		error:{
 			message:null

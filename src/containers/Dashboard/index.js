@@ -1,7 +1,11 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Switch, Route } from 'react-router-dom';
+import { createStructuredSelector } from 'reselect';
+import { 
+	Switch, 
+	Route 
+} from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
@@ -10,16 +14,15 @@ import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import AccountIcon from '@material-ui/icons/AccountCircleOutlined';
+
+// COMPONENT
 import DrawerMenu from './DrawerMenu';
 
-// page
-// import DashboardOverviewPage from '../DashboardOverviewPage';
-import MapDraw from '../Map';
+// PAGES
 import MapUtama from '../MapRevised'
+import MapDraw from '../Map';
 import DownloadPage from '../DownloadPage'
 
-import { createStructuredSelector } from 'reselect';
 import { makeSelectDrawerState } from '../Map/selectors';
 import { changeDrawerStateAction } from '../Map/action';
 
@@ -62,39 +65,48 @@ class Dashboard extends React.Component {
 
 						<Toolbar>							
 							<IconButton onClick={ this.toggleDrawer }>
-								<MenuIcon fontSize="small" style={{ color: 'white' }} />
+								<MenuIcon 
+									fontSize="small" 
+									style={{ color: 'white' }} />
 							</IconButton>							
 							
-							<Grid container style={{ paddingLeft:10, paddingTop:15,margin:0,justifyContent:'center' }}>
+							<Grid 
+								container 
+								style={{ 
+									paddingLeft:10, 
+									paddingTop:15,
+									margin:0,
+									justifyContent:'center' }}>
+
 								<LogoPU style={{ 
 									width:28,
 									height:28,
 									paddingBottom:'0px',
 								}}/>
+
 								<Typography 
 									variant="body1" 
 									color="inherit" 
 									style={{ 
 										flexGrow: 1,
-										//fontSize:18,
+										fontSize:18,
 										paddingLeft:10 
-									}}>
-
-										{'Sistem Informasi Geografis Dinas Kabupaten Pangkep'}
+									}}>{'SIG Dinas Kabupaten Pangkep'}
 								</Typography>
-							<IconButton disableRipple>
+
+							{/*<IconButton disableRipple>
 								<AccountIcon fontSize="small" style={{ color:'white' }} />
-							</IconButton>
+							</IconButton>*/}
 							</Grid>
 						</Toolbar>
 
 						<Drawer 
-							style = {{ color:'#333333' }}
 							open = { drawerState }
-							onClose = { this.toggleDrawer }>							
+							onClose = { this.toggleDrawer }							
+							style = {{ color:'#333333' }}>
 							<DrawerMenu 
-								history={history}
-								toggleDrawer={this.toggleDrawer} />
+								history = { history } 
+								toggleDrawer = { this.toggleDrawer } />
 						</Drawer>
 
 					</AppBar>
@@ -105,6 +117,7 @@ class Dashboard extends React.Component {
 					display="flex"					
 					style={{
             width: '100vw',
+            height:'90vh',
             flex: '1',
             marginTop: '0px',
             padding: '0px',

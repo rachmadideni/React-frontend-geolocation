@@ -114,13 +114,17 @@ class PengaturanMap extends React.Component {
 									</RadioGroup>														
 							</Grid>
 							<Divider/>
-							<Grid 
+							{/*<Grid 
 								item
-								style={{ marginTop:20 }}>
+								style={{ 
+									width:'100%',
+									marginTop:20
+								}}>
 								<FormLabel 
 									component="legend">
 									Show/Hide Layer
 								</FormLabel>
+								
 								<FormGroup row>
 									<FormControlLabel 
 										control={
@@ -147,14 +151,14 @@ class PengaturanMap extends React.Component {
 										}
 										label="Project"/>
 										<Button 
-											variant="contained" 
-											fullWidth 
+											variant="contained" 											
 											color="secondary"
 											onClick={this.handleLayerVisibility}>
 											Apply
 										</Button>
-								</FormGroup>					
-							</Grid>
+								</FormGroup>
+																
+							</Grid>*/}
 					</Grid>
 		)
 	}

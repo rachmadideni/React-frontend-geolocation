@@ -1,10 +1,13 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-import SignIn from '../SignIn';
+import { 
+  Switch, 
+  Route, 
+  Redirect 
+} from 'react-router-dom';
 
+// PAGES
+import SignIn from '../SignIn';
 import Dashboard from '../Dashboard';
-// import MapDraw from '../Map';
-// import MapUtama from '../MapRevised';
 
 function App(){
 	return (		
@@ -16,13 +19,6 @@ function App(){
   					routeProps => (
   						<Dashboard {...routeProps} />
   					)} />
-
-        {/*<Route exact path="/draw/river" 
-          render={
-            routeProps=>(
-              <MapDraw {...routeProps} />
-            )} />*/}
-
     	</Switch>    	
 	);
 }

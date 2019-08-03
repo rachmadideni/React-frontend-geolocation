@@ -57,11 +57,13 @@ class DrawRiverShape extends React.Component {
 	}
 
 	_onDrawUpdate = e => {
-		if(e.action === "change_coordinates"){
+
+		//if(e.action === "change_coordinates"){
+		if(e.type === 'draw.update'){
 			this.props.replaceMap(e.features);
-			this.props.getRiver();
+			// this.props.getRiver();
 		}		
-	}
+	}	
 
 	// _onSelectionChange = e => {
 	// 	// console.log(e.features[0].properties.featureId);
@@ -104,7 +106,7 @@ class DrawRiverShape extends React.Component {
 
 							<Draw 
 								ref={ this.drawShapeRiver }
-								data={ this.props.riverData }																
+								data={ this.props.riverData }									
 								onDrawUpdate={e=>this._onDrawUpdate(e)}
 								lineStringControl={false}
 								pointControl={false}
@@ -123,7 +125,7 @@ DrawRiverShape.propTypes = {
 	isLoading:PropTypes.bool,
 	mapConfig:PropTypes.object.isRequired,
 	viewport:PropTypes.object,
-	mapStyle:PropTypes.object,
+	mapStyle:PropTypes.string,
 	riverData:PropTypes.object,
 	getRiver:PropTypes.func.isRequired,
 	changeViewport:PropTypes.func.isRequired,

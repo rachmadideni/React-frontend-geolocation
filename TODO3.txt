@@ -1,0 +1,20 @@
+todo 22/07/2019
+
+* refaktor 
+  [x]update kordinat project ke api jka point digeser(drag)
+  [x] tambah image viewer di DrawProjectPage
+  rapikan drawer menu (hilangkan menu yg tdk terpakai)
+  rapikan state, console.log, komentar yg sudha & tdk terpakai
+  test build project dan build api & buat aplikasi di localhost (buat juga reverse proxy)
+  jika user mengakses virtual host (sig-dinaspupangkep.online:8081 => localhost:3000)
+  aplikasi bisa mengakses api localhost:3001
+
+
+  aplikasikan npm forever
+  buat dokumentasi (manual book)
+  pesan domain 
+
+* buat view palewagau utk transaksi penerimaan / pengeluaran kas
+  buat crud berfungsi utk master coa
+  setting tabel wilayah sementara dan aplikasikan pada saat pembuatan coa
+  

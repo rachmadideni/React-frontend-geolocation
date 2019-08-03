@@ -39,7 +39,7 @@ class DrawProjectPage extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			// project:{}, // this.props.projectData
+			project:{}, // this.props.projectData
 			// river:{}, // this.props.riverData
 			featureId:null,
 			features:[],
@@ -90,13 +90,16 @@ class DrawProjectPage extends React.Component {
 	}
 
 	_onSelectedProject = data => {
-		if(data.features.length >0){
+
+		if(data.features.length > 0){
+			
 			const currentProperties = data.features[0].properties;
 			const featureId = data.features[0].id;
 			const features = data.features;
 
 			const markerLng = data.features[0].geometry.coordinates[0];
 			const markerLat = data.features[0].geometry.coordinates[1];
+			
 			if(currentProperties.hasOwnProperty('nampro')){
 				// user memilih point yg sdh ada datanya
 				// console.log('kondisi 1')
@@ -109,8 +112,10 @@ class DrawProjectPage extends React.Component {
 					}
 				});
 			}else{
+
 				// user mengklik point yang baru dibuat. setelah mengklik luar map
 				// console.log('kondisi 2')
+				
 				this.setState(state=>{
 					return {
 						featureId,
@@ -119,6 +124,7 @@ class DrawProjectPage extends React.Component {
 						markerLat
 					}
 				});
+
 			}
 		}else{
 
@@ -133,30 +139,15 @@ class DrawProjectPage extends React.Component {
 		}		
 	}
 
-	_updateCollection = collection => {
+	/*_updateCollection = collection => {
 		this.setState((state,props)=>{			
 			return{
 				project:collection
 			}
 		})
-	}
+	}*/
 
-	_onDrawCreate = data => {
-		if(data.features.length > 0){
-			
-			let features = data.features[0];
-			let featureId = data.features[0].id;
-			
-			this.setState((state,props)=>{
-				return {
-					featureId,
-					features
-				}
-			});
-
-			this.props.getProject();
-		}
-	}
+	
 
 	_renderMarkerinNewPoint = () => {
 		const { markerLng, markerLat } = this.state;
@@ -180,12 +171,35 @@ class DrawProjectPage extends React.Component {
 		}
 	}
 
+	_onDrawCreate = data => {
+		if(data.features.length > 0){			
+			let featureId = data.features[0].id;			
+			let features = data.features[0];
+			/*this.setState((state,props)=>{
+				return {
+					featureId,
+					features
+				}
+			});*/
+
+			this.setState({
+				featureId,
+				features
+			});
+			this.props.getProject();
+		}
+	}
+
 	_onDrawUpdate = data => {
 		if(data.action === 'move'){
 			console.log(data.features);
 			this.props.replaceCoordinatesProject(data.features);
 		}
 	}
+
+	/*
+		onChange = { collection => this._updateCollection(collection) }
+	 */
 
 	render(){
 
@@ -228,10 +242,12 @@ class DrawProjectPage extends React.Component {
 								
 				<Draw 
 					data = { this.props.projectData }
-					onChange={collection=>this._updateCollection(collection)} 
-					onDrawCreate={e=>this._onDrawCreate(e)}
-					onDrawUpdate={e=>this._onDrawUpdate(e)}
-					onDrawSelectionChange={data=>this._onSelectedProject(data)}
+					
+					onDrawSelectionChange = { data => this._onSelectedProject(data) }
+					
+					onDrawCreate = { e => this._onDrawCreate(e) }
+					onDrawUpdate = { e => this._onDrawUpdate(e) }
+					
 					displayControlsDefault={false}
 					lineStringControl={false}
 					trashControl={false}

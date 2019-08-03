@@ -68,6 +68,7 @@ class DrawRiverPage extends React.Component {
 			feature:{},
 			featureId:null,
 			isFormOpen:false,
+			mode:'simple_select'
 			// steps:tourConfig
 		}
 	}
@@ -93,38 +94,52 @@ class DrawRiverPage extends React.Component {
 
 	componentDidMount(){					
 		this.props.getRiver();
+		this.mapGlRef = React.createRef();
 	}
 
 
 	_onSelectedRiver = data => {
-		// ekstrak features (array) dari data
-		const { features } = data;		
-		console.log('onselect features:',features);
+
+		const { features } = data;				
 		if(features.length > 0){
 			
+			// klo form belum nampak buka form
 			if(!this.state.isFormOpen){
 				this._handleFormOpen(true);
 			}
 			
+			// bersihkan inputan			
 			this.props.clearRiverForm();
 			
+			// klo sungai sdh ada data
+			// set state featureId dgn nilai data 
+			// panggil props getRiverAttribute
 			if (features[0].properties.hasOwnProperty('idsung')) {							
 				this.setState({
-					featureId:features[0].properties.featureId
-					// featureId:features[0].id
+					featureId:features[0].properties.featureId					
 				});
 				return this.props.getRiverAttribute(features[0].properties.idsung);											
-			} else {
-				
+			} 
+
+			// kondisi baru abis dibuat
+			else {				
 				// handle fetch
 				console.log('ByID')
+				
+				if(features[0].properties.featureId){
+					this.setState({
+						featureId:features[0].properties.featureId
+						// featureId:features[0].id
+					});
+					return this.props.getRiverAttributeById(features[0].properties.featureId);					
+				}else{
 
-				this.setState({
-					featureId:features[0].properties.featureId
-					//featureId:features[0].id
-				});
-
-				return this.props.getRiverAttributeById(features[0].properties.featureId);
+					this.setState({
+						// featureId:features[0].properties.featureId
+						featureId:features[0].id
+					});
+					return this.props.getRiverAttributeById(features[0].id);					
+				}
 			}
 			
 		}else{
@@ -155,6 +170,8 @@ class DrawRiverPage extends React.Component {
 				}
 			});
 			this.props.getRiver();
+			// const theMapGLRef = React.useRef(this.mapGlRef);
+			// console.log(this.mapGlRef);
 			// this.props.clearRiverForm(); // kosongkan form & clear state form > river 
 			// this._handleFormOpen(true); // tampilkan form			
 		}
@@ -166,6 +183,16 @@ class DrawRiverPage extends React.Component {
 		})
 	}
 
+	_changeMode = e => {
+		console.log(e);
+		console.log(this.state.mode);
+		// this.setState({
+		// 	mode:e.mode
+		// })
+	}
+
+
+
 	render(){
 		const { isLoading, mapConfig, viewport, mapStyle } = this.props;
 		return (
@@ -174,7 +201,8 @@ class DrawRiverPage extends React.Component {
 					isLoading = { isLoading } />
 				
 				<MapGL 					
-					{...viewport} 					
+					{...viewport}
+					ref = { this.mapGlRef } 					
 					accessToken = { mapConfig.token }
 					mapStyle = { mapStyle }
 					style = {{ width: '100vw', height: '90vh' }}					
@@ -194,7 +222,9 @@ class DrawRiverPage extends React.Component {
 						polygonControl={false}
 						combineFeaturesControl={false}
 						uncombineFeaturesControl={false} 
-						pointControl={false} />																			
+						pointControl={false} 
+						mode={this.state.mode}
+        		onDrawModeChange={({ mode }) => this._changeMode ({mode}) } />																			
 						
 					<FormRiver 
 						data-id="form" 

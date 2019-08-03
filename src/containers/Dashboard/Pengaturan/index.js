@@ -29,24 +29,24 @@ class Pengaturan extends React.Component{
 				wrap="nowrap"
 				style={{
 					paddingLeft:30,
-					paddingRight:30,
+					paddingRight:0,
 					width:'100%'
 				}}>
 
 				<Tabs 
 					value = { tabValue } 
 					onChange = { this.handleTab }>
-					<Tab label="BASE MAP STYLE" />
-					<Tab label="User" />					
+					<Tab label="STYLE MAP" />
+					{/*<Tab label="User" />					*/}
 				</Tabs>
 				{ 
 					tabValue === 0  && 
 					<PengaturanMap />
 				}
-				{
+				{/*
 					tabValue === 1 && 
 					<PengaturanUser />
-				}
+				*/}
 			</Grid>
 		);
 	}

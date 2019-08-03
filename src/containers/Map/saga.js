@@ -113,7 +113,8 @@ export function* replaceMap(action){
 	    })	    
 		};
 		const response = yield call(request, endpoint, requestOpt);
-		// console.log(action.payload);
+		console.log(action.payload);
+		return response;
 		/*if(response.status === 200){
 			yield put(replaceMapSuccessAction())			
 		}*/
@@ -321,7 +322,7 @@ export function* fetchProjectAttribute(action){
 		yield put(getProjectAttributeFailAction({
 			id:"",
 			nampro:"",
-			tglpro:"",
+			tglpro:new Date().toISOString().substring(0, 10),
 			ketera:"",
 			upload:uploadedFiles
 		}));

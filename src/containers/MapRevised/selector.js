@@ -7,11 +7,13 @@ const data_sungai = () => createSelector(container, substate=>substate.getIn(['d
 const data_upload = () => createSelector(container, substate=>substate.getIn(['data','gambar_proyek']).toJS())
 const attribut_proyek = () => createSelector(container, state=>state.getIn(['data','attribute','proyek']).toJS())
 const viewport = () => createSelector(container, state=>state.getIn(['map','viewport']).toJS())
+const accessToken = () => createSelector(container, state=>state.getIn(['map','accessToken']))
 
 export {
 	data_proyek,
 	data_sungai,
 	data_upload,
 	attribut_proyek,
-	viewport
+	viewport,
+	accessToken
 }
