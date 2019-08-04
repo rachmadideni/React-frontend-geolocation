@@ -11,6 +11,7 @@ import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import RiverIcon from '@material-ui/icons/Fingerprint';
 import WorldIcon from '../../../icons/world';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 // TAB 1 & 2
 import Pengaturan from '../Pengaturan'
@@ -118,6 +119,9 @@ class Drawer extends React.Component{
 			},{
 				icon:WorldIcon,
 				label:'Download'
+			},{
+				icon:CloudUploadIcon,
+				label:'Upload Shape'
 			}
 		]
 	}
