@@ -22,6 +22,7 @@ import DrawerMenu from './DrawerMenu';
 import MapUtama from '../MapRevised'
 import MapDraw from '../Map';
 import DownloadPage from '../DownloadPage'
+import UploadShapePage from '../UploadShapePage';
 
 import { makeSelectDrawerState } from '../Map/selectors';
 import { changeDrawerStateAction } from '../Map/action';
@@ -104,9 +105,11 @@ class Dashboard extends React.Component {
 							open = { drawerState }
 							onClose = { this.toggleDrawer }							
 							style = {{ color:'#333333' }}>
+
 							<DrawerMenu 
 								history = { history } 
 								toggleDrawer = { this.toggleDrawer } />
+								
 						</Drawer>
 
 					</AppBar>
@@ -138,7 +141,13 @@ class Dashboard extends React.Component {
 						<Route
 							exact
 							path="/download"
-							render={()=> <DownloadPage history={history} /> } />							
+							render={()=> <DownloadPage history={history} /> } />
+
+						<Route
+							exact
+							path="/upload/shape"
+							render={()=> <UploadShapePage history={history} /> } />
+
 
 					</Switch>
 				</Grid>

@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Card';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
+
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -18,7 +23,8 @@ import {
 	getProjectAttributeAction,
 	addProjectAction,
 	uploadProjectAction,
-	hapusProjectAction
+	hapusProjectAction,
+	deleteUploadAction
 } from '../../Map/action';
 
 import { 
@@ -34,6 +40,8 @@ import moment from 'moment';
 import { api } from '../../../environtments';
 import ImgsViewer from 'react-images-viewer'
 
+
+
 class FormProject extends React.Component {
 	constructor(props){
 		super(props);
@@ -48,7 +56,9 @@ class FormProject extends React.Component {
 			files:null,
 			isValidSubmit:false,
 			isImageViewerOpen:false,
-			imageList:[]
+			imageList:[],
+			imageIndex:null,
+			dialogOpen:false
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this._getProjectDate = this._getProjectDate.bind(this); 
@@ -184,6 +194,8 @@ class FormProject extends React.Component {
 		this.props.uploadProject({ files, id });
 	}
 
+	// onClick={(featureId && id) ? e=>this._handleImageToShow(e,index) : false}
+
 	_renderFiles = () => {
 
 		const { 
@@ -199,9 +211,7 @@ class FormProject extends React.Component {
 			return upload.map((item,index)=>{
 				return (
 					<a 						
-						onClick={
-							(featureId && id) ? e=>this._handleImageToShow(e,index) : false 
-						} 
+						onClick={(featureId && id) ? e=>this._handleDialog({e,item,index}) : false}						 
 						key={index} >
 						<img alt=""
 							style={{
@@ -221,6 +231,76 @@ class FormProject extends React.Component {
 
 	}
 
+	_handleDialog = ({ e,item,index }) => {
+		// console.log(index)
+		const n = [];
+		n.push({
+			src:`${api.host}/api/static/${item.filename}`,
+			filename:`${item.filename}`
+		});
+		
+		this.setState((state,props)=>{
+			return {
+				dialogOpen:true,
+				imageList:n,
+				imageIndex:index
+			}
+		});
+	}
+
+	// DIALOG BOX
+	_showImageOptions = e => {
+		const { imageIndex } = this.state;
+		return (
+			<Dialog
+				open={this.state.dialogOpen}
+				onClose={e=>this.setState({
+					dialogOpen:false
+				})}
+				onBackdropClick={e=>this.setState({
+					dialogOpen:false
+				})}>
+					<DialogActions>
+						
+						<Button 
+							onClick={ e=>this._deleteImage(e,imageIndex) } 
+							color="primary">
+							Hapus Gambar
+						</Button>
+						
+						<Button 
+							onClick = { e => this._handleImageToShow(e,imageIndex) }
+							color="secondary">
+							Buka Gambar
+						</Button>
+					</DialogActions>
+			</Dialog>
+		);
+	}
+
+	_handleImageToShow = (e,index) => {
+		e.preventDefault();
+		console.log('_handleImageToShow',index);
+		// const { upload } = this.props.dt	
+		// const n = [];
+		// n.push({src:`${api.host}/api/static/${upload[index].filename}`})
+		this.setState((state,props)=>{
+			return {
+				isImageViewerOpen:true,
+				// imageList:n
+			}
+		});
+
+	}
+
+	_deleteImage = (e,index) => {
+		e.preventDefault();
+		const { imageList } = this.state;
+		// console.log('hapus image index',index);
+		// console.log(imageList);
+		this.props.deleteUpload(imageList[0].filename); 
+	}
+
 	_closeImageViewer = () => {
 		this.setState((state,props)=>{
 			return {
@@ -229,20 +309,6 @@ class FormProject extends React.Component {
 		})
 	}
 
-	_handleImageToShow = (e,index) => {
-		e.preventDefault();
-
-		const { upload } = this.props.dt	
-		const n = [];
-		n.push({src:`${api.host}/api/static/${upload[index].filename}`})
-		this.setState((state,props)=>{
-			return {
-				isImageViewerOpen:true,
-				imageList:n
-			}
-		});
-
-	}
 
 	_renderImgViewer = () => {
 		return (
@@ -251,6 +317,7 @@ class FormProject extends React.Component {
 					isOpen={this.state.isImageViewerOpen}
 					onClose={this._closeImageViewer}
 					imgs={this.state.imageList}
+					onClickImg={e=>console.log(e.target)}
 					showThumbnails={false} />			
 			</React.Fragment>
 		);		
@@ -287,6 +354,7 @@ class FormProject extends React.Component {
 				style={{ display:'flex' }}>
 
 				{this._renderImgViewer()}
+				{this._showImageOptions()}
 
 				<FormWrapper>
 					<FormInnerWrapper
@@ -490,7 +558,8 @@ function mapDispatchToProps(dispatch){
 		getProjectAttribute: featureId=>dispatch(getProjectAttributeAction(featureId)),
 		addProject: features=>dispatch(addProjectAction(features)),
 		uploadProject: file=>dispatch(uploadProjectAction(file)),
-		hapusProject: featureId => dispatch(hapusProjectAction(featureId))		
+		hapusProject: featureId => dispatch(hapusProjectAction(featureId)),
+		deleteUpload: filename => dispatch(deleteUploadAction(filename))		
 	}
 }
 

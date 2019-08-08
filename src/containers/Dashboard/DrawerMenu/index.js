@@ -163,6 +163,12 @@ class Drawer extends React.Component{
 			this.toggleDrawer();
 			return history.replace('/download');
 		}
+
+		if(value===6){
+			this.toggleDrawer();
+			return history.replace('/upload/shape');	
+		}
+
 		return null;
 	}
 

@@ -7,6 +7,7 @@ import DrawRiverPage from './DrawRiverPage';
 import DrawProjectPage from './DrawProjectPage';
 import DrawRiverShapePage from './DrawRiverShapePage';
 import DownloadPage from '../DownloadPage';
+import UploadShapePage from '../UploadShapePage';
 
 /*import MapGL, { 
 	NavigationControl, 
@@ -169,6 +170,13 @@ class MapContainer extends React.Component {
 	        	path="/download" 
 						render={routeProps => (
 		          	<DownloadPage {...routeProps} />
+		        )} />
+
+		      <Route 
+	        	exact 
+	        	path="/upload/shape" 
+						render={routeProps => (
+		          	<UploadShapePage {...routeProps} />
 		        )} />
 
 				</Switch>

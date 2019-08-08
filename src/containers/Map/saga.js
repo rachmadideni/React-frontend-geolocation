@@ -26,7 +26,10 @@ import {
 	REPLACE_MAP_ACTION,
 	HAPUS_PROJECT_ACTION,
 	GET_DOWNLOAD_FILES,
-	REPLACE_COORD_ACTION
+	REPLACE_COORD_ACTION,
+	DELETE_UPLOAD_ACTION,
+	DELETE_UPLOAD_SUCCESS_ACTION,
+	DELETE_UPLOAD_ERROR_ACTION
 } from './constants';
 
 import { 
@@ -67,7 +70,9 @@ import {
 	hapusProjectSuccessAction,
 	hapusProjectErrorAction,
 	replaceCoordinatesProjectSuccessAction,
-	replaceCoordinatesProjectErrorAction
+	replaceCoordinatesProjectErrorAction,
+	deleteUploadSuccessAction,
+	deleteUploadErrorAction
 } from './action';
 
 // import { makeSelectRiverFeatures } from './selectors'
@@ -256,8 +261,6 @@ export function* insertRiverFeatures(action){
 	}
 }
 
-
-
 // upload file
 export function* uploadFile(file){
 	const endpoint = `${api.host}/api/geojson/project/upload`;
@@ -304,6 +307,23 @@ export function* getUploadFiles(featureId){
 	}catch(err){
 		throw err;	
 	}
+}
+
+export function* deleteUpload(action){
+	console.log('saga deleteUpload ',action.payload);
+	const filename = action.payload;
+	const endpoint = `${api.host}/api/geojson/hapusUpload/${filename}`;
+	const requestOpt = { method:'GET' }
+	try{
+		const response = yield call(request, endpoint, requestOpt);
+		yield put(deleteUploadSuccessAction());
+		// return response.data;
+		console.log('saga deleteUpload :',response.data);
+
+	}catch(err){
+		throw err;	
+		yield put(deleteUploadErrorAction());
+	}	
 }
 
 // AMBIL SEMUA DATA AWAL PROJECT
@@ -661,7 +681,8 @@ export default function* MapContainerSaga(){
 		takeLatest(REPLACE_MAP_ACTION, replaceMap),
 		takeLatest(HAPUS_PROJECT_ACTION, hapusproject),
 		takeLatest(GET_DOWNLOAD_FILES, getDownloadFiles),
-		takeLatest(REPLACE_COORD_ACTION, replaceCoordProject)
+		takeLatest(REPLACE_COORD_ACTION, replaceCoordProject),
+		takeLatest(DELETE_UPLOAD_ACTION, deleteUpload)
 		//addRiver(),
 		//takeLatest(GET_GEOJSON_ACTION, getGeojson)
 	]);

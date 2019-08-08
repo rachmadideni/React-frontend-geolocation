@@ -75,7 +75,10 @@ import {
 	HAPUS_PROJECT_ERROR_ACTION,
 	REPLACE_COORD_ACTION,
 	REPLACE_COORD_SUCCESS_ACTION,
-	REPLACE_COORD_ERROR_ACTION
+	REPLACE_COORD_ERROR_ACTION,
+	DELETE_UPLOAD_ACTION,
+	DELETE_UPLOAD_SUCCESS_ACTION,
+	DELETE_UPLOAD_ERROR_ACTION
 } from './constants';
 
 
@@ -615,6 +618,27 @@ export function downloadExportSuccessAction(payload){
 export function downloadExportErrorAction(payload){
 	return {
 		type:DOWNLOAD_EXPORT_ERROR_ACTION,
+		payload
+	}
+}
+
+export function deleteUploadAction(payload){
+	return {
+		type:DELETE_UPLOAD_ACTION,
+		payload
+	}
+}
+
+export function deleteUploadSuccessAction(payload){
+	return {
+		type:DELETE_UPLOAD_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function deleteUploadErrorAction(payload){
+	return {
+		type:DELETE_UPLOAD_ERROR_ACTION,
 		payload
 	}
 }
