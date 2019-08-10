@@ -7,15 +7,16 @@ import { color } from '../../styles/constants';
 
 const Wrapper = styled(Grid)`
 	&& {
-		width:30vw;
-		padding:0;
+		width:30vw;		
 		position:absolute;
 		top:20px;
 		left:20px;
-		padding-top:15px;
-		padding-bottom:15px;
-		padding-left:28px;
-		padding-right:28px;
+		// padding-top:15px;
+		// padding-bottom:15px;
+		// padding-left:15px;
+		// padding-right:15px;
+		padding:12px;
+		overflow:hidden;		
 	}
 `
 const FormWrapper = styled(Grid)`
@@ -23,6 +24,9 @@ const FormWrapper = styled(Grid)`
 		width:100%;		
 		border-radius:0;
 		box-shadow:none;
+		padding:20px;
+		// max-height:100vh;
+		overflow:hidden;
 	}
 `
 

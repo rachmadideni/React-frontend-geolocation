@@ -4,7 +4,8 @@ import React, { Fragment } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import DrawRiverPage from './DrawRiverPage';
-import DrawProjectPage from './DrawProjectPage';
+import DrawProjectPage from './DrawProjectPage'; // disable sementara
+// import DrawProjectPage from './ProjectPage';
 import DrawRiverShapePage from './DrawRiverShapePage';
 import DownloadPage from '../DownloadPage';
 import UploadShapePage from '../UploadShapePage';

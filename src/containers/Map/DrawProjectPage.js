@@ -32,7 +32,12 @@ import {
 // component
 import LoadingDialog from '../../components/LoadingDialog';
 import FormProject from './FormLayer/FormProject';
-import { RoomSharp } from '@material-ui/icons';
+import { 
+	RoomSharp,
+	LinearScale } from '@material-ui/icons';
+
+import Grid from '@material-ui/core/Card';
+import IconButton from '@material-ui/core/IconButton';
 
 class DrawProjectPage extends React.Component {
 	
@@ -61,6 +66,28 @@ class DrawProjectPage extends React.Component {
 			longitude,
 			zoom
 		});
+	}
+
+	renderDrawOptions = () => {
+		return (
+			<Grid 
+				container 
+				wrap="nowrap" 
+				justify="center" 
+				alignItems="center" 
+				style={{					
+					position:'absolute',
+					top:200,
+					right:10,
+					// width:36 + 'px',
+					// height:36 + 'px',
+					// backgroundColor:'#EFE9E1'
+				}}>
+				<IconButton>
+					<LinearScale />
+				</IconButton>
+			</Grid>
+		);
 	}
 
 	renderNavigationControl = () => {
@@ -221,6 +248,7 @@ class DrawProjectPage extends React.Component {
 
 				{this.renderNavigationControl()}
 				{this._renderMarkerinNewPoint()}
+				{this.renderDrawOptions()}
 				
 				<Source 
 					id="river" 

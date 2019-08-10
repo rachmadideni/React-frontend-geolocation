@@ -40,7 +40,10 @@ import moment from 'moment';
 import { api } from '../../../environtments';
 import ImgsViewer from 'react-images-viewer'
 
-
+// slider progress
+import SliderProgress from '../component/SliderProgress';
+// Marker selectors
+import MarkerSelector from '../component/MarkerSelector';
 
 class FormProject extends React.Component {
 	constructor(props){
@@ -58,7 +61,8 @@ class FormProject extends React.Component {
 			isImageViewerOpen:false,
 			imageList:[],
 			imageIndex:null,
-			dialogOpen:false
+			dialogOpen:false,
+			markerOpen:true
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this._getProjectDate = this._getProjectDate.bind(this); 
@@ -248,6 +252,21 @@ class FormProject extends React.Component {
 		});
 	}
 
+	_handleMarker = value => {
+		this.setState({
+			markerOpen:value
+		})
+	}
+
+	_renderMarkerDialog = () => {
+		const { markerOpen } = this.state
+		return (
+			<MarkerSelector 
+				handleMarker={this._handleMarker} 
+				markerOpen={markerOpen} />
+		);
+	}
+
 	// DIALOG BOX
 	_showImageOptions = e => {
 		const { imageIndex } = this.state;
@@ -355,6 +374,7 @@ class FormProject extends React.Component {
 
 				{this._renderImgViewer()}
 				{this._showImageOptions()}
+				{this._renderMarkerDialog()}
 
 				<FormWrapper>
 					<FormInnerWrapper
@@ -462,6 +482,9 @@ class FormProject extends React.Component {
 			      	disabled={featureId ? false: true}
 			      	 />
 
+			      <SliderProgress 
+			      	disabled={ (featureId && dt.id) ? false : true } />
+
 			      <div 
 			      	style={{ 
 			      		backgroundColor:'none',
@@ -497,7 +520,7 @@ class FormProject extends React.Component {
 
 						</div>
 
-						<Grid style={{ paddingTop:'55px' }}>
+						<Grid style={{ paddingTop:'55px',boxShadow:'none', }}>
 
 						<ActionButton 									
 								size="small" 
