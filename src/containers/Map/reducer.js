@@ -61,7 +61,21 @@ import {
 	DOWNLOAD_EXPORT_ERROR_ACTION,
 	DELETE_UPLOAD_ACTION,
 	DELETE_UPLOAD_SUCCESS_ACTION,
-	DELETE_UPLOAD_ERROR_ACTION
+	DELETE_UPLOAD_ERROR_ACTION,
+	INSERT_PROJECT_FEATURES_ACTION,
+	INSERT_PROJECT_FEATURES_SUCCESS,
+	INSERT_PROJECT_FEATURES_ERROR,
+	ADD_NEW_PROJECT_ACTION,
+	ADD_NEW_PROJECT_SUCCESS_ACTION,
+	ADD_NEW_PROJECT_ERROR_ACTION,
+	GET_PROJECT_PROPERTIES_ACTION,
+	GET_PROJECT_PROPERTIES_SUCCESS_ACTION,
+	GET_PROJECT_PROPERTIES_ERROR_ACTION,
+	ADD_PROJECT_PROPERTIES_ACTION,
+	ADD_PROJECT_PROPERTIES_SUCCESS_ACTION,
+	ADD_PROJECT_PROPERTIES_ERROR_ACTION,
+	LOAD_PROJECT_ACTION,
+	LOAD_PROJECT_SUCCESS_ACTION
 } from './constants';
 
 export const initialState = fromJS({
@@ -87,7 +101,8 @@ export const initialState = fromJS({
 	tabValue:0,
 	marker:[],
 	options:{
-		kecamatan:[]
+		kecamatan:[],
+		marker:[]
 	},
 	features:[],
 	geodata:{
@@ -132,7 +147,8 @@ export const initialState = fromJS({
 		name:'',
 		file:'',
 		error:''
-	}
+	},
+	marker:null
 });
 
 function mapContainerReducer(state = initialState, action){
@@ -187,9 +203,7 @@ function mapContainerReducer(state = initialState, action){
 			return state.set('DASMODE',action.payload)
 		
 		case GET_OPTIONS_SUCCESS_ACTION:
-			return state.setIn(
-				['options',action.payload.key],
-				action.payload.options)
+			return state.setIn(['options',action.payload.key],action.payload.options)
 		
 		case SET_RIVER_PROP_ACTION:
 			return state.update('features', features => features.push(...action.payload));
@@ -218,7 +232,16 @@ function mapContainerReducer(state = initialState, action){
 			return state.set('loading',false);
 		case INSERT_RIVER_FEATURES_ERROR:
 			return state;
-		
+
+		// tambah feature ke features di geodata > project
+		case INSERT_PROJECT_FEATURES_ACTION:
+			return state.set('loading',true).updateIn(['geodata','project','features'], features => features.push(action.payload));
+		case INSERT_PROJECT_FEATURES_SUCCESS:
+			return state.set('loading',false);
+		case INSERT_PROJECT_FEATURES_ERROR:
+			return state;
+
+
 		// clear form 
 		case CLEAR_RIVER_FORM:
 			return state.setIn(['form','river'], 
@@ -297,7 +320,8 @@ function mapContainerReducer(state = initialState, action){
 		}
 
 		case UBAH_TANGGAL_PROJECT_ACTION:{
-			return state.setIn(['form','project','tglpro'], action.value);
+			const tglpro = action.value;
+			return state.setIn(['form','project','tglpro'], tglpro.substring(0, 10));
 		}
 
 		case UBAH_KETERANGAN_PROJECT_ACTION:{
@@ -358,7 +382,38 @@ function mapContainerReducer(state = initialState, action){
 		case ADD_PROJECT_ACTION:
 			return state.set('loading',true);
 		case ADD_PROJECT_SUCCESS_ACTION:
-			return state.set('loading',false);					
+			return state.set('loading',false);
+
+		case ADD_NEW_PROJECT_ACTION:
+			return state.set('loading',true);
+
+		case ADD_NEW_PROJECT_SUCCESS_ACTION:
+			return state.set('loading',false);
+
+		case GET_PROJECT_PROPERTIES_ACTION:
+			return state.set('loading',true);
+
+		case GET_PROJECT_PROPERTIES_SUCCESS_ACTION:
+			return state.set('loading',false).setIn(['form','project'], new Map(action.payload));
+
+		case GET_PROJECT_PROPERTIES_ERROR_ACTION:
+			return state.set('loading',false).setIn(['form','project'], new Map(action.payload));
+
+		case ADD_PROJECT_PROPERTIES_ACTION:
+			return state.set('loading',false);
+
+		case ADD_PROJECT_PROPERTIES_SUCCESS_ACTION:
+			return state.set('loading',false);
+
+		case ADD_PROJECT_PROPERTIES_ERROR_ACTION:
+			return state.set('loading',false);
+
+		case LOAD_PROJECT_ACTION:
+			return state.set('loading',true);
+
+		case LOAD_PROJECT_SUCCESS_ACTION:			
+			return state.set('loading',false).setIn(['geodata','project','features'], new List(action.payload));			
+
 		default:
 			return state;
 	}

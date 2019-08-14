@@ -14,6 +14,12 @@ import TaludIcon from '../../../icons/talud';
 import MarkerIcon from '../../../icons/marker';
 // import WorldIcon from '../../../icons/world';
 
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
+import { makeSelectMarkerType } from '../../Map/selectors';
+
 const BaseTabs = styled(Tabs).attrs({
 	classes:{
 		indicator:'indicator'
@@ -119,5 +125,17 @@ class MarkerSelector extends Component {
 		);
 	}
 }
+
+// const mapStateToProps = createStructuredSelector({
+// 	marker:makeSelectMarker()
+// })
+
+// function mapDispatchToProps(dispatch){
+// 	return {
+// 		changeMarker: value=>dispatch(changeMarkerAction(value))
+// 	}
+// }
+
+// const withConnect = connect(mapStateToProps,mapDispatchToProps);
 
 export default MarkerSelector;

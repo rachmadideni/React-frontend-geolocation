@@ -4,9 +4,10 @@ import Grid from '@material-ui/core/Card';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogContent from '@material-ui/core/DialogContent';
+// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
+import Typography from '@material-ui/core/Typography';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -24,7 +25,9 @@ import {
 	addProjectAction,
 	uploadProjectAction,
 	hapusProjectAction,
-	deleteUploadAction
+	deleteUploadAction,
+	addProjectPropertiesAction,
+	getProjectPropertiesAction
 } from '../../Map/action';
 
 import { 
@@ -45,6 +48,15 @@ import SliderProgress from '../component/SliderProgress';
 // Marker selectors
 import MarkerSelector from '../component/MarkerSelector';
 
+import { withStyles } from '@material-ui/core/styles';
+import { styles } from './styles';
+import Avatar from '@material-ui/core/Avatar';
+import TaludIcon from '../../../icons/talud';
+import MarkerIcon from '../../../icons/marker';
+import Tooltip from '@material-ui/core/Tooltip';
+import Divider from '@material-ui/core/Divider';
+
+
 class FormProject extends React.Component {
 	constructor(props){
 		super(props);
@@ -56,30 +68,21 @@ class FormProject extends React.Component {
 				tglpro:null
 			},
 			isSubmitted:false,
-			files:null,
-			isValidSubmit:false,
+			files:null,			
 			isImageViewerOpen:false,
 			imageList:[],
 			imageIndex:null,
 			dialogOpen:false,
-			markerOpen:true
+			markerOpen:false
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this._getProjectDate = this._getProjectDate.bind(this); 
 	}
 
-	componentDidMount(){
-		// console.log(moment().format('YYYY-MM-DD'));	
-		// console.log(this.props.dt.tglpro);
-		// console.log('history:',this.props);
-	}
-
 	_getProjectDate(){
 		const { tglpro } = this.props.dt;
-		// console.log(moment().toDate());
 		if(!tglpro){
 			return {
-				// tglpro:moment().toDate()
 				tglpro:new Date().toISOString().substring(0, 10)				
 			}
 		}
@@ -91,12 +94,12 @@ class FormProject extends React.Component {
 	}
 
 	componentDidUpdate(props,state){
-
 		if (props.featureId !== this.props.featureId) {
-		// if (this.props.featureId !== state.featureId) {
-			// console.log()
 			if (this.props.featureId) {				
-				this.props.getProjectAttribute(this.props.featureId);// call saga utk ambil atribut								
+				// disable smntra krn mau coba test_project atribut
+				// this.props.getProjectAttribute(this.props.featureId);// call saga utk ambil atribut								
+				console.log(this.props.featureId);
+				this.props.getProjectProperties(this.props.featureId)
 			}
 
 			this.setState((state)=>{
@@ -117,7 +120,8 @@ class FormProject extends React.Component {
 		} = this.props.dt
 
 		const {
-			addProject
+			addProject,
+			dt
 		} = this.props
 
 		const { features } = this.state;
@@ -125,15 +129,19 @@ class FormProject extends React.Component {
 		this.setState({
 			isSubmitted:true
 		})
-		  
-		if(this.validasiNamaProject(nampro) && this.validasiTanggalProject(tglpro)){
-			// alert('lolos validasi');
-			// console.log('check history:',this.props);			
-			addProject({
+				
+		if(this.validasiNamaProject(String(nampro)) && this.validasiTanggalProject(String(tglpro))){
+
+			// di koment dl smntr
+			// addProject({
+			// 	features,
+			// 	properties:this.props.dt
+			// });
+
+			this.props.addProjectProperties({
 				features,
 				properties:this.props.dt
-			});
-			// return <Redirect to="/signin" />
+			}); // test insert properties ke tabel test_project
 		}
 		return false;
 	}
@@ -159,8 +167,7 @@ class FormProject extends React.Component {
 		return !isError;
 	}
 
-	validasiTanggalProject(tanggal_project){
-		// console.log(tanggal_project);
+	validasiTanggalProject(tanggal_project){		
 		let isError = false;
 		let errorMsg = null;
 		if(isEmpty(tanggal_project)){
@@ -192,7 +199,7 @@ class FormProject extends React.Component {
 	}
 
 	_handleUpload = () => {
-		// console.log(file);
+
 		const { files } = this.state;
 		const { id } = this.props.dt;
 		this.props.uploadProject({ files, id });
@@ -214,17 +221,19 @@ class FormProject extends React.Component {
 		if(upload.length > 0){
 			return upload.map((item,index)=>{
 				return (
+					
 					<a 						
 						onClick={(featureId && id) ? e=>this._handleDialog({e,item,index}) : false}						 
 						key={index} >
 						<img alt=""
 							style={{
-								width:'55px',
-								height:'55px',
+								width:'32px',
+								height:'32px',
 								border:'solid 1px #354577',							
-								margin:'5px',
+								margin:'2px',
 								padding:'2px'
-							}} src={`${api.host}/api/static/${item.filename}`}></img></a>				
+							}} src={`${api.host}/api/static/${item.filename}`}></img></a>
+					
 				);
 			})			
 		}
@@ -236,7 +245,6 @@ class FormProject extends React.Component {
 	}
 
 	_handleDialog = ({ e,item,index }) => {
-		// console.log(index)
 		const n = [];
 		n.push({
 			src:`${api.host}/api/static/${item.filename}`,
@@ -299,14 +307,9 @@ class FormProject extends React.Component {
 
 	_handleImageToShow = (e,index) => {
 		e.preventDefault();
-		console.log('_handleImageToShow',index);
-		// const { upload } = this.props.dt	
-		// const n = [];
-		// n.push({src:`${api.host}/api/static/${upload[index].filename}`})
 		this.setState((state,props)=>{
 			return {
 				isImageViewerOpen:true,
-				// imageList:n
 			}
 		});
 
@@ -315,8 +318,6 @@ class FormProject extends React.Component {
 	_deleteImage = (e,index) => {
 		e.preventDefault();
 		const { imageList } = this.state;
-		// console.log('hapus image index',index);
-		// console.log(imageList);
 		this.props.deleteUpload(imageList[0].filename); 
 	}
 
@@ -361,79 +362,51 @@ class FormProject extends React.Component {
 			dt,
 			ubahNamaProject,
 			ubahTanggalProject,
-			ubahKeteranganProject
+			ubahKeteranganProject,
+			classes
 		} = this.props;
-
 
 		return (
 			
-			<Wrapper 
-				
-				direction="column" 
-				style={{ display:'flex' }}>
+			<Wrapper>
 
 				{this._renderImgViewer()}
 				{this._showImageOptions()}
 				{this._renderMarkerDialog()}
 
+				
+				{/*{JSON.stringify(this.state.featureId)}
+				{JSON.stringify(this.state.features)}
+				{JSON.stringify(this.props.dt)}*/}
+
 				<FormWrapper>
-					<FormInnerWrapper
-						
-						direction="column"
+					<FormInnerWrapper												
 						style={{
-							display:'flex',
+							//display:'flex',
 							borderRadius:'0',
 							boxShadow:'none',
 							width:'100%',
 						}}>
 
-						<FormHeader judul="Atribut Project" />
-
-						<Grid 
-							item
-							style={{ 
-								width:'40%',
-								borderRadius:'0',
-								boxShadow:'none'								
-							}}>
-
-							<Grid 								
-								direction="row" 								
-								style={{									
-									borderRadius:'0',
-									boxShadow:'none',
-									alignItems:'center',
-									justifyContent:'space-between',									
-								}}>
-								
-								<Grid 
-									item 
-									style={{									
-										borderRadius:'0',
-										boxShadow:'none',
-									}}>
-
-									
-								</Grid>
-							</Grid>
-						</Grid>
-					</FormInnerWrapper>
-					{/*
-						defaultValue={this._getProjectDate().displayDate}
-						value={this._getProjectDate().displayDate}					
-					*/}
+					<FormHeader judul="Atribut Project" />
+					
 					<form
 						noValidate 
 						autoComplete="off" 
 						disabled={featureId ? false: true}
-						onSubmit={this.handleSubmit}>
+						onSubmit={this.handleSubmit}
+						style={{
+							padding:0,
+							margin:0
+						}}>
 
 						<TextField 
+							InputProps={{ classes: { input: classes.input } }}
 							id="nampro"
 							label="nama project"
 							autoFocus
 							disabled={featureId ? false: true} 
-							margin="normal"
+							margin="dense"
 							fullWidth
 							value={dt.nampro}
 							error={!!this.state.error.nampro}
@@ -448,11 +421,13 @@ class FormProject extends React.Component {
 							} />
 
 						<TextField 
+							InputProps={{ classes: { input: classes.input } }}
 							id="tglpro"
 							label="tanggal project"
 							type="date"							 
 							value = { this._getProjectDate().displayDate }
 							disabled={featureId ? false: true}
+							margin="dense"
 							InputLabelProps={{
 			          shrink: true,
 			        }} 
@@ -468,12 +443,13 @@ class FormProject extends React.Component {
 								}
 							} />						
 
-			      <TextField 
+			      <TextField 			      	
+			      	InputProps={{ classes: { input: classes.input } }}
 			      	id="keterangan"
 			      	label="keterangan"
 			      	multiline
-			      	rows={5} 
-			      	margin="normal"
+			      	rows={3} 
+			      	margin="dense"
 			      	fullWidth
 			      	value={dt.ketera}
 			      	onChange={ event=>{
@@ -482,47 +458,103 @@ class FormProject extends React.Component {
 			      	disabled={featureId ? false: true}
 			      	 />
 
-			      <SliderProgress 
-			      	disabled={ (featureId && dt.id) ? false : true } />
+			     	<Grid 			     		
+			     		style={{			     			
+			     			paddingTop:10+'px',
+			     			paddingBottom:30+'px',
+			     			boxShadow:'none'
+			     		}}>
+					      
+					      <div style={{					      	
+					      	paddingLeft:15+'px',
+					      	paddingRight:20+'px',
+					      	paddingBottom:10
+					      }}>
+					      	<SliderProgress 
+					      		disabled={ (featureId && dt.id) ? false : true } />
+					      </div>
 
-			      <div 
-			      	style={{ 
-			      		backgroundColor:'none',
-			      		height:'35px',
-			      		marginBottom:'15px'
-			      	}}>
+					      <Divider />
 
-							<input 
-								type="file" 
-								name="project"
-								accept="image/*"
-								disabled={ (featureId && dt.id) ? false : true } 
-								onChange={this._handleFileUploadChanges} />
-							
-							<Button 
-							  variant="contained" 
-							  size="small"
-							  success={true}
-							  onClick={this._handleUpload}
-							  disabled={ (featureId && dt.id) ? false : true }>
-							  upload
-							</Button>
+					      <div 
+					      	style={{
+					      		paddingTop:10,
+					      		paddingLeft:20+'px',
+					      		paddingRight:20+'px', 
+					      		backgroundColor:'none',
+					      		height:'35px',
+					      		marginBottom:'15px'
+					      	}}>
 
-							<div style={{
-								flex:1,
-								width:'100%',
-								height:'150px',
-								marginBottom:'50px',
-								paddingBottom:'20px'
+									<input 
+										type="file" 
+										name="project"
+										accept="image/*"
+										disabled={ (featureId && dt.id) ? false : true } 
+										onChange={this._handleFileUploadChanges} />
+									
+									<Button 
+									  variant="contained" 
+									  size="small"
+									  success={true}
+									  onClick={this._handleUpload}
+									  disabled={ (featureId && dt.id) ? false : true }>
+									  upload
+									</Button>
+
+									<div style={{
+										flex:1,
+										width:'100%',
+										height:'150px',
+										marginBottom:'50px',
+										paddingBottom:'20px'
+									}}>
+									{this._renderFiles()}							
+									</div>
+
+								</div>
+			      </Grid>
+			      
+			      <Grid 
+			      	container	
+			      	justify="center" alignItems="center"			      	
+			      	style={{				      								
+								boxShadow:'none'									
+							}}>									
+								 <div 
+						      	style={{
+						      		paddingTop:10,
+						      		paddingLeft:10
+						      	}}>																
+									
+									<Typography 
+										color="secondary"
+										variant="caption" 
+										display="block" 
+										gutterBottom>
+										marker
+									</Typography>
+									<Tooltip 
+										title="marker" 
+										placement="left-start">
+											<Avatar 
+
+												className={classes.smallAvatar}
+												onClick={
+													e=>this._handleMarker(!this.state.markerOpen)
+												}>
+												<TaludIcon />
+											</Avatar>
+									</Tooltip>
+								</div>								
+						</Grid>
+						
+						<Grid 
+							style={{ 
+								boxShadow:'none'
 							}}>
-							{this._renderFiles()}							
-							</div>
 
-						</div>
-
-						<Grid style={{ paddingTop:'55px',boxShadow:'none', }}>
-
-						<ActionButton 									
+							<ActionButton 																
 								size="small" 
 								variant="contained" 
 								success="true"
@@ -549,6 +581,7 @@ class FormProject extends React.Component {
 						</Grid>
 
 					</form>
+					</FormInnerWrapper>					
 				</FormWrapper>
 			</Wrapper>
 		);
@@ -557,7 +590,6 @@ class FormProject extends React.Component {
 
 FormProject.propTypes = {
 	featureId: PropTypes.string,
-  // features: PropTypes.object,
   dt: PropTypes.object,// form data
   validasiNamaProject: PropTypes.func,
   validasiTanggalProject: PropTypes.func,
@@ -582,7 +614,9 @@ function mapDispatchToProps(dispatch){
 		addProject: features=>dispatch(addProjectAction(features)),
 		uploadProject: file=>dispatch(uploadProjectAction(file)),
 		hapusProject: featureId => dispatch(hapusProjectAction(featureId)),
-		deleteUpload: filename => dispatch(deleteUploadAction(filename))		
+		deleteUpload: filename => dispatch(deleteUploadAction(filename)),
+		addProjectProperties: features=>dispatch(addProjectPropertiesAction(features)),
+		getProjectProperties: featureId => dispatch(getProjectPropertiesAction(featureId))
 	}
 }
 
@@ -591,4 +625,4 @@ const withConnect = connect(
 	mapDispatchToProps
 );
 
-export default compose(withConnect)(FormProject);
+export default compose(withConnect)(withStyles(styles)(FormProject));

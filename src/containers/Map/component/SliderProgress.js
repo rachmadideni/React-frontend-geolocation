@@ -14,7 +14,11 @@ class SliderProgress extends Component {
 		const { disabled } = this.props
 		return (
 			<Fragment>
-				<Typography gutterBottom>
+				<Typography 
+					color="secondary"
+					variant="caption" 
+					display="block" 
+					gutterBottom>
 					Progress				
 				</Typography>
 				<Slider 

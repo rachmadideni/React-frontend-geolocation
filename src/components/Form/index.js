@@ -9,13 +9,13 @@ const Wrapper = styled(Grid)`
 	&& {
 		width:30vw;		
 		position:absolute;
-		top:20px;
-		left:20px;
+		top:10px;
+		left:10px;
 		// padding-top:15px;
 		// padding-bottom:15px;
 		// padding-left:15px;
 		// padding-right:15px;
-		padding:12px;
+		padding:8px;
 		overflow:hidden;		
 	}
 `
@@ -29,10 +29,16 @@ const FormWrapper = styled(Grid)`
 		overflow:hidden;
 	}
 `
+const FormInnerWrapper = styled(Grid)`
+	//display:flex;
+	width:100%;
+	border-radius:0;
+	box-shadow:none;
+`
 
 const ActionButton = styled(Button).attrs({
 	classes:{ root:'root',disabled:'.disabled',label:'label' }
-})`
+})`	
 	.label {
 		text-transform:capitalize;
 	}
@@ -55,23 +61,16 @@ const HeaderStyled = styled(Grid)`
 `
 
 function FormHeader(props){
-	return (
-		<HeaderStyled>
+	return (		
 			<Typography 
 				align="left" 
 				color="secondary" 
-				variant="subtitle2">
+				variant="subtitle2"
+				gutterBottom>
 					{props.judul}
-			</Typography>
-		</HeaderStyled>
+			</Typography>		
 	)
 }
 
-const FormInnerWrapper = styled(Grid)`
-	display:flex;
-	width:100%;
-	border-radius:0;
-	box-shadow:none;
-`
 
 export { Wrapper, FormWrapper, ActionButton, FormHeader, FormInnerWrapper }

@@ -78,7 +78,21 @@ import {
 	REPLACE_COORD_ERROR_ACTION,
 	DELETE_UPLOAD_ACTION,
 	DELETE_UPLOAD_SUCCESS_ACTION,
-	DELETE_UPLOAD_ERROR_ACTION
+	DELETE_UPLOAD_ERROR_ACTION,
+	INSERT_PROJECT_FEATURES_ACTION,
+	INSERT_PROJECT_FEATURES_SUCCESS,
+	INSERT_PROJECT_FEATURES_ERROR,
+	ADD_NEW_PROJECT_ACTION,
+	ADD_NEW_PROJECT_SUCCESS_ACTION,
+	ADD_PROJECT_PROPERTIES_ACTION,
+	ADD_PROJECT_PROPERTIES_SUCCESS_ACTION,
+	ADD_PROJECT_PROPERTIES_ERROR_ACTION,
+	GET_PROJECT_PROPERTIES_ACTION,
+	GET_PROJECT_PROPERTIES_SUCCESS_ACTION,
+	GET_PROJECT_PROPERTIES_ERROR_ACTION,
+	LOAD_PROJECT_ACTION,
+	LOAD_PROJECT_SUCCESS_ACTION,
+	LOAD_PROJECT_ERROR_ACTION	
 } from './constants';
 
 
@@ -250,6 +264,19 @@ export function addProjectAction(payload){
 export function addProjectSuccessAction(){
 	return {
 		type:ADD_PROJECT_SUCCESS_ACTION
+	}
+}
+
+export function addNewProjectAction(payload){
+	return {
+		type:ADD_NEW_PROJECT_ACTION,
+		payload
+	}
+}
+
+export function addNewProjectSuccessAction(){
+	return {
+		type:ADD_NEW_PROJECT_SUCCESS_ACTION
 	}
 }
 
@@ -588,6 +615,27 @@ export function insertRiverFeaturesErrorAction(payload){
 	}	
 }
 
+export function insertProjectFeaturesAction(payload){
+	return {
+		type:INSERT_PROJECT_FEATURES_ACTION,
+		payload
+	}
+}
+
+export function insertProjectFeaturesSuccessAction(){
+	return {
+		type:INSERT_PROJECT_FEATURES_SUCCESS
+	}
+}
+
+export function insertProjectFeaturesErrorAction(){
+	return {
+		type:INSERT_PROJECT_FEATURES_ERROR
+	}
+}
+
+
+
 export function clearRiverFormAction(){
 	return {
 		type:CLEAR_RIVER_FORM
@@ -639,6 +687,69 @@ export function deleteUploadSuccessAction(payload){
 export function deleteUploadErrorAction(payload){
 	return {
 		type:DELETE_UPLOAD_ERROR_ACTION,
+		payload
+	}
+}
+
+// action add project properties ke tabel test_project
+export function addProjectPropertiesAction(payload){
+	return {
+		type:ADD_PROJECT_PROPERTIES_ACTION,
+		payload
+	}
+}
+
+export function addProjectPropertiesSuccessAction(payload){
+	return {
+		type:ADD_PROJECT_PROPERTIES_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function addProjectPropertiesErrorAction(payload){
+	return {
+		type:ADD_PROJECT_PROPERTIES_ERROR_ACTION,
+		payload
+	}
+}
+
+export function getProjectPropertiesAction(payload){
+	return {
+		type:GET_PROJECT_PROPERTIES_ACTION,
+		payload
+	}
+}
+
+export function getProjectPropertiesSuccessAction(payload){
+	return {
+		type:GET_PROJECT_PROPERTIES_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function getProjectPropertiesErrorAction(payload){
+	return {
+		type:GET_PROJECT_PROPERTIES_ERROR_ACTION,
+		payload
+	}
+}
+
+export function loadProjectAction(){
+	return {
+		type:LOAD_PROJECT_ACTION
+	}
+}
+
+export function loadProjectSuccessAction(payload){
+	return {
+		type:LOAD_PROJECT_SUCCESS_ACTION,
+		payload
+	}
+}
+
+export function loadProjectErrorAction(payload){
+	return {
+		type:LOAD_PROJECT_ERROR_ACTION,
 		payload
 	}
 }

@@ -50,6 +50,8 @@ const makeSelectUpdatedFeatures = () => createSelector(MapContainer, state=>stat
 // select export file name
 const makeSelectExportFileName = () => createSelector(MapContainer, state=>state.getIn(['exportFile','file']))
 
+// select last inserted project features
+const selectProjectFeatures = () => createSelector(MapContainer, state=>state.getIn(['geodata','project','features']).toJS());
 
 // const selectNewFeatureOnly = () => createSelector( selectFeatures, state => state.slice(-1) ) 
 // console.log(selectFeatures);
@@ -76,5 +78,6 @@ export {
 	makeSelectDrawMode,
 	selectFeatures,
 	makeSelectUpdatedFeatures,
-	makeSelectExportFileName
+	makeSelectExportFileName,
+	selectProjectFeatures
 }
