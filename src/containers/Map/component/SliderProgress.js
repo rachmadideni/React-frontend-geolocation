@@ -11,7 +11,7 @@ function valuetext(value) {
 
 class SliderProgress extends Component {
 	render(){
-		const { disabled } = this.props
+		const { disabled, progressValue, handleProgressChange } = this.props
 		return (
 			<Fragment>
 				<Typography 
@@ -21,8 +21,9 @@ class SliderProgress extends Component {
 					gutterBottom>
 					Progress				
 				</Typography>
-				<Slider 
-					defaultValue={0}
+				<Slider 					
+					value={progressValue}
+					onChange={handleProgressChange}
 					getAriaValueText={valuetext}
 					valueLabelDisplay="auto"
 					disabled={disabled}

@@ -5,20 +5,21 @@ export function mapOptionsResponseToDisplay(optionKey, response) {
         value:opt.idkecm,
         label:opt.nmkecm
       }))
-    case 'sungai':
-    return response
-    // case 'nationality':
-    //   return response.map(opt => ({
-    //     value: opt.isoCode,
-    //     title: opt.en,
-    //   }));
+    case 'marker':
+      return response.map(item=>({
+        icon:item.nama_icon,
+        label:item.nama_marker
+      }))    
     default:
       return response;
-      // return response.map(opt => ({
-      //   value: opt.code,
-      //   title: opt.en,
-      // }));
   }
+}
+
+export function mapMarkerOptions(response){
+  return response.map(item=>({
+    icon:item.nama_icon,
+    label:item.nama_marker
+  }))  
 }
 
 //https://gist.github.com/henrahmagix/4740707

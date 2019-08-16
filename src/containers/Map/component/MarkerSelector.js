@@ -1,24 +1,13 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import styled from 'styled-components';
-
-// test icon
-import SettingsIcon from '@material-ui/icons/SettingsOutlined';
-import RiverIcon from '@material-ui/icons/Fingerprint';
 import TaludIcon from '../../../icons/talud';
 import MarkerIcon from '../../../icons/marker';
-// import WorldIcon from '../../../icons/world';
-
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-
-import { makeSelectMarkerType } from '../../Map/selectors';
 
 const BaseTabs = styled(Tabs).attrs({
 	classes:{
@@ -35,7 +24,7 @@ const BaseTabs = styled(Tabs).attrs({
 const IconTab = styled(Tab).attrs({
 	classes:{
 		selected:'selected',
-		labelContainer:'label-container'
+		//labelContainer:'label-container'
 	}
 })`
 	&& {
@@ -65,6 +54,7 @@ function HorizontalTabs(props){
 		{
 			tabs.map((tab,index)=>{
 				const key = `markerTab-${index}`;
+				//const Icon = tab.icon;//<tab.icon />				
 				return <IconTab key={key} icon={<tab.icon />} label={tab.label} />;
 			})
 		}
@@ -72,40 +62,34 @@ function HorizontalTabs(props){
 	);
 }
 
-class MarkerSelector extends Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			tabValue:0
-		}
-	}
+class MarkerSelector extends Component {	
+
+	// DATA PILIHAN ICON (STATIC)
 	getItemIcon(){
 		return [{
+			icon:MarkerIcon,
+			label:'default'
+		},{
 			icon:TaludIcon,
 			label:'talud'
-		},
-		{
-			icon:MarkerIcon,
-			label:'marker'
 		}]
-	}
+	}	
 
 	handleMarker = () => {
 		this.props.handleMarker(!this.props.markerOpen)
 	}
 
-	handleTabChange = (event,value) => {
-		this.setState({
-			tabValue:value
-		})
+	handleMarkerChange = (event,value) => {
+		this.props.handleMarkerChange(value);
 	}
 
-	render(){
-		const { tabValue } = this.state;
+	render(){		
+		const { markerValue } = this.props
 		return (
 			<Dialog 
-				open={this.props.markerOpen}
-				onClose={this.handleMarker}>
+				open = { this.props.markerOpen }
+				onClose = { this.handleMarker } >				
+				
 				<Typography 
 					gutterBottom
 					style={{
@@ -115,27 +99,24 @@ class MarkerSelector extends Component {
 					}}>
 					Pilih Marker				
 				</Typography>
+				
 				<DialogActions>
 					<HorizontalTabs 
-						value={tabValue}
-						onChange = { this.handleTabChange }
-						tabs={this.getItemIcon()} />
+						value = { markerValue }
+						onChange = { this.handleMarkerChange }
+						tabs = { this.getItemIcon() } />
 				</DialogActions>
+
 			</Dialog>
 		);
 	}
 }
 
-// const mapStateToProps = createStructuredSelector({
-// 	marker:makeSelectMarker()
-// })
-
-// function mapDispatchToProps(dispatch){
-// 	return {
-// 		changeMarker: value=>dispatch(changeMarkerAction(value))
-// 	}
-// }
-
-// const withConnect = connect(mapStateToProps,mapDispatchToProps);
+MarkerSelector.propTypes = {
+	markerOpen:PropTypes.bool.isRequired,
+	handleMarker: PropTypes.func.isRequired,
+	handleMarkerChange: PropTypes.func.isRequired,
+	markerValue: PropTypes.number	
+}
 
 export default MarkerSelector;

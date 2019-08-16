@@ -23,14 +23,15 @@ import {
 	GET_DOWNLOAD_FILES,
 	REPLACE_COORD_ACTION,
 	DELETE_UPLOAD_ACTION,
-	DELETE_UPLOAD_SUCCESS_ACTION,
-	DELETE_UPLOAD_ERROR_ACTION,
+	// DELETE_UPLOAD_SUCCESS_ACTION,
+	// DELETE_UPLOAD_ERROR_ACTION,
 	INSERT_PROJECT_FEATURES_ACTION,
 	// BARU
 	ADD_NEW_PROJECT_ACTION,
 	ADD_PROJECT_PROPERTIES_ACTION,
 	GET_PROJECT_PROPERTIES_ACTION,
-	LOAD_PROJECT_ACTION
+	LOAD_PROJECT_ACTION,
+	GET_MARKER_OPTIONS_ACTION
 } from './constants';
 
 import {  
@@ -52,7 +53,7 @@ import {
 	downloadExportErrorAction,
 	insertRiverFeaturesSuccessAction,
 	insertRiverFeaturesErrorAction,
-	AddNewRiverSuccessAction,
+	// AddNewRiverSuccessAction,
 	AddNewRiverErrorAction,
 	getRiverAttributeByIdSuccessAction,
 	getRiverAttributeByIdFailAction,
@@ -60,7 +61,7 @@ import {
 	updateRiverPropertyErrorAction,
 	queryPropertiSuccessAction,
 	queryPropertiErrorAction,
-	replaceMapSuccessAction,
+	// replaceMapSuccessAction,
 	replaceMapErrorAction,
 	hapusProjectSuccessAction,
 	hapusProjectErrorAction,
@@ -69,7 +70,7 @@ import {
 	deleteUploadSuccessAction,
 	deleteUploadErrorAction,
 	// BARU 
-	insertProjectFeaturesAction,
+	// insertProjectFeaturesAction,
 	insertProjectFeaturesSuccessAction,
 	insertProjectFeaturesErrorAction,
 	addNewProjectSuccessAction,
@@ -78,10 +79,11 @@ import {
 	addProjectPropertiesSuccessAction,
 	addProjectPropertiesErrorAction,
 	loadProjectSuccessAction,
-	loadProjectErrorAction
+	loadProjectErrorAction,
+	getMarkerOptionsSuccessAction
 } from './action';
 
-import { mapOptionsResponseToDisplay } from './helpers';
+import { mapOptionsResponseToDisplay, mapMarkerOptions } from './helpers';
 
 
 export function* getDownloadFiles(action){
@@ -294,10 +296,10 @@ export function* deleteUpload(action){
 	const endpoint = `${api.host}/api/geojson/hapusUpload/${filename}`;
 	const requestOpt = { method:'GET' }
 	try{
-		const response = yield call(request, endpoint, requestOpt);
+		yield call(request, endpoint, requestOpt);
 		yield put(deleteUploadSuccessAction());
 	}catch(err){
-		throw err;	
+		// throw err;	
 		yield put(deleteUploadErrorAction());
 	}	
 }
@@ -590,16 +592,17 @@ export function* getOptions(action){
 }
 
 export function* getMarkerOptions(action){
+	const optionKey = action.payload;	
 	const endpoint = `${api.host}/api/options/marker/list`;
 	const requestOpt = { method:'GET' }
 	try{
 		const response = yield call(request,endpoint, requestOpt);
 		if(response.status === 200){
 			const data = response.data;
-			
+			const options = mapOptionsResponseToDisplay(optionKey,data);
+			console.log(options);
+			yield put(getMarkerOptionsSuccessAction(optionKey, options));		
 		}
-		// TODO : create actions
-		// yield put(getMarkerOptionb)
 	}catch(err){
 		// yield errors
 	}
@@ -670,9 +673,9 @@ export function* addProjectProperties(action){
 	try{
 		const response = yield call(request, endpoint, requestOpt);
 		console.log(response)
-		if(response.data === 1){
+		// if(response.data){
 			yield put(addProjectPropertiesSuccessAction())
-		}
+		// }
 	}catch(err){
 		yield put(addProjectPropertiesErrorAction())
 	}
@@ -688,21 +691,49 @@ export function* getProjectProperties(action){
 	try{
 		
 		const response = yield call(request, endpoint, requestOpt);
-		console.log(response.data.length);
-				
-		if(response.data.length > 0){
-			// const id = response.data[0].id;
-			// const nampro = response.data[0].nampro;
-			// const tglpro = response.data[0].tglpro.substring(0,10);
-			// const ketera = response.data[0].ketera;
+		// console.log(response.data.length);
+		
+		// make sure we have a data		
+		if (response.data.length > 0) {			
+			const data = response.data[0];
 
-			// console.log(response.data);
-			// console.log({ id,nampro,tglpro,ketera});
+			const newObj = Object.entries(data).map(function(item){					
+					return {
+						key:item[0],
+						value:item[1] === null ? "" : item[1]
+					}
+			});
 
-			const { id, nampro, tglpro, ketera } = response.data[0];
-			
+			console.log('newObj:',newObj);
+
 			const uploadedFiles = yield getUploadFiles(featureId);
-			yield put(getProjectPropertiesSuccessAction({ id, nampro, tglpro, ketera, upload: uploadedFiles }));			
+			const id = newObj[0].value;
+			const nampro = newObj[2].value;
+			const tglpro = newObj[3].value === "" ? "" : newObj[3].value.substring(0,10);
+			const ketera = newObj[4].value;
+			const marker = newObj[6].value;
+			const progress = newObj[7].value;
+			
+			yield put(getProjectPropertiesSuccessAction({ 
+				id, 
+				nampro, 
+				tglpro, 
+				ketera, 
+				upload: uploadedFiles,
+				marker,
+				progress 
+			}));
+
+		}else{
+			yield put(getProjectPropertiesErrorAction({
+				id:"",
+				nampro:"",
+				tglpro:new Date().toISOString().substring(0, 10),
+				ketera:"",
+		 		upload:[],
+		 		marker:0,
+		 		progress:0
+			}))
 		}
 	}catch(err){
 		const uploadedFiles = yield getUploadFiles(featureId);
@@ -711,7 +742,9 @@ export function* getProjectProperties(action){
 			nampro:"",
 			tglpro:new Date().toISOString().substring(0, 10),
 			ketera:"",
-	 		upload:uploadedFiles
+	 		upload:uploadedFiles,
+	 		marker:0,
+	 		progress:0
 		}));
 	}
 }
@@ -743,6 +776,7 @@ export default function* MapContainerSaga(){
 		takeLatest(ADD_NEW_PROJECT_ACTION, addNewProject),
 		takeLatest(ADD_PROJECT_PROPERTIES_ACTION, addProjectProperties),
 		takeLatest(GET_PROJECT_PROPERTIES_ACTION, getProjectProperties),
-		takeLatest(LOAD_PROJECT_ACTION, loadProject)
+		takeLatest(LOAD_PROJECT_ACTION, loadProject),
+		takeLatest(GET_MARKER_OPTIONS_ACTION, getMarkerOptions)
 	]);
 }

@@ -4,7 +4,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import PengaturanMap from './Map';
-import PengaturanUser from './User';
+// import PengaturanUser from './User';
 
 class Pengaturan extends React.Component{
 	constructor(props){

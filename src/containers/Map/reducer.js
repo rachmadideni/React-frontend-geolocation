@@ -27,11 +27,13 @@ import {
 	UBAH_KETERANGAN_ACTION,
 	GET_RIVER_ATTRIBUTE_SUCCESS_ACTION,
 	GET_RIVER_ATTRIBUTE_FAIL_ACTION,
-	HAPUS_SUNGAI_ACTION,
 	HAPUS_SUNGAI_SUCCESS_ACTION,
+	HAPUS_SUNGAI_ACTION,
 	UBAH_NAMA_PROJECT_ACTION,
 	UBAH_TANGGAL_PROJECT_ACTION,
 	UBAH_KETERANGAN_PROJECT_ACTION,
+	UBAH_MARKER_PROJECT_ACTION,
+	UBAH_PROGRESS_PROJECT_ACTION,
 	GET_PROJECT_ATTRIBUTE_SUCCESS_ACTION,
 	GET_PROJECT_ATTRIBUTE_FAIL_ACTION,
 	GET_PROJECT_ACTION,
@@ -59,15 +61,15 @@ import {
 	// UPDATE_FEATURES_ERROR_ACTION,
 	DOWNLOAD_EXPORT_SUCCESS_ACTION,
 	DOWNLOAD_EXPORT_ERROR_ACTION,
-	DELETE_UPLOAD_ACTION,
-	DELETE_UPLOAD_SUCCESS_ACTION,
-	DELETE_UPLOAD_ERROR_ACTION,
+	// DELETE_UPLOAD_ACTION,
+	// DELETE_UPLOAD_SUCCESS_ACTION,
+	// DELETE_UPLOAD_ERROR_ACTION,
 	INSERT_PROJECT_FEATURES_ACTION,
 	INSERT_PROJECT_FEATURES_SUCCESS,
 	INSERT_PROJECT_FEATURES_ERROR,
 	ADD_NEW_PROJECT_ACTION,
 	ADD_NEW_PROJECT_SUCCESS_ACTION,
-	ADD_NEW_PROJECT_ERROR_ACTION,
+	// ADD_NEW_PROJECT_ERROR_ACTION,
 	GET_PROJECT_PROPERTIES_ACTION,
 	GET_PROJECT_PROPERTIES_SUCCESS_ACTION,
 	GET_PROJECT_PROPERTIES_ERROR_ACTION,
@@ -75,7 +77,8 @@ import {
 	ADD_PROJECT_PROPERTIES_SUCCESS_ACTION,
 	ADD_PROJECT_PROPERTIES_ERROR_ACTION,
 	LOAD_PROJECT_ACTION,
-	LOAD_PROJECT_SUCCESS_ACTION
+	LOAD_PROJECT_SUCCESS_ACTION,
+	GET_MARKER_OPTIONS_SUCCESS_ACTION
 } from './constants';
 
 export const initialState = fromJS({
@@ -138,7 +141,9 @@ export const initialState = fromJS({
 			nampro:'',
 			tglpro:'',
 			ketera:'',
-			upload:[]
+			upload:[],
+			marker:0,
+			progress:0
 		}
 	},
 	queryProperti:{},
@@ -147,8 +152,7 @@ export const initialState = fromJS({
 		name:'',
 		file:'',
 		error:''
-	},
-	marker:null
+	}	
 });
 
 function mapContainerReducer(state = initialState, action){
@@ -203,7 +207,10 @@ function mapContainerReducer(state = initialState, action){
 			return state.set('DASMODE',action.payload)
 		
 		case GET_OPTIONS_SUCCESS_ACTION:
-			return state.setIn(['options',action.payload.key],action.payload.options)
+			return state.setIn(['options',action.payload.key],action.payload.options);
+
+		case GET_MARKER_OPTIONS_SUCCESS_ACTION:
+			return state.setIn(['options',action.payload.key],action.payload.options);
 		
 		case SET_RIVER_PROP_ACTION:
 			return state.update('features', features => features.push(...action.payload));
@@ -259,7 +266,9 @@ function mapContainerReducer(state = initialState, action){
 				nampro:'',
 				tglpro:'',
 				ketera:'',
-				upload:[]
+				upload:[],
+				marker:0,
+				progress:0
 			}));
 
 		// QUERY PROPERTI
@@ -320,12 +329,21 @@ function mapContainerReducer(state = initialState, action){
 		}
 
 		case UBAH_TANGGAL_PROJECT_ACTION:{
-			const tglpro = action.value;
-			return state.setIn(['form','project','tglpro'], tglpro.substring(0, 10));
+			// const tglpro = action.value;
+			// tglpro.substring(0, 10)
+			return state.setIn(['form','project','tglpro'], action.value);
 		}
 
 		case UBAH_KETERANGAN_PROJECT_ACTION:{
 			return state.setIn(['form','project','ketera'], action.value);
+		}
+
+		case UBAH_MARKER_PROJECT_ACTION:{
+			return state.setIn(['form','project','marker'], action.value);	
+		}
+
+		case UBAH_PROGRESS_PROJECT_ACTION:{
+			return state.setIn(['form','project','progress'], action.value);	
 		}
 
 		case GET_RIVER_ATTRIBUTE_SUCCESS_ACTION:{
@@ -400,7 +418,7 @@ function mapContainerReducer(state = initialState, action){
 			return state.set('loading',false).setIn(['form','project'], new Map(action.payload));
 
 		case ADD_PROJECT_PROPERTIES_ACTION:
-			return state.set('loading',false);
+			return state.set('loading',true);
 
 		case ADD_PROJECT_PROPERTIES_SUCCESS_ACTION:
 			return state.set('loading',false);

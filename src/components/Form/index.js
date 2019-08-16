@@ -54,11 +54,11 @@ const ActionButton = styled(Button).attrs({
 	}
 `
 
-const HeaderStyled = styled(Grid)`
-	width:60%;
-	border-radius:0;
-	box-shadow:none;
-`
+// const HeaderStyled = styled(Grid)`
+// 	width:60%;
+// 	border-radius:0;
+// 	box-shadow:none;
+// `
 
 function FormHeader(props){
 	return (		

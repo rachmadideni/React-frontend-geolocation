@@ -171,6 +171,4 @@ const withConnect = connect(
 	mapDispatchToProps
 );
 
-export default compose(	
-	withConnect
-)(Dashboard);
+export default compose(withConnect)(Dashboard);

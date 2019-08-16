@@ -4,8 +4,6 @@ import Grid from '@material-ui/core/Card';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-// import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
 
@@ -13,23 +11,26 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import {
-	makeSelectFormProjectData
-} from '../../Map/selectors';
+// selectors
+import { makeSelectFormProjectData, makeSelectOptions } from '../../Map/selectors';
 
+// action
 import {
 	ubahNamaProjectAction,
 	ubahTanggalProjectAction,
 	ubahKeteranganProjectAction,
+	ubahMarkerProjectAction,
+	ubahProgressProjectAction,
 	getProjectAttributeAction,
 	addProjectAction,
 	uploadProjectAction,
 	hapusProjectAction,
 	deleteUploadAction,
 	addProjectPropertiesAction,
-	getProjectPropertiesAction
+	getMarkerOptionsAction	
 } from '../../Map/action';
 
+// komponen
 import { 
 	Wrapper,
 	FormWrapper,
@@ -37,31 +38,34 @@ import {
 	FormHeader,
 	ActionButton } from '../../../components/Form';
 
-import isEmpty from 'validator/lib/isEmpty';
-import moment from 'moment';
-
-import { api } from '../../../environtments';
+// Komponen slider progress
+import SliderProgress from '../component/SliderProgress';
+// Komponen Marker selectors 
+import MarkerSelector from '../component/MarkerSelector';
+// komponen image viewer
 import ImgsViewer from 'react-images-viewer'
 
-// slider progress
-import SliderProgress from '../component/SliderProgress';
-// Marker selectors
-import MarkerSelector from '../component/MarkerSelector';
+// Utils
+import isEmpty from 'validator/lib/isEmpty';
+import moment from 'moment';
+import { api } from '../../../environtments';
 
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from './styles';
+
 import Avatar from '@material-ui/core/Avatar';
 import TaludIcon from '../../../icons/talud';
 import MarkerIcon from '../../../icons/marker';
 import Tooltip from '@material-ui/core/Tooltip';
 import Divider from '@material-ui/core/Divider';
+import Icon from '@material-ui/core/Icon';
 
 
 class FormProject extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			featureId:null,
+			featureId:this.props.featureId,
 			features:[],
 			error:{
 				nampro:null,
@@ -81,7 +85,9 @@ class FormProject extends React.Component {
 
 	_getProjectDate(){
 		const { tglpro } = this.props.dt;
-		if(!tglpro){
+		console.log(tglpro);
+		console.log(typeof tglpro);
+		if(tglpro === ""){
 			return {
 				tglpro:new Date().toISOString().substring(0, 10)				
 			}
@@ -93,44 +99,32 @@ class FormProject extends React.Component {
     };
 	}
 
-	componentDidUpdate(props,state){
-		if (props.featureId !== this.props.featureId) {
-			if (this.props.featureId) {				
-				// disable smntra krn mau coba test_project atribut
-				// this.props.getProjectAttribute(this.props.featureId);// call saga utk ambil atribut								
-				console.log(this.props.featureId);
-				this.props.getProjectProperties(this.props.featureId)
-			}
+	componentDidMount(){
+		this.props.getMarkerOptions('marker');
+	}	
 
-			this.setState((state)=>{
+	componentDidUpdate(props,state){						
+		if(this.props.featureId !== state.featureId){					
+			this.setState(state=>{
 				return {
 					featureId:this.props.featureId,
 					features:this.props.features
 				}
 			})
-		}		
+		}	
 	}
 
 	handleSubmit(event){
 		event.preventDefault();
-		const {
-			nampro,
-			tglpro,
-			// keterangan
-		} = this.props.dt
-
-		const {
-			addProject,
-			dt
-		} = this.props
-
+		const { nampro,tglpro } = this.props.dt
+		const { addProject, dt } = this.props
 		const { features } = this.state;
 		
 		this.setState({
 			isSubmitted:true
 		})
 				
-		if(this.validasiNamaProject(String(nampro)) && this.validasiTanggalProject(String(tglpro))){
+		if(this.validasiNamaProject(nampro) && this.validasiTanggalProject(tglpro)){
 
 			// di koment dl smntr
 			// addProject({
@@ -138,6 +132,7 @@ class FormProject extends React.Component {
 			// 	properties:this.props.dt
 			// });
 
+			console.log('user is saving data!');
 			this.props.addProjectProperties({
 				features,
 				properties:this.props.dt
@@ -170,6 +165,7 @@ class FormProject extends React.Component {
 	validasiTanggalProject(tanggal_project){		
 		let isError = false;
 		let errorMsg = null;
+		console.log(tanggal_project);
 		if(isEmpty(tanggal_project)){
 			isError = true;
 			errorMsg = "Tanggal Project tidak boleh kosong"
@@ -207,23 +203,16 @@ class FormProject extends React.Component {
 
 	// onClick={(featureId && id) ? e=>this._handleImageToShow(e,index) : false}
 
+	// TAMPILKAN FILE YG SDH TERUPLOAD DI FORM
 	_renderFiles = () => {
 
-		const { 
-			upload, 
-			id 
-		} = this.props.dt;
-		
-		const { 
-			featureId 
-		} = this.state;
+		const { upload, id } = this.props.dt;		
+		const { featureId } = this.state;
 		
 		if(upload.length > 0){
 			return upload.map((item,index)=>{
-				return (
-					
-					<a 						
-						onClick={(featureId && id) ? e=>this._handleDialog({e,item,index}) : false}						 
+				return (					
+					<a onClick={(featureId && id) ? e=>this._handleDialog({e,item,index}) : false}						 
 						key={index} >
 						<img alt=""
 							style={{
@@ -236,14 +225,13 @@ class FormProject extends React.Component {
 					
 				);
 			})			
-		}
-		
+		}		
 		return (
 			<h4>tidak ada file upload</h4>
 		);
-
 	}
 
+	// TAMPILKAN FILE UPLOAD KE DIALOG BOX (View Image})
 	_handleDialog = ({ e,item,index }) => {
 		const n = [];
 		n.push({
@@ -267,13 +255,22 @@ class FormProject extends React.Component {
 	}
 
 	_renderMarkerDialog = () => {
-		const { markerOpen } = this.state
+		const { markerOpen } = this.state;
+		const { options, dt } = this.props
 		return (
 			<MarkerSelector 
-				handleMarker={this._handleMarker} 
-				markerOpen={markerOpen} />
+				handleMarker={this._handleMarker}
+				handleMarkerChange={this.handleMarkerChange} 
+				markerValue={dt.marker}
+				markerOpen={markerOpen}
+				options={options.marker} />
 		);
 	}
+
+	handleMarkerChange = value => {
+		return this.props.ubahMarkerProject(value);
+	}
+
 
 	// DIALOG BOX
 	_showImageOptions = e => {
@@ -352,18 +349,32 @@ class FormProject extends React.Component {
 		}
 	}
 
+	displaySelectedMarker = (value) => {
+			switch(value){
+				case 0:
+					return <MarkerIcon />;
+				case 1:
+					return <TaludIcon />;
+				default:
+					return <MarkerIcon />;
+			}				
+	}
+
+	handleProgressChange = (event,value) => {		
+		this.props.ubahProgressProject(value)
+	}	
+
 	render(){
 
-		const { 
-			featureId,			
-		} = this.state;
+		const { featureId } = this.state;		
 
 		const {
 			dt,
 			ubahNamaProject,
 			ubahTanggalProject,
 			ubahKeteranganProject,
-			classes
+			classes,
+			options
 		} = this.props;
 
 		return (
@@ -373,16 +384,10 @@ class FormProject extends React.Component {
 				{this._renderImgViewer()}
 				{this._showImageOptions()}
 				{this._renderMarkerDialog()}
-
-				
-				{/*{JSON.stringify(this.state.featureId)}
-				{JSON.stringify(this.state.features)}
-				{JSON.stringify(this.props.dt)}*/}
-
+							
 				<FormWrapper>
 					<FormInnerWrapper												
 						style={{
-							//display:'flex',
 							borderRadius:'0',
 							boxShadow:'none',
 							width:'100%',
@@ -420,12 +425,15 @@ class FormProject extends React.Component {
 								}
 							} />
 
+							{/*value = { this._getProjectDate().displayDate }*/}
 						<TextField 
 							InputProps={{ classes: { input: classes.input } }}
 							id="tglpro"
 							label="tanggal project"
 							type="date"							 
-							value = { this._getProjectDate().displayDate }
+							value={dt.tglpro}
+							error={!!this.state.error.tglpro}
+							helperText={this.state.error.tglpro}
 							disabled={featureId ? false: true}
 							margin="dense"
 							InputLabelProps={{
@@ -471,6 +479,8 @@ class FormProject extends React.Component {
 					      	paddingBottom:10
 					      }}>
 					      	<SliderProgress 
+					      		progressValue={this.props.dt.progress}
+					      		handleProgressChange={this.handleProgressChange}
 					      		disabled={ (featureId && dt.id) ? false : true } />
 					      </div>
 
@@ -534,18 +544,17 @@ class FormProject extends React.Component {
 										gutterBottom>
 										marker
 									</Typography>
+
 									<Tooltip 
 										title="marker" 
 										placement="left-start">
 											<Avatar 
-
 												className={classes.smallAvatar}
-												onClick={
-													e=>this._handleMarker(!this.state.markerOpen)
-												}>
-												<TaludIcon />
+												onClick={e=>this._handleMarker(!this.state.markerOpen)}>
+												{this.displaySelectedMarker(this.props.dt.marker)}												
 											</Avatar>
 									</Tooltip>
+
 								</div>								
 						</Grid>
 						
@@ -596,13 +605,15 @@ FormProject.propTypes = {
   ubahNamaProject: PropTypes.func,
   ubahTanggalProject: PropTypes.func,
   ubahKeteranganProject: PropTypes.func,
+  ubahMarkerProject: PropTypes.func,
   getProjectAttribute: PropTypes.func,
   addProject: PropTypes.func,
   handleSubmit: PropTypes.func
 }
 
 const mapStateToProps = createStructuredSelector({
-	dt:makeSelectFormProjectData()
+	dt:makeSelectFormProjectData(),
+	options:makeSelectOptions(),
 })
 
 function mapDispatchToProps(dispatch){
@@ -610,13 +621,15 @@ function mapDispatchToProps(dispatch){
 		ubahNamaProject: value=>dispatch(ubahNamaProjectAction(value)),
 		ubahTanggalProject: value=>dispatch(ubahTanggalProjectAction(value)),
 		ubahKeteranganProject: value=>dispatch(ubahKeteranganProjectAction(value)),
+		ubahMarkerProject: value=>dispatch(ubahMarkerProjectAction(value)),
+		ubahProgressProject: value=>dispatch(ubahProgressProjectAction(value)),
 		getProjectAttribute: featureId=>dispatch(getProjectAttributeAction(featureId)),
 		addProject: features=>dispatch(addProjectAction(features)),
 		uploadProject: file=>dispatch(uploadProjectAction(file)),
 		hapusProject: featureId => dispatch(hapusProjectAction(featureId)),
 		deleteUpload: filename => dispatch(deleteUploadAction(filename)),
 		addProjectProperties: features=>dispatch(addProjectPropertiesAction(features)),
-		getProjectProperties: featureId => dispatch(getProjectPropertiesAction(featureId))
+		getMarkerOptions: key => dispatch(getMarkerOptionsAction(key))		
 	}
 }
 

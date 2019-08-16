@@ -18,7 +18,8 @@ import {
 	replaceCoordinatesProjectAction,
 	insertProjectFeaturesAction,
 	addNewProjectAction,
-	loadProjectAction
+	loadProjectAction,
+	getProjectPropertiesAction,
 } from './action'
 
 // selector
@@ -84,10 +85,7 @@ class DrawProjectPage extends React.Component {
 				style={{					
 					position:'absolute',
 					top:200,
-					right:10,
-					// width:36 + 'px',
-					// height:36 + 'px',
-					// backgroundColor:'#EFE9E1'
+					right:10
 				}}>
 				<IconButton>
 					<LinearScale />
@@ -122,28 +120,28 @@ class DrawProjectPage extends React.Component {
 		// }
 	}
 
-	_onSelectedProject = data => {
-
+	/*_onSelectedProject = data => {
+		console.log('_onSelectedProject :', data);
 		if(data.features.length > 0){
 			
 			const currentProperties = data.features[0].properties;
 			const featureId = data.features[0].id;
+			// const featureId = currentProperties.featureId;
 			const features = data.features;
 
-			const markerLng = data.features[0].geometry.coordinates[0];
-			const markerLat = data.features[0].geometry.coordinates[1];
-			
+			// const markerLng = data.features[0].geometry.coordinates[0];
+			// const markerLat = data.features[0].geometry.coordinates[1];
+						
 			if(currentProperties.hasOwnProperty('nampro')){
-				// user memilih point yg sdh ada datanya
-				// console.log('kondisi 1')
 				this.setState(state=>{
 					return {
 						featureId,
 						features,
-						markerLng,
-						markerLat
+						// markerLng,
+						// markerLat
 					}
 				});
+				
 			}else{
 
 				// user mengklik point yang baru dibuat. setelah mengklik luar map
@@ -153,8 +151,8 @@ class DrawProjectPage extends React.Component {
 					return {
 						featureId,
 						features,
-						markerLng,
-						markerLat
+						// markerLng,
+						// markerLat
 					}
 				});
 
@@ -165,12 +163,12 @@ class DrawProjectPage extends React.Component {
 			this.setState(state=>{
 				return {
 					featureId:null,					
-					markerLng:null,
-					markerLat:null
+					// markerLng:null,
+					// markerLat:null
 				}
 			});
 		}		
-	}
+	}*/
 
 	_renderMarkerinNewPoint = () => {
 		const { markerLng, markerLat } = this.state;
@@ -200,32 +198,30 @@ class DrawProjectPage extends React.Component {
 		}
 	}
 
+	// ini yg dipake
 	_onSelectProject = data => {
-			
+			console.log(data);
 			if(data.features.length > 0){
-				console.log(data.features);
+
 				const currentProperties = data.features[0].properties;
-				// const featureId = data.features[0].id;
-				const featureId = currentProperties.featureId;
 				const features = data.features;
-				
+				let featureId = null;
 				if(currentProperties.hasOwnProperty('nampro')){
-					this.setState(state=>{
-						return {
-							featureId,
-							features						
-						}
-					});
-				}else{				
-					this.setState(state=>{
-						return {
-							featureId,
-							features						
-						}
-					});
+					// kondisi 1
+					featureId = currentProperties.featureId;
+				}else{
+					// kondisi 2
+					featureId = features[0].id;						
 				}
 
+				this.setState({
+					featureId,
+					features
+				});				
+				return this.props.getProjectProperties(featureId);				
+
 			}else{
+					console.log('user selected condition #3!');	
 					this.setState(state=>{
 						return {
 							featureId:null					
@@ -233,10 +229,6 @@ class DrawProjectPage extends React.Component {
 					});			
 			}
 	}
-
-	/*
-		onChange = { collection => this._updateCollection(collection) }
-	 */
 
 	 _onDrawCreate = data => {
 		// console.log('draw: ',data)
@@ -297,27 +289,25 @@ class DrawProjectPage extends React.Component {
 					type="line" 
 					source="river" 
 					paint={{ 
-						'line-color': '#3bb2d0',
-						'line-width': 3 }} />
+						'line-color': '#4ce0aa',
+						'line-width': 3,
+						'line-opacity':0.7
+					}} />
 
 				<FormProject 
 					featureId={this.state.featureId} 
 					features={this.state.features}
 					clearProjectForm={this.props.clearProjectForm} />
 
-					{/*
-						<FormProject2 />
-						onDrawSelectionChange = { data => this._onSelectedProject(data) }
-						
+					{/*						
+						onDrawSelectionChange = { data => this._onSelectedProject(data) }						
 						onDrawUpdate = { e => this._onDrawUpdate(e) }
 					*/}
 								
 				<Draw 
 					data = { this.props.projectData }
-
 					onDrawCreate = { e => this._onDrawCreate(e) }
-					onDrawSelectionChange={e=>this._onSelectProject(e)}
-					
+					onDrawSelectionChange={e=>this._onSelectProject(e)}					
 					displayControlsDefault={false}
 					lineStringControl={true}
 					trashControl={false}
@@ -360,7 +350,8 @@ function mapDispatchToProps(dispatch){
 		replaceCoordinatesProject: features => dispatch(replaceCoordinatesProjectAction(features)),
 		insertProjectFeatures: features => dispatch(insertProjectFeaturesAction(features)),
 		addNewProject: features=>dispatch(addNewProjectAction(features)),
-		loadProject: () => dispatch(loadProjectAction())
+		loadProject: () => dispatch(loadProjectAction()),
+		getProjectProperties: featureId => dispatch(getProjectPropertiesAction(featureId))
 	}
 }
 

@@ -34,6 +34,8 @@ import {
 	UBAH_NAMA_PROJECT_ACTION,
 	UBAH_TANGGAL_PROJECT_ACTION,
 	UBAH_KETERANGAN_PROJECT_ACTION,
+	UBAH_MARKER_PROJECT_ACTION,
+	UBAH_PROGRESS_PROJECT_ACTION,
 	GET_PROJECT_ACTION,
 	GET_PROJECT_SUCCESS_ACTION,
 	GET_PROJECT_FAILED_ACTION,
@@ -92,9 +94,28 @@ import {
 	GET_PROJECT_PROPERTIES_ERROR_ACTION,
 	LOAD_PROJECT_ACTION,
 	LOAD_PROJECT_SUCCESS_ACTION,
-	LOAD_PROJECT_ERROR_ACTION	
+	LOAD_PROJECT_ERROR_ACTION,
+	GET_MARKER_OPTIONS_ACTION,
+	GET_MARKER_OPTIONS_SUCCESS_ACTION	
 } from './constants';
 
+
+export function getMarkerOptionsAction(key){
+	return {
+		type:GET_MARKER_OPTIONS_ACTION,
+		payload:key
+	}
+}
+
+export function getMarkerOptionsSuccessAction(key,options){
+	return {
+		type:GET_MARKER_OPTIONS_SUCCESS_ACTION,
+		payload:{
+			key,
+			options
+		}
+	}
+}
 
 export function replaceCoordinatesProjectAction(payload){
 	return {
@@ -232,6 +253,21 @@ export function ubahKeteranganProjectAction(value){
 		value
 	}
 }
+
+export function ubahMarkerProjectAction(value){
+	return {
+		type:UBAH_MARKER_PROJECT_ACTION,
+		value
+	}
+}
+
+export function ubahProgressProjectAction(value){
+	return {
+		type:UBAH_PROGRESS_PROJECT_ACTION,
+		value
+	}
+}
+
 
 export function getProjectAttributeAction(payload){
 	return {
