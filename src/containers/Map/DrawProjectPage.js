@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MapGL, { Source, Layer, Marker, NavigationControl, FullscreenControl } from '@urbica/react-map-gl';
+import MapGL, { Source, Layer, Marker, NavigationControl, FullscreenControl, MapContext } from '@urbica/react-map-gl';
 import Draw from '@urbica/react-map-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import { compose } from 'redux';
@@ -37,13 +37,17 @@ import {
 // component
 import LoadingDialog from '../../components/LoadingDialog';
 import FormProject from './FormLayer/FormProject';
+import FormCariKoordinat from './component/FormCariKoordinat';
 // import FormProject2 from './FormLayer/FormProject2';
 import { 
 	RoomSharp,
-	LinearScale } from '@material-ui/icons';
+	LinearScale,
+	LocationSearching
+	 } from '@material-ui/icons';
 
 import Grid from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class DrawProjectPage extends React.Component {
 	
@@ -55,13 +59,21 @@ class DrawProjectPage extends React.Component {
 			featureId:null,
 			features:[],
 			markerLng:null,
-			markerLat:null	
+			markerLat:null,
+			SearchPositionControlIsOpen:false,
+			// FormPositionControlButtonIsSubmitted:false,
+			LongPos:"",//119.536600,
+			LatPos:"",//-4.875469	
 		}
 	}
 
 	componentDidMount(){
 		this.props.getRiver();
 		this.props.loadProject();
+		this.setState({
+			LongPos:"",
+			LatPos:""
+		})
 		// this.props.getProject();
 	}
 
@@ -75,6 +87,7 @@ class DrawProjectPage extends React.Component {
 		});
 	}
 
+	// DRAW OPTIONS CONTROL 
 	renderDrawOptions = () => {
 		return (
 			<Grid 
@@ -94,6 +107,69 @@ class DrawProjectPage extends React.Component {
 		);
 	}
 
+	SearchPositionControl = () => {
+		return (			
+			<Grid 
+				container 
+				wrap="nowrap"
+				justify="center" 
+				alignItems="center"
+				style={{
+					display:'flex',
+					position:'absolute',
+					top:150,
+					right:10,					
+				}}>
+				
+					<IconButton 
+						disableRipple
+						size="small" 
+						style={{ fontSize: 12 }}
+						onClick={()=>this.handleShowForm(!this.state.SearchPositionControlIsOpen)}>
+						<LocationSearching />
+					</IconButton>
+				
+			</Grid>
+		);
+	}
+
+	handleShowForm = value => {
+		this.setState({
+			SearchPositionControlIsOpen:value,
+			LongPos:"",
+			LatPos:""
+		})
+	}
+
+	handleTextField = (name,value) => {		
+		this.setState({
+			[name]:value
+		})
+	}
+
+	handleSearchSubmit = () => {
+		this.setState({
+			SearchPositionControlIsOpen:false,
+			// FormPositionControlButtonIsSubmitted:true
+		});
+	}
+	
+	renderSearchPositionForm = () => {
+		return (
+			<React.Fragment>
+				<FormCariKoordinat 
+					isOpen={this.state.SearchPositionControlIsOpen}
+					LongPos={this.state.LongPos}
+					LatPos={this.state.LatPos}
+					handleShowForm={this.handleShowForm}
+					handleTextField={this.handleTextField}
+					handleSearchSubmit={this.handleSearchSubmit} />
+			</React.Fragment>
+		);
+	}
+
+
+	// MAP CONTROL (ZOOM,FULLSCREEN)
 	renderNavigationControl = () => {
 		return (
 			<React.Fragment>
@@ -191,6 +267,7 @@ class DrawProjectPage extends React.Component {
 		}
 	}
 
+	// UBAH LOKASI TITIK PROJECT
 	_onDrawUpdate = data => {
 		if(data.action === 'move'){
 			console.log(data.features);
@@ -221,12 +298,12 @@ class DrawProjectPage extends React.Component {
 				return this.props.getProjectProperties(featureId);				
 
 			}else{
-					console.log('user selected condition #3!');	
-					this.setState(state=>{
-						return {
-							featureId:null					
-						}
-					});			
+					// console.log('user selected condition #3!');	
+					// this.setState(state=>{
+					// 	return {
+					// 		featureId:null					
+					// 	}
+					// });			
 			}
 	}
 
@@ -265,58 +342,79 @@ class DrawProjectPage extends React.Component {
 			viewport, 
 			mapStyle } = this.props;
 
+		const {
+			LongPos,
+			LatPos
+		} = this.state;
+
 		return (
 			<React.Fragment>
-			<LoadingDialog isLoading = { isLoading } />
-			<MapGL 
-				{...viewport} 					
-				accessToken = { mapConfig.token }
-				mapStyle = { mapStyle }
-				style = { { width: '100vw', height: '90vh' } }					
-				onViewportChange = { viewport => this.handleViewportChange(viewport) }>
+				<LoadingDialog isLoading = { isLoading } />
+				<MapGL 
+					{...viewport} 					
+					accessToken = { mapConfig.token }
+					mapStyle = { mapStyle }
+					style = { { width: '100vw', height: '90vh' } }					
+					onViewportChange = { viewport => this.handleViewportChange(viewport) }
+					viewportChangeMethod={'flyTo'}>
 
-				{this.renderNavigationControl()}
-				{this._renderMarkerinNewPoint()}
-				{this.renderDrawOptions()}
-				
-				<Source 
-					id="river" 
-					type="geojson" 
-					data={this.props.riverData} />
+					{this.renderNavigationControl()}
+					{this._renderMarkerinNewPoint()}
+					{this.renderDrawOptions()}
+					{this.SearchPositionControl()}
+					{this.renderSearchPositionForm()}					
 
-				<Layer 
-					id="river" 
-					type="line" 
-					source="river" 
-					paint={{ 
-						'line-color': '#4ce0aa',
-						'line-width': 3,
-						'line-opacity':0.7
-					}} />
+					{
+						(
+							this.state.SearchPositionControlIsOpen && 							
+							this.state.LongPos && this.state.LatPos ) && (						
+									<MapContext.Consumer>{
+										map=>{								
+											map.flyTo({center: [LongPos, LatPos], zoom: 13});
+											return;
+										}}
+									</MapContext.Consumer>
+						)
+					}
+					
+					<Source 
+						id="river" 
+						type="geojson" 
+						data={this.props.riverData} />
 
-				<FormProject 
-					featureId={this.state.featureId} 
-					features={this.state.features}
-					clearProjectForm={this.props.clearProjectForm} />
+					<Layer 
+						id="river" 
+						type="line" 
+						source="river" 
+						paint={{ 
+							'line-color': '#4ce0aa',
+							'line-width': 3,
+							'line-opacity':0.7
+						}} />
 
-					{/*						
-						onDrawSelectionChange = { data => this._onSelectedProject(data) }						
-						onDrawUpdate = { e => this._onDrawUpdate(e) }
-					*/}
-								
-				<Draw 
-					data = { this.props.projectData }
-					onDrawCreate = { e => this._onDrawCreate(e) }
-					onDrawSelectionChange={e=>this._onSelectProject(e)}					
-					displayControlsDefault={false}
-					lineStringControl={true}
-					trashControl={false}
-					polygonControl={false}
-					combineFeaturesControl={false}
-					uncombineFeaturesControl={false} 
-					pointControl={true} />
+					<FormProject 
+						featureId={this.state.featureId} 
+						features={this.state.features}
+						clearProjectForm={this.props.clearProjectForm} />
 
-			</MapGL>
+						{/*						
+							onDrawSelectionChange = { data => this._onSelectedProject(data) }						
+							onDrawUpdate = { e => this._onDrawUpdate(e) }
+						*/}
+									
+					<Draw 
+						data = { this.props.projectData }
+						onDrawCreate = { e => this._onDrawCreate(e) }
+						onDrawSelectionChange={e=>this._onSelectProject(e)}					
+						displayControlsDefault={false}
+						lineStringControl={true}
+						trashControl={false}
+						polygonControl={false}
+						combineFeaturesControl={false}
+						uncombineFeaturesControl={false} 
+						pointControl={true} />
+
+				</MapGL>
 			</React.Fragment>
 		);
 	}
