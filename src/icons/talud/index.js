@@ -10,7 +10,7 @@ function TaludIcon(props){
 	return (
 		<SvgIcon {...props}
 			viewBox="0 0 225.000000 225.000000"
-			fontSize="48px">
+			fontSize="inherit">
 				<g transform="translate(0.000000,225.000000) scale(0.100000,-0.100000)">
 					<PathD d="M1514 2183 c-222 -107 -1468 -734 -1490 -750 -18 -13 -19 -34 -22
 -562 -3 -383 0 -555 7 -569 7 -13 121 -76 295 -163 l284 -142 133 63 c185 86

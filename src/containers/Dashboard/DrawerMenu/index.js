@@ -102,7 +102,7 @@ class Drawer extends React.Component{
 			{
 				icon:DashboardIcon,
 				label:'Dashboard'
-			},
+			},			
 			{
 				icon:SettingsIcon,
 				label:'Pengaturan'
@@ -122,7 +122,11 @@ class Drawer extends React.Component{
 			},{
 				icon:CloudUploadIcon,
 				label:'Upload Shape'
-			}
+			},
+			{
+				icon:DashboardIcon,
+				label:'Summmary'
+			},
 		]
 	}
 
@@ -167,6 +171,11 @@ class Drawer extends React.Component{
 		if(value===6){
 			this.toggleDrawer();
 			return history.replace('/upload/shape');	
+		}
+
+		if(value===7){
+			this.toggleDrawer();
+			return history.replace('/summary');	
 		}
 
 		return null;

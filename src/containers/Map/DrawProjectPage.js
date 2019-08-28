@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MapGL, { Source, Layer, Marker, NavigationControl, FullscreenControl, MapContext } from '@urbica/react-map-gl';
+import MapGL, { Source, Layer, Marker, NavigationControl, FullscreenControl, MapContext, Image } from '@urbica/react-map-gl';
 import Draw from '@urbica/react-map-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import { compose } from 'redux';
@@ -41,21 +41,26 @@ import FormCariKoordinat from './component/FormCariKoordinat';
 // import FormProject2 from './FormLayer/FormProject2';
 import { 
 	RoomSharp,
-	LinearScale,
+	
 	LocationSearching
 	 } from '@material-ui/icons';
 
 import Grid from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+
+// import * as turf from '@turf/turf';
+// import imageMarker0 from '../../icons/greenmarker256.png';
+// import imageMarker1 from '../../icons/greenmarker256.png';
+
+import TaludIcon from '../../icons/talud';
+import Avatar from '@material-ui/core/Avatar';
 
 class DrawProjectPage extends React.Component {
 	
 	constructor(props){
 		super(props);
 		this.state = {
-			project:{}, // this.props.projectData
-			// river:{}, // this.props.riverData
+			// project:{}, // this.props.projectData
 			featureId:null,
 			features:[],
 			markerLng:null,
@@ -85,26 +90,6 @@ class DrawProjectPage extends React.Component {
 			longitude,
 			zoom
 		});
-	}
-
-	// DRAW OPTIONS CONTROL 
-	renderDrawOptions = () => {
-		return (
-			<Grid 
-				container 
-				wrap="nowrap" 
-				justify="center" 
-				alignItems="center" 
-				style={{					
-					position:'absolute',
-					top:200,
-					right:10
-				}}>
-				<IconButton>
-					<LinearScale />
-				</IconButton>
-			</Grid>
-		);
 	}
 
 	SearchPositionControl = () => {
@@ -267,6 +252,45 @@ class DrawProjectPage extends React.Component {
 		}
 	}
 
+	displayMarkerForProject = (feature,index) => {
+		let { type, coordinates } = feature.geometry;
+		let { properties } = feature;
+		// console.log(properties);
+		return (						
+			<Marker
+				key={`marker-${index}`}
+				longitude={type === 'LineString' ? coordinates[0][0] : coordinates[0]}
+				latitude={type === 'LineString' ? coordinates[0][1] : coordinates[1]}
+				offset={[0,-25]}>
+				{ properties.idMarker === 0 ? 
+					<Avatar 
+						style={{ 
+							margin: 10,
+							width:24,
+							height:24,
+							backgroundColor:'#6BD675' 
+						}}>
+							<RoomSharp 
+								style={{
+									color:'white',
+									fontWeight:'bold',
+									fontSize:24							
+								}} />
+						</Avatar> : 
+						<Avatar style={{ 
+							margin: 10,
+							width:24,
+							height:24,
+							backgroundColor:'#6BD675' 
+						}}>
+							<TaludIcon />
+						</Avatar>
+				}				
+			</Marker>			
+		);
+
+	}
+
 	// UBAH LOKASI TITIK PROJECT
 	_onDrawUpdate = data => {
 		if(data.action === 'move'){
@@ -277,7 +301,7 @@ class DrawProjectPage extends React.Component {
 
 	// ini yg dipake
 	_onSelectProject = data => {
-			console.log(data);
+			
 			if(data.features.length > 0){
 
 				const currentProperties = data.features[0].properties;
@@ -296,8 +320,9 @@ class DrawProjectPage extends React.Component {
 					features
 				});				
 				return this.props.getProjectProperties(featureId);				
-
+				console.log('_onSelectProject : kondisi 1');
 			}else{
+				console.log('_onSelectProject : kondisi 2');
 					// console.log('user selected condition #3!');	
 					// this.setState(state=>{
 					// 	return {
@@ -340,7 +365,10 @@ class DrawProjectPage extends React.Component {
 			isLoading, 
 			mapConfig, 
 			viewport, 
-			mapStyle } = this.props;
+			mapStyle,
+			projectData } = this.props;
+		
+		const { features } = projectData;
 
 		const {
 			LongPos,
@@ -360,9 +388,10 @@ class DrawProjectPage extends React.Component {
 
 					{this.renderNavigationControl()}
 					{this._renderMarkerinNewPoint()}
-					{this.renderDrawOptions()}
+					
 					{this.SearchPositionControl()}
-					{this.renderSearchPositionForm()}					
+					{this.renderSearchPositionForm()}
+					{features.map(this.displayMarkerForProject)}					
 
 					{
 						(
@@ -382,15 +411,53 @@ class DrawProjectPage extends React.Component {
 						type="geojson" 
 						data={this.props.riverData} />
 
+					<Source 
+						id="marker_source" 
+						type="geojson" 
+						data={this.props.projectData} />
+
 					<Layer 
 						id="river" 
 						type="line" 
 						source="river" 
 						paint={{ 
-							'line-color': '#4ce0aa',
-							'line-width': 3,
-							'line-opacity':0.7
+							'line-color': '#0497db',
+							'line-width': 3,							
 						}} />
+
+					<Layer 
+						id="marker_image"
+						type="symbol"
+						source="marker_source"
+						layout={{							
+							'text-field':'{nampro}',
+							'text-size': ['step', ['get', 'sizerank'], 18, 9, 12],
+							'text-font': ['DIN Offc Pro Medium','Arial Unicode MS Regular'],							
+							'text-offset': [0, 0.6],
+							'text-anchor': 'top',							
+						}}
+						paint={{
+                'text-color': 'hsl(0, 0%, 37%)',
+                'text-halo-color': 'hsl(0, 0%, 100%)',
+                'text-halo-width': 1
+            }} />
+
+           <Layer 
+           	id="river_text"
+           	type="symbol"
+           	source="river"
+           	layout={{
+           		'text-field':'{nmsung}',
+           		'text-size': ['step', ['get', 'sizerank'], 18, 9, 12],
+           		'text-font': ['DIN Offc Pro Medium','Arial Unicode MS Regular'],							
+							'text-offset': [0, 0.6],
+							'text-anchor': 'top',
+           	}}
+           	paint={{
+                'text-color': 'hsl(256, 60%, 19%)',
+                'text-halo-color': 'hsl(0, 0%, 100%)',
+                'text-halo-width': 1                
+            }} />
 
 					<FormProject 
 						featureId={this.state.featureId} 

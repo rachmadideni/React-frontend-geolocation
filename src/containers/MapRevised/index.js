@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { fromJS } from 'immutable';
-
 import MapGL, { Marker, Popup, FlyToInterpolator, NavigationControl } from 'react-map-gl';
+
+// COMPONENTS
 import Pin from './component/Pin';
 import PopupContent from './component/PopupContent';
 import List from './component/List';
@@ -32,13 +33,9 @@ import {
 	changeViewportAction
 } from './action';
 
-import {
-	changeDrawerStateAction
-} from '../Map/action';
+import { changeDrawerStateAction } from 'containers/Map/action';
 
-import { 
-	makeSelectDrawerState 
-} from '../Map/selectors';
+import { makeSelectDrawerState } from 'containers/Map/selectors';
 
 // style.json
 import { 
@@ -126,11 +123,11 @@ class MapRevised extends Component {
 	}
 
 	_load_data_sungai = data => {
-		const mapStyle = defaultMapStyle.setIn(['sources','incomeByState'], fromJS({type:'geojson',data}))
-		.set('layers', defaultMapStyle.get('layers').push(dataLayer));					
+		const mapStyle = defaultMapStyle.setIn(['sources', 'incomeByState'], fromJS({ type: 'geojson', data }))
+		.set('layers', defaultMapStyle.get('layers').push(dataLayer));
 		this.setState({
 			mapStyle:mapStyle
-		})
+		});
 	}
 
 	// _load_label_sungai = data => {
@@ -267,11 +264,6 @@ class MapRevised extends Component {
 	}*/
 
 	_goToViewport = (longitude,latitude) => {
-		// console.log('longitude:',longitude);
-		// console.log('latitude:',latitude);
-		//{longitude, latitude}
-		// console.log('Longitude:',longitude);
-		// console.log('latitude:',latitude);
     this.handleViewportChange({
       longitude,
       latitude,
@@ -281,8 +273,7 @@ class MapRevised extends Component {
     });
   };
 
-  _renderNavigationControl = () => {
-  	// const { viewport } = this.state;
+  _renderNavigationControl = () => {  	
   	return (
 	  	<div 
 	  		className="nav" 
@@ -298,13 +289,10 @@ class MapRevised extends Component {
   }
 
 	render(){
-//ref={(reactMap) => this.reactMap = reactMap}
 		const { mapStyle } = this.state;
 		const { viewport } = this.state;
 		const { accessToken } = this.props;
 		return (
-			
-
 				<MapGL
 					ref={this.mapRef}
 					{...viewport}
@@ -314,6 +302,7 @@ class MapRevised extends Component {
 					mapStyle={mapStyle}
 					onViewportChange = { viewport => this.handleViewportChange(viewport) }
 					onHover={this._onHover}>					
+					
 					{this._renderProyek()}
 					{this._renderPopup()}
 					{this._renderTooltip()}

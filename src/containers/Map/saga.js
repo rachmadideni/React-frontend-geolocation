@@ -599,8 +599,7 @@ export function* getMarkerOptions(action){
 		const response = yield call(request,endpoint, requestOpt);
 		if(response.status === 200){
 			const data = response.data;
-			const options = mapOptionsResponseToDisplay(optionKey,data);
-			console.log(options);
+			const options = mapOptionsResponseToDisplay(optionKey,data);			
 			yield put(getMarkerOptionsSuccessAction(optionKey, options));		
 		}
 	}catch(err){
@@ -691,7 +690,6 @@ export function* getProjectProperties(action){
 	try{
 		
 		const response = yield call(request, endpoint, requestOpt);
-		// console.log(response.data.length);
 		
 		// make sure we have a data		
 		if (response.data.length > 0) {			
@@ -704,7 +702,7 @@ export function* getProjectProperties(action){
 					}
 			});
 
-			console.log('newObj:',newObj);
+			// console.log('newObj:',newObj);
 
 			const uploadedFiles = yield getUploadFiles(featureId);
 			const id = newObj[0].value;

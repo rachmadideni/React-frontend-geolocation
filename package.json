@@ -49,9 +49,9 @@
     "wkx": "^0.4.8"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "cra-alias start",
+    "build": "cra-alias build",
+    "test": "cra-alias test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -68,5 +68,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cra-alias": "^4.13.14"
   }
 }

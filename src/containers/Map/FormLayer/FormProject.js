@@ -108,7 +108,8 @@ class FormProject extends React.Component {
 			this.setState(state=>{
 				return {
 					featureId:this.props.featureId,
-					features:this.props.features
+					features:this.props.features,
+					files:null
 				}
 			})
 		}	
@@ -315,7 +316,11 @@ class FormProject extends React.Component {
 	_deleteImage = (e,index) => {
 		e.preventDefault();
 		const { imageList } = this.state;
-		this.props.deleteUpload(imageList[0].filename); 
+		this.props.deleteUpload(imageList[0].filename);
+		this.setState({
+			dialogOpen:false
+		})
+
 	}
 
 	_closeImageViewer = () => {

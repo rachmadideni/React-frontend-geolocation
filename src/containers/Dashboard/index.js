@@ -15,19 +15,20 @@ import Drawer from '@material-ui/core/Drawer';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+// PAGES
+import MapRevised from 'containers/MapRevised'; // dashboard
+import MapSummary from 'containers/MapSummary'; // summary
+import MapDraw from 'containers/Map';
+import DownloadPage from 'containers/DownloadPage'
+import UploadShapePage from 'containers/UploadShapePage';
+
+import { makeSelectDrawerState } from 'containers/Map/selectors';
+import { changeDrawerStateAction } from 'containers/Map/action';
+
+import LogoPU from 'icons/logo_pu';
+
 // COMPONENT
 import DrawerMenu from './DrawerMenu';
-
-// PAGES
-import MapUtama from '../MapRevised'
-import MapDraw from '../Map';
-import DownloadPage from '../DownloadPage'
-import UploadShapePage from '../UploadShapePage';
-
-import { makeSelectDrawerState } from '../Map/selectors';
-import { changeDrawerStateAction } from '../Map/action';
-
-import LogoPU from '../../icons/logo_pu';
 
 class Dashboard extends React.Component {
 
@@ -88,16 +89,14 @@ class Dashboard extends React.Component {
 								<Typography 
 									variant="body1" 
 									color="inherit" 
+									gutterBottom
 									style={{ 
 										flexGrow: 1,
 										fontSize:18,
 										paddingLeft:10 
 									}}>{'SIG Dinas Kabupaten Pangkep'}
 								</Typography>
-
-							{/*<IconButton disableRipple>
-								<AccountIcon fontSize="small" style={{ color:'white' }} />
-							</IconButton>*/}
+					
 							</Grid>
 						</Toolbar>
 
@@ -131,7 +130,14 @@ class Dashboard extends React.Component {
 						<Route 
 							exact 
 							path="/dashboard" 
-							render = {() => <MapUtama history = { history } /> } />
+							render = {() => <MapRevised history = { history } /> } />
+
+						<Route 
+							exact 
+							path="/summary"
+							render = {
+								()=> <MapSummary history={history} />
+							} />
 
 						<Route 
 							exact 
