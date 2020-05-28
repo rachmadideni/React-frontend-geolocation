@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 // import PropTypes from 'prop-types';
-import { ReactReduxContext } from 'react-redux';
-import hoistNonReactStatics from 'hoist-non-react-statics';
+import { ReactReduxContext } from 'react-redux'
+import hoistNonReactStatics from 'hoist-non-react-statics'
 
-import getInjectors from './sagaInjectors';
+import getInjectors from './sagaInjectors'
 
 /**
  * Dynamically injects a saga, passes component's props as saga arguments
@@ -16,34 +16,34 @@ import getInjectors from './sagaInjectors';
  *   - constants.ONCE_TILL_UNMOUNT—behaves like 'RESTART_ON_REMOUNT' but never runs it again.
  *
  */
-export default ({ key, saga, mode }) => WrappedComponent => {
+export default ({ key, saga, mode }) => (WrappedComponent) => {
   class InjectSaga extends React.Component {
-    static WrappedComponent = WrappedComponent;
+    static WrappedComponent = WrappedComponent
 
-    static contextType = ReactReduxContext;
+    static contextType = ReactReduxContext
 
-    static displayName = `withSaga(${WrappedComponent.displayName ||
-      WrappedComponent.name ||
-      'Component'})`;
+    static displayName = `withSaga(${
+      WrappedComponent.displayName || WrappedComponent.name || 'Component'
+    })`
 
     componentWillMount() {
-      const { injectSaga } = this.injectors;
+      const { injectSaga } = this.injectors
 
-      injectSaga(key, { saga, mode }, this.props);
+      injectSaga(key, { saga, mode }, this.props)
     }
 
     componentWillUnmount() {
-      const { ejectSaga } = this.injectors;
+      const { ejectSaga } = this.injectors
 
-      ejectSaga(key);
+      ejectSaga(key)
     }
 
-    injectors = getInjectors(this.context.store);
+    injectors = getInjectors(this.context.store)
 
     render() {
-      return <WrappedComponent {...this.props} />;
+      return <WrappedComponent {...this.props} />
     }
   }
 
-  return hoistNonReactStatics(InjectSaga, WrappedComponent);
-};
+  return hoistNonReactStatics(InjectSaga, WrappedComponent)
+}

@@ -1,14 +1,14 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from 'react'
 // import PropTypes from 'prop-types';
 
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom'
 
-import DrawRiverPage from './DrawRiverPage';
-import DrawProjectPage from './DrawProjectPage'; // disable sementara
+import DrawRiverPage from './DrawRiverPage'
+import DrawProjectPage from './DrawProjectPage' // disable sementara
 // import DrawProjectPage from './ProjectPage';
-import DrawRiverShapePage from './DrawRiverShapePage';
-import DownloadPage from '../DownloadPage';
-import UploadShapePage from '../UploadShapePage';
+import DrawRiverShapePage from './DrawRiverShapePage'
+import DownloadPage from '../DownloadPage'
+import UploadShapePage from '../UploadShapePage'
 
 /*import MapGL, { 
 	NavigationControl, 
@@ -64,8 +64,7 @@ import LoadingDialog from '../../components/LoadingDialog';*/
 // import SectionContainer from './SectionContainer';
 
 class MapContainer extends React.Component {
-
-		/*componentDidMount(){
+  /*componentDidMount(){
 			this.props.getRiver();
 			this.props.getProject();			    					
 		}
@@ -127,9 +126,8 @@ class MapContainer extends React.Component {
 			}
 		}*/
 
-	render(){
-		
-		/*const { 
+  render() {
+    /*const { 
 			mapConfig,
 			viewport,
 			mapStyle,
@@ -141,50 +139,43 @@ class MapContainer extends React.Component {
 			// tabValue,
 		} = this.props;*/
 
-		return (
-			<Fragment>
-				<Switch>
-					
-					<Route 
-					exact
-					path="/draw/riverAtribut" 
-					render={routeProps => (
-	          	<DrawRiverPage {...routeProps} />
-	        )} />
+    return (
+      <Fragment>
+        <Switch>
+          <Route
+            exact
+            path="/draw/riverAtribut"
+            render={(routeProps) => <DrawRiverPage {...routeProps} />}
+          />
 
-	        <Route 
-						exact
-						path="/draw/riverShape" 
-						render={routeProps => (
-		          	<DrawRiverShapePage {...routeProps} />
-		        )} />
+          <Route
+            exact
+            path="/draw/riverShape"
+            render={(routeProps) => <DrawRiverShapePage {...routeProps} />}
+          />
 
-	        <Route 
-	        	exact 
-	        	path="/draw/project" 
-						render={routeProps => (
-		          	<DrawProjectPage {...routeProps} />
-		        )} />
+          <Route
+            exact
+            path="/draw/project"
+            render={(routeProps) => <DrawProjectPage {...routeProps} />}
+          />
 
-		      <Route 
-	        	exact 
-	        	path="/download" 
-						render={routeProps => (
-		          	<DownloadPage {...routeProps} />
-		        )} />
+          <Route
+            exact
+            path="/download"
+            render={(routeProps) => <DownloadPage {...routeProps} />}
+          />
 
-		      <Route 
-	        	exact 
-	        	path="/upload/shape" 
-						render={routeProps => (
-		          	<UploadShapePage {...routeProps} />
-		        )} />
+          <Route
+            exact
+            path="/upload/shape"
+            render={(routeProps) => <UploadShapePage {...routeProps} />}
+          />
+        </Switch>
+        {/*<LoadingDialog 
+					isLoading={isLoading} />*/}
 
-				</Switch>
-				{/*<LoadingDialog 
-					isLoading={isLoading} />*/}			
-				
-				{/*<MapGL
+        {/*<MapGL
 					ref = { (myMap) => { this.myMap = myMap; } } 					
 					accessToken = { mapConfig.token } 
 					latitude = { viewport.latitude } 
@@ -197,25 +188,24 @@ class MapContainer extends React.Component {
 					}
 					onLoad = {e=>this._renderDrawControlType(e)} >*/}
 
-										
-					{/*						
+        {/*						
 						layerVisibility.project && 
 						<ProjectMark 
 							data = { geodataProject } riverData = { this.props.geodata } />
 					*/}
-					
-					{/*
+
+        {/*
 						// render river hanya jika features punya isi
 						// jike river visible = true dan data river ada   
 						(layerVisibility.sungai && geodata.features.length > 0) &&
 						<RiverMap 
 							data={this.props.geodata} 
 							fetchRiver={this.props.getRiver} />												
-					*/}					
-				{/*</MapGL>*/}								
-			</Fragment>
-		);
-	}
+					*/}
+        {/*</MapGL>*/}
+      </Fragment>
+    )
+  }
 }
 
 /*MapContainer.propTypes = {
@@ -274,4 +264,4 @@ export default compose(
 	withSaga,
 	withConnect
 )(MapContainer);*/
-export default MapContainer;
+export default MapContainer

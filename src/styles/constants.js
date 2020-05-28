@@ -6,11 +6,11 @@
 // }
 
 export const color = {
-	primary:'#354577',
-	secondary:'#F8C427',
-	success:'#50d329',
-	primaryTextColor:'#ffffff',
-	secondaryTextColor:'#ffffff',
-	light:'#f2f2f2',
-	danger:'#d12525'
+  primary: '#354577',
+  secondary: '#F8C427',
+  success: '#50d329',
+  primaryTextColor: '#ffffff',
+  secondaryTextColor: '#ffffff',
+  light: '#f2f2f2',
+  danger: '#d12525',
 }

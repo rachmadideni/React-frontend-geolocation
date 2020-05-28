@@ -1,522 +1,394 @@
-import React from 'react';
-// import styled from 'styled-components';
-import Grid from '@material-ui/core/Card';
-// import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-// import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
-import Slide from '@material-ui/core/Slide';
+import React from 'react'
 
-// import { color } from '../../../styles/constants'
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
+import Grid from '@material-ui/core/Card'
 
-import { 
-	getOptionsAction, 
-	pilihJenisSungaiAction,
-	ubahNamaSungaiAction,
-	ubahJenisSungaiAction,
-	ubahKecamatanAction,
-	ubahKeteranganAction,
-	getRiverAttributeAction,
-	addRiverAction,
-	hapusSungaiAction,
-	getRiverAction,
-	updateRiverPropertyAction
-} from '../../Map/action';
+import TextField from '@material-ui/core/TextField'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormLabel from '@material-ui/core/FormLabel'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
 
-import { 
-	makeSelectOptions,
-	makeSelectJenisSungai,
-	makeSelectFormRiverData } from '../../Map/selectors';
+import MenuItem from '@material-ui/core/MenuItem'
+import Slide from '@material-ui/core/Slide'
 
-import isEmpty from 'validator/lib/isEmpty';
 
-import { 
-	Wrapper,
-	FormWrapper,
-	FormInnerWrapper,
-	FormHeader,
-	ActionButton } from '../../../components/Form';
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
 
-// const Wrapper = styled(Grid)`
-// 	&& {
-// 		width:30vw;
-// 		padding:0;
-// 		position:absolute;
-// 		top:20px;
-// 		left:20px;
-// 		padding-top:15px;
-// 		padding-bottom:15px;
-// 		padding-left:28px;
-// 		padding-right:28px;
-// 	}
-// `
+import {
+  getOptionsAction,
+  pilihJenisSungaiAction,
+  ubahNamaSungaiAction,
+  ubahJenisSungaiAction,
+  ubahKecamatanAction,
+  ubahKeteranganAction,
+  getRiverAttributeAction,
+  addRiverAction,
+  hapusSungaiAction,
+  getRiverAction,
+  updateRiverPropertyAction,
+} from '../../Map/action'
 
-// const FormWrapper = styled(Grid)`
-// 	&& {
-// 		width:100%;		
-// 		border-radius:0;
-// 		box-shadow:none;
-// 	}
-// `
+import {
+  makeSelectOptions,
+  makeSelectJenisSungai,
+  makeSelectFormRiverData,
+} from '../../Map/selectors'
 
-// const ActionButton = styled(Button).attrs({
-// 	classes:{ root:'root',disabled:'.disabled',label:'label' }
-// })`
-// 	.label {
-// 		text-transform:capitalize;
-// 	}
-// 	&&{
-// 		color:white;
-// 		background-color:${props=>props.success ? color.success : color.danger};
-// 		box-shadow:none;
-// 		margin-bottom:5px;
-// 		margin-right:5px;
-// 		'&::hover': {
-// 			background-color:'orange'
-// 		}
-// 	}
-// `
+import isEmpty from 'validator/lib/isEmpty'
 
-// const HeaderStyled = styled(Grid)`
-// 	width:60%;
-// 	border-radius:0;
-// 	box-shadow:none;
-// `
+import {
+  Wrapper,
+  FormWrapper,
+  FormInnerWrapper,
+  FormHeader,
+  ActionButton,
+} from '../../../components/Form'
 
-// function FormHeader(props){
-// 	return (
-// 		<HeaderStyled>
-// 			<Typography 
-// 				align="left" 
-// 				color="secondary" 
-// 				variant="subtitle2">
-// 					{props.judul}
-// 			</Typography>
-// 		</HeaderStyled>
-// 	)
-// }
 
-// const FormInnerWrapper = styled(Grid)`
-// 	display:flex;
-// 	width:100%;
-// 	border-radius:0;
-// 	box-shadow:none;
-// `
 
-class FormRiverAttributes extends React.Component{
-	constructor(props){
-		super(props);
-		this.state = {			
-			featureId:this.props.featureId,
-			features:[],
-			idsung:null,			
-			sungai:'',
-			kecamatan:null,
-			jenis_sungai:"1",
-			keterangan:'',
-			error:{
-				kecamatan:null,
-				sungai:null,
-				jenis_sungai:null
-			},
-			isSubmitted:false,
-		}
+class FormRiverAttributes extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      featureId: this.props.featureId,
+      features: [],
+      idsung: null,
+      sungai: '',
+      kecamatan: null,
+      jenis_sungai: '1',
+      keterangan: '',
+      error: {
+        kecamatan: null,
+        sungai: null,
+        jenis_sungai: null,
+      },
+      isSubmitted: false,
+    }
 
-		this.handleSubmit = this.handleSubmit.bind(this); 
-	}
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
 
-	componentDidUpdate(props,state){
-		
-		// console.log('___________________');
-		// console.log('child updated!');		
-		//console.log('props.featureId = ' + props.featureId + ', this.props.featureId = ' + this.props.featureId);
-		// console.log('state idsung = ' + state.idsung + ', this.props.idsung = ' + this.props.idsung);
-		// console.log(props.featureId);		
-		// console.log('state',state);
-		
-		//if(this.props.featureId !== state.featureId){
-						
-		// if(props.idsung !== this.props.idsung){			
-		// console.log('kondisi:', props.featureId !== this.props.featureId)
-		// console.log(props.featureId);				
-		
-		/*if (props.featureId !== this.props.featureId) {			
-			
-			if(this.props.idsung){
-				this.props.getRiverAttribute(this.props.idsung);// call saga utk ambil atribut				
-			}
+  componentDidUpdate(props, state) {
+    
+    if (this.props.featureId !== state.featureId) {
+      this.setState((state) => {
+        return {
+          featureId: this.props.featureId,
+        }
+      })
+    }
+  }
 
-			this.setState( state => {
-				return {
-					featureId: this.props.featureId,
-					features: this.props.features,
-    			idsung: this.props.idsung
-				}
-			});
+  validasiSungai(nama_sungai) {
+    let isError = false
+    let errorMsg = null
+    if (isEmpty(nama_sungai)) {
+      isError = true
+      errorMsg = 'Nama Sungai tidak boleh kosong'
+    } else {
+      isError = false
+      errorMsg = null
+    }
 
-		}*/	
+    this.setState((state) => {
+      return {
+        error: {
+          sungai: errorMsg,
+        },
+      }
+    })
+    return !isError
+  }
 
-		// penting harus ada. klo tdk ada user tdk bisa update properti sungai yang baru dibuat
-		// console.log(this.state.featureId)
-		// console.log(this.props.featureId)
-		if(this.props.featureId !== state.featureId){
-			this.setState(state=>{
-				return {
-					featureId:this.props.featureId
-				}
-			})
-		}
-		
-	}
+  validasiKecamatan(kecamatan) {
+    let isError = false
+    let errorMsg = null
 
-	validasiSungai(nama_sungai){
-		let isError = false;
-		let errorMsg = null;
-		if(isEmpty(nama_sungai)){
-			isError = true;
-			errorMsg = "Nama Sungai tidak boleh kosong"
-		}else{
-			isError = false;
-			errorMsg = null
-		}
+    if (!kecamatan && this.props.featureId) {
+      isError = true
+      errorMsg = 'Kecamatan tidak boleh kosong'
+    } else {
+      isError = false
+      errorMsg = null
+    }
 
-		this.setState(state=>{
-			return {
-				error:{
-					sungai:errorMsg
-				}
-			}
-		})
-		return !isError;
-	}
+    this.setState((state) => {
+      return {
+        error: {
+          kecamatan: errorMsg,
+        },
+      }
+    })
+    return !isError
+  }
 
-	validasiKecamatan(kecamatan){
-		let isError = false;
-		let errorMsg = null;		
-		
-		if(!kecamatan && this.props.featureId){
-			isError = true;
-			errorMsg = "Kecamatan tidak boleh kosong"
-		}else{
-			isError = false;
-			errorMsg = null
-		}
+  componentDidMount() {
+    this.props.getOptions('kecamatan')
+  }
 
-		this.setState(state=>{
-			return {
-				error:{
-					kecamatan:errorMsg
-				}
-			}
-		})
-		return !isError;	
-	}
+  // simpan ke state komponen
+  handleChange = (event, name) => {
+    this.setState({
+      [name]: event.target.value,
+    })
+  }
 
-	componentDidMount(){
-		this.props.getOptions('kecamatan');		
-	}	
+  resetForm = () => {
+    this.setState((state, props) => {
+      //console.log(props.featureId);
+      return {
+        kecamatan: '',
+        sungai: '',
+        jenis_sungai: '1',
+        keterangan: '',
+        idsung: '',
+      }
+    })
 
-	
-	
-	// simpan ke state komponen
-	handleChange = (event, name) => {	
-		this.setState({
-			[name]:event.target.value
-		})   
-	};
+    this.props.pilihJenisSungai(1)
+  }
 
-	resetForm = () => {
+  handlePilihSungai = (event, value) => {
+    return this.props.pilihJenisSungai(value)
+  }
 
-		this.setState((state,props)=>{
-			//console.log(props.featureId);
-			return {
-				kecamatan:'',
-				sungai:'',
-				jenis_sungai:"1",
-				keterangan:'',
-				idsung:''				
-			}
-		})
+  handleSubmit(event) {
+    event.preventDefault()
 
-		this.props.pilihJenisSungai(1);
-	}
+    const { sungai, kecamatan } = this.props.dt
 
-	handlePilihSungai = (event,value) =>{
-		return this.props.pilihJenisSungai(value)		
-	}
+    this.setState({
+      isSubmitted: true,
+    })
 
-	handleSubmit(event){
-		event.preventDefault();
+    if (this.validasiSungai(sungai) && this.validasiKecamatan(kecamatan)) {
+      
+      this.props.updateRiverProperty({
+        featureId: this.state.featureId,
+        property: property,
+      })
 
-		const {
-			sungai,
-			kecamatan			
-		} = this.props.dt
+      this.props.handleFormOpen(false)
+      this.props.clearRiverForm()
+    }
 
-		this.setState({
-			isSubmitted:true
-		})
+    return false
+  }
 
-		if(this.validasiSungai(sungai) && this.validasiKecamatan(kecamatan)){
-			// alert('lolos validasi');
+  handleDelete = () => {
+    const { featureId } = this.state
+    const d = window.confirm('anda akan menghapus sungai')
+    if (d === true) {
+      this.props.hapusSungai(featureId)
+      this.props.clearRiverForm()
+      this.props.handleFormOpen(false)
+    }
+  }
 
-			// disabled semenetra
-			/*this.props.addRiver({ 
-				features, 
-				properties:this.props.dt 
-			});*/
+  render() {
+    const {
+      featureId,
+      // kecamatan,
+      // sungai,
+      // jenis_sungai,
+      // keterangan
+    } = this.state
 
-			// tes update property
-			const property = this.props.dt;
-			/*
-			property = {
-				kecamatan:2,
-				sungai:"tb2",
-				jenis_sungai:"2",
-				keterangan:"tb2",
-				idsung:null
-			}
-			 */
-			
-			// isi properti sungai (setelah user membuat sungai baru)
-			this.props.updateRiverProperty({
-				featureId:this.state.featureId,
-				property:property
-			});
+    const {
+      options,
+      dt,
+      ubahNamaSungai,
+      ubahJenisSungai,
+      ubahKecamatan,
+      ubahKeterangan,
+    } = this.props
 
-			this.props.handleFormOpen(false);
-			this.props.clearRiverForm();
-		}
+    return (
+      <Slide
+        direction="right"
+        in={this.props.isFormOpen}
+        mountOnEnter
+        unmountOnExit
+      >
+        <Wrapper
+          container="true"
+          direction="column"
+          style={{
+            display: 'flex',
+          }}
+        >
+          <FormWrapper>
+            <FormInnerWrapper
+              container="true"
+              direction="column"
+              style={{
+                display: 'flex',
+                borderRadius: '0',
+                boxShadow: 'none',
+                width: '100%',
+              }}
+            >
+              <FormHeader judul="Atribut Sungai" />
 
-		return false;
-	}
+              <Grid
+                item="true"
+                style={{
+                  width: '40%',
+                  borderRadius: '0',
+                  boxShadow: 'none',
+                }}
+              >
+                <Grid
+                  container="true"
+                  direction="row"
+                  style={{
+                    borderRadius: '0',
+                    boxShadow: 'none',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Grid
+                    item="true"
+                    style={{
+                      borderRadius: '0',
+                      boxShadow: 'none',
+                    }}
+                  ></Grid>
+                </Grid>
+              </Grid>
+            </FormInnerWrapper>
 
-	handleDelete = () => {		
-		const { featureId } = this.state;
-		const d = window.confirm('anda akan menghapus sungai')
-		if(d === true){
-			this.props.hapusSungai(featureId);
-			this.props.clearRiverForm();
-			this.props.handleFormOpen(false);
-		}
-	}
+            <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+              <TextField
+                id="attr1"
+                label="nama sungai"
+                autoFocus={true}
+                value={dt.sungai}
+                onChange={(event) => {
+                  if (this.state.isSubmitted) {
+                    this.validasiSungai(event.target.value)
+                  }
+                  return ubahNamaSungai(event.target.value)
+                }}
+                margin="normal"
+                fullWidth
+                error={!!this.state.error.sungai}
+                helperText={this.state.error.sungai}
+              />
 
-	render(){
+              <FormLabel component="legend">Tipe</FormLabel>
 
-		const { 
-			featureId,
-			// kecamatan,
-			// sungai,
-			// jenis_sungai,
-			// keterangan 
-		} = this.state;
-		
-		const { 
-			options,
-			dt,
-			ubahNamaSungai,
-			ubahJenisSungai,
-			ubahKecamatan,
-			ubahKeterangan } = this.props;		
-		
-		return (
-			
-			<Slide 
-				direction="right" 
-				in={this.props.isFormOpen} 
-				mountOnEnter 
-				unmountOnExit>
-			
-			<Wrapper 				
-				container="true"
-				direction="column"				
-				style={{
-					display:'flex',					
-				}}>
-						
-				<FormWrapper>										
-					<FormInnerWrapper 
-						container="true"
-						direction="column"
-						style={{
-							display:'flex',
-							borderRadius:'0',
-							boxShadow:'none',
-							width:'100%',
-						}}>						
+              <RadioGroup
+                value={dt.jenis_sungai}
+                onChange={(event) => {
+                  return ubahJenisSungai(event.target.value)
+                }}
+              >
+                <FormControlLabel
+                  value="1"
+                  label="sungai utama"
+                  control={<Radio />}
+                  labelPlacement="end"
+                />
 
-						<FormHeader judul="Atribut Sungai" />
+                <FormControlLabel
+                  value="2"
+                  label="anak sungai"
+                  control={<Radio />}
+                  labelPlacement="end"
+                />
+              </RadioGroup>
 
-						<Grid 
-							item="true"
-							style={{ 
-								width:'40%',
-								borderRadius:'0',
-								boxShadow:'none'								
-							}}>
-							
-							<Grid 
-								container="true" 
-								direction="row" 								
-								style={{									
-									borderRadius:'0',
-									boxShadow:'none',
-									alignItems:'center',
-									justifyContent:'space-between',									
-								}}>
-								
-								<Grid item="true" style={{									
-									borderRadius:'0',
-									boxShadow:'none',
-								}}>
-																		
-								</Grid>
-							</Grid>
+              <TextField
+                select
+                id="nmkecm"
+                value={dt.kecamatan}
+                onChange={(event) => {
+                  if (this.state.isSubmitted) {
+                    this.validasiKecamatan(event.target.value)
+                  }
+                  return ubahKecamatan(event.target.value)
+                }}
+                margin="normal"
+                fullWidth
+                error={!!this.state.error.kecamatan}
+                helperText={this.state.error.kecamatan}
+              >
+                {options.kecamatan.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
 
-						</Grid>						
-					</FormInnerWrapper>
+              {/* simpan ke state : kecamatan */}
 
-					<form 
-						noValidate 
-						autoComplete="off" 						
-						onSubmit={this.handleSubmit}>
+              <TextField
+                multiline
+                rows={3}
+                id="attr3"
+                label="keterangan"
+                value={dt.keterangan}
+                onChange={(event) => {
+                  return ubahKeterangan(event.target.value)
+                }}
+                margin="normal"
+                fullWidth
+              />
 
-						<TextField 
-							id="attr1" 
-							label="nama sungai" 
-							autoFocus={true}
-							
-							value={dt.sungai}
-							onChange = { 
-								event =>{
-									if(this.state.isSubmitted){
-										this.validasiSungai(event.target.value)
-									}
-									return ubahNamaSungai(event.target.value)									
-							}} 
-							margin="normal" 
-							fullWidth 
-							error={!!this.state.error.sungai}
-							helperText={this.state.error.sungai} />
-						
-						<FormLabel 
-							component="legend">
-							Tipe
-						</FormLabel>
-						
-						<RadioGroup 
-							value = { dt.jenis_sungai }
-							onChange = { 
-								event=> {
-									return ubahJenisSungai(event.target.value)
-								}}>
-							<FormControlLabel 								
-								value="1" 
-								label="sungai utama" 
-								control={<Radio />} labelPlacement="end" />
+              <ActionButton
+                size="small"
+                variant="contained"
+                success="true"
+                fullWidth
+                onClick={this.handleSubmit}
+              >
+                Simpan Atribut
+              </ActionButton>
 
-							<FormControlLabel 								
-								value="2" 
-								label="anak sungai" 
-								control={<Radio />} labelPlacement="end" />
-						</RadioGroup>
-						
-						<TextField 
-							select 							
-							id = "nmkecm" 							
-							value = {dt.kecamatan} 
-							onChange = { event => {
-								if(this.state.isSubmitted){
-									this.validasiKecamatan(event.target.value)
-								}
-								return ubahKecamatan(event.target.value)
-							}} 
-							margin = "normal" 
-							fullWidth
-							error={!!this.state.error.kecamatan}
-							helperText={this.state.error.kecamatan}>
-							{options.kecamatan.map(option => (
-			          <MenuItem key={option.value} value={option.value}>
-			            {option.label}
-			          </MenuItem>
-			        ))}
-						</TextField>
-
-					{/* simpan ke state : kecamatan */}
-
-						<TextField 
-							multiline
-							rows={3}							
-							id="attr3" 
-							label="keterangan" 
-							value={dt.keterangan}
-							onChange = { event => {
-								return ubahKeterangan(event.target.value)								
-							}}
-							margin="normal" 
-							fullWidth />
-
-						<ActionButton 									
-							size="small" 
-							variant="contained" 
-							success="true"
-							fullWidth
-							onClick = { this.handleSubmit }>
-							Simpan Atribut
-						</ActionButton>
-
-						<ActionButton 									
-							size="small" 
-							variant="contained" 
-							success={false}										
-							fullWidth
-							onClick = { this.handleDelete }																				
-							>
-							Hapus
-						</ActionButton>
-
-					</form>
-				</FormWrapper>
-			</Wrapper>
-			</Slide>
-		)
-	}
+              <ActionButton
+                size="small"
+                variant="contained"
+                success={false}
+                fullWidth
+                onClick={this.handleDelete}
+              >
+                Hapus
+              </ActionButton>
+            </form>
+          </FormWrapper>
+        </Wrapper>
+      </Slide>
+    )
+  }
 }
 
 const mapStateToProps = createStructuredSelector({
-	options:makeSelectOptions(),
-	jenis_sungai:makeSelectJenisSungai(),
-	dt:makeSelectFormRiverData()
+  options: makeSelectOptions(),
+  jenis_sungai: makeSelectJenisSungai(),
+  dt: makeSelectFormRiverData(),
 })
 
-function mapDispatchToProps(dispatch){
-	return {
-		getOptions: key=>dispatch(getOptionsAction(key)),
-		pilihJenisSungai: value=>dispatch(pilihJenisSungaiAction(value)),
-		ubahNamaSungai:value=>dispatch(ubahNamaSungaiAction(value)),
-		ubahJenisSungai:value=>dispatch(ubahJenisSungaiAction(value)),
-		ubahKecamatan:value=>dispatch(ubahKecamatanAction(value)),
-		ubahKeterangan:value=>dispatch(ubahKeteranganAction(value)),
-		getRiverAttribute: idsung=>dispatch(getRiverAttributeAction(idsung)),
-		addRiver: features=>dispatch(addRiverAction(features)),
-		hapusSungai: value=>dispatch(hapusSungaiAction(value)),
-		getRiver: ()=>dispatch(getRiverAction()),
-		updateRiverProperty: (property)=>dispatch(updateRiverPropertyAction(property))
-	}
+function mapDispatchToProps(dispatch) {
+  return {
+    getOptions: (key) => dispatch(getOptionsAction(key)),
+    pilihJenisSungai: (value) => dispatch(pilihJenisSungaiAction(value)),
+    ubahNamaSungai: (value) => dispatch(ubahNamaSungaiAction(value)),
+    ubahJenisSungai: (value) => dispatch(ubahJenisSungaiAction(value)),
+    ubahKecamatan: (value) => dispatch(ubahKecamatanAction(value)),
+    ubahKeterangan: (value) => dispatch(ubahKeteranganAction(value)),
+    getRiverAttribute: (idsung) => dispatch(getRiverAttributeAction(idsung)),
+    addRiver: (features) => dispatch(addRiverAction(features)),
+    hapusSungai: (value) => dispatch(hapusSungaiAction(value)),
+    getRiver: () => dispatch(getRiverAction()),
+    updateRiverProperty: (property) =>
+      dispatch(updateRiverPropertyAction(property)),
+  }
 }
 
+const withConnect = connect(mapStateToProps, mapDispatchToProps)
 
-
-const withConnect = connect(
-	mapStateToProps,
-	mapDispatchToProps
-);
-
-export default compose(withConnect)(FormRiverAttributes);
+export default compose(withConnect)(FormRiverAttributes)

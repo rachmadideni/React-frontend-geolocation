@@ -1,19 +1,19 @@
-import { createMuiTheme } from '@material-ui/core';
-import { color } from './constants';
+import { createMuiTheme } from '@material-ui/core'
+import { color } from './constants'
 
 export const theme = createMuiTheme({
-	typography: {
+  typography: {
     useNextVariants: true,
-    fontSize:14
+    fontSize: 14,
   },
-	palette:{
-		primary:{
-			main:color.primary,
-			contrastText:color.primaryTextColor
-		},
-		secondary:{
-			main:color.secondary,
-			contrastText:color.secondaryTextColor
-		}
-	}
+  palette: {
+    primary: {
+      main: color.primary,
+      contrastText: color.primaryTextColor,
+    },
+    secondary: {
+      main: color.secondary,
+      contrastText: color.secondaryTextColor,
+    },
+  },
 })

@@ -4,10 +4,10 @@
  *
  */
 
-import React from 'react';
+import React from 'react'
 // import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import BaseDialog from '@material-ui/core/Dialog';
+import styled from 'styled-components'
+import BaseDialog from '@material-ui/core/Dialog'
 // import { dimension } from 'styles/constants';
 
 const StyledDialog = styled(BaseDialog).attrs({
@@ -16,10 +16,8 @@ const StyledDialog = styled(BaseDialog).attrs({
     paperFullWidth: 'paper-full-width',
     paperWidthSm: 'paper-width-sm',
   },
-})`
-  
-`;
-  /*&& {
+})``
+/*&& {
     .paper-full-screen {
       max-height: ${dimension.maxHeight.main}px;
       max-width: ${dimension.maxWidth.main}px;
@@ -30,9 +28,9 @@ const StyledDialog = styled(BaseDialog).attrs({
   }*/
 
 function Dialog(props) {
-  return <StyledDialog {...props} />;
+  return <StyledDialog {...props} />
 }
 
-Dialog.propTypes = {};
+Dialog.propTypes = {}
 
-export default Dialog;
+export default Dialog

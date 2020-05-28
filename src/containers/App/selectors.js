@@ -1,32 +1,22 @@
-import { createSelector } from 'reselect';
+import { createSelector } from 'reselect'
 
-const selectGlobal = state => state.get('global');
+const selectGlobal = (state) => state.get('global')
 
-const selectRouter = state => state.get('router');
+const selectRouter = (state) => state.get('router')
 
 const makeSelectAuth = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.get('auth').toJS(),
-  );
+  createSelector(selectGlobal, (globalState) => globalState.get('auth').toJS())
 
 const makeSelectLoading = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.get('loading'),
-  );
+  createSelector(selectGlobal, (globalState) => globalState.get('loading'))
 
 const makeSelectError = () =>
-  createSelector(
-    selectGlobal,
-    globalState => globalState.get('error'),
-  );
+  createSelector(selectGlobal, (globalState) => globalState.get('error'))
 
 const makeSelectLocation = () =>
-  createSelector(
-    selectRouter,
-    routerState => routerState.get('location').toJS(),
-  );
+  createSelector(selectRouter, (routerState) =>
+    routerState.get('location').toJS()
+  )
 
 export {
   selectGlobal,
@@ -34,4 +24,4 @@ export {
   makeSelectLoading,
   makeSelectError,
   makeSelectLocation,
-};
+}

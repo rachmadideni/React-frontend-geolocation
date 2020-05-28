@@ -1,18 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import React from 'react'
+import styled from 'styled-components'
+import SvgIcon from '@material-ui/core/SvgIcon'
 
 const PathD = styled.path`
   stroke: none;
-`;
+`
 
-function Marker(props){
-	return (
-		<SvgIcon {...props}
-			viewBox="0 0 512.000000 512.000000" 
-			fontSize="48px">
-				<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)">
-				<PathD d="M2320 5110 c-36 -5 -118 -23 -182 -39 -564 -142 -1016 -561 -1198
+function Marker(props) {
+  return (
+    <SvgIcon {...props} viewBox="0 0 512.000000 512.000000" fontSize="48px">
+      <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)">
+        <PathD
+          d="M2320 5110 c-36 -5 -118 -23 -182 -39 -564 -142 -1016 -561 -1198
 -1110 -71 -212 -95 -383 -87 -611 11 -308 92 -570 264 -855 33 -55 121 -206
 195 -335 74 -129 214 -372 310 -540 97 -168 261 -453 365 -635 501 -873 566
 -985 573 -985 4 0 57 87 118 193 60 105 178 311 262 457 84 146 231 402 328
@@ -21,10 +20,11 @@ function Marker(props){
 -115 2 -239 0 -275 -5z m410 -1086 c103 -30 190 -83 276 -169 88 -87 140 -177
 169 -290 20 -77 19 -230 -1 -309 -53 -206 -223 -384 -429 -449 -55 -17 -94
 -22 -185 -22 -91 0 -130 5 -185 22 -207 66 -376 243 -429 449 -20 79 -21 232
--1 309 55 215 233 399 446 459 30 8 68 17 84 20 53 8 199 -3 255 -20z"/>
-</g>				
-		</SvgIcon>
-	);
+-1 309 55 215 233 399 446 459 30 8 68 17 84 20 53 8 199 -3 255 -20z"
+        />
+      </g>
+    </SvgIcon>
+  )
 }
 
-export default Marker;
+export default Marker

@@ -1,18 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import React from 'react'
+import styled from 'styled-components'
+import SvgIcon from '@material-ui/core/SvgIcon'
 
 const PathD = styled.path`
   stroke: none;
-`;
+`
 
-function TaludIcon(props){
-	return (
-		<SvgIcon {...props}
-			viewBox="0 0 225.000000 225.000000"
-			fontSize="48px">
-				<g transform="translate(0.000000,225.000000) scale(0.100000,-0.100000)">
-					<PathD d="M1514 2183 c-222 -107 -1468 -734 -1490 -750 -18 -13 -19 -34 -22
+function TaludIcon(props) {
+  return (
+    <SvgIcon {...props} viewBox="0 0 225.000000 225.000000" fontSize="48px">
+      <g transform="translate(0.000000,225.000000) scale(0.100000,-0.100000)">
+        <PathD
+          d="M1514 2183 c-222 -107 -1468 -734 -1490 -750 -18 -13 -19 -34 -22
 -562 -3 -383 0 -555 7 -569 7 -13 121 -76 295 -163 l284 -142 133 63 c185 86
 1479 737 1504 756 20 14 20 28 23 558 2 345 -1 553 -7 569 -9 22 -58 50 -278
 160 -147 74 -277 137 -289 141 -14 4 -63 -14 -160 -61z m526 -263 c0 -3 -324
@@ -48,10 +47,11 @@ c34 19 68 35 75 36 8 0 12 -18 12 -60z m-270 -133 l0 -62 -195 -98 c-107 -53
 198 97 202 97 4 0 8 -27 8 -60z m-800 -330 c0 -33 -2 -60 -5 -60 -3 0 -95 45
 -205 100 l-200 100 0 53 c0 30 3 56 6 60 4 3 96 -39 205 -94 l199 -99 0 -60z
 m270 68 l0 -63 -71 -36 -70 -37 3 65 3 65 64 34 c35 19 65 34 67 34 2 0 4 -28
-4 -62z"/>
-				</g>
-		</SvgIcon>
-	);
+4 -62z"
+        />
+      </g>
+    </SvgIcon>
+  )
 }
 
-export default TaludIcon;
+export default TaludIcon
